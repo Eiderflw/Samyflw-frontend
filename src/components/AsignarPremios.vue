@@ -3,92 +3,142 @@
         <Toast />
         <template #header>
             <div class="flex items-center gap-2 flex-end w-full justify-content-between">
-                <h1 class="m-0">Promocion</h1>
-                <div class="botones flex gap-2">
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search" />
-                        <InputText v-model="filtersCreadores['global'].value" placeholder="Buscar.." />
-                    </span>
-                    <Button label="Servicios" icon="pi pi-plus" @click="modalServicios = true" />
-                </div>
+                <h1 class="m-0">Entregar Premios</h1>
+
             </div>
         </template>
-        <DataTable :value="creadores" :filters="filtersCreadores" sortField="saldo" :sortOrder="-1" paginator :rows="5"
-            :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
-            <Column field="usuario" header="Usuario" sortable></Column>
-
-            <Column header="Premio" field="saldo">
+        <DataTable :value="premios" dataKey="id" sortField="estado" :sortOrder="1" :customSort="customSort" paginator
+            :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+            <Column field="nombre" header="Usuario" sortable></Column>
+            <Column field="premio" header="Premio">
                 <template #body="slotProps">
-                    <TreeSelect v-model="tipo" :options="nodes" placeholder="Tipo de cuenta" class="md:w-12rem w-full">
-                        <template #option="{ option }">
-                            <img :src="option.icon" alt="" class="w-4 h-4 mr-1" /> {{ option.label }}
-                        </template>
-                    </TreeSelect>
+                    <p class="m-0" v-if="slotProps.data.tipo_premio !== 'Objeto'">{{ slotProps.data.premio }}</p>
+                    <Image v-else :src="slotProps.data.premio" alt="Imagen del premio" width="250" preview />
                 </template>
             </Column>
-            <Column header="Cambiar">
+            <Column field="descripcion" header="Descripción"></Column>
+            <Column field="fecha_obtenido" header="Fecha" style="width: 35%">
+            </Column>
+            <Column field="estado" header="Estado">
                 <template #body="slotProps">
-                    <Button icon="pi pi-money-bill" @click="() => {
-                            modalCambiarSaldo = true;
-                            actualizarSaldo.id = slotProps.data._id;
-                            actualizarSaldo.saldo = slotProps.data.saldo;
-                            actualizarSaldo.usuario = slotProps.data.usuario;
-                        }"></Button>
+                    <Tag :severity="ponerEstado(slotProps.data.estado)"
+                        :value="`${slotProps.data.estado === 'Reclamado' ? ('Reclamado | ' + slotProps.data.transferencia.fecha_reclamado.slice(0, 10)) : slotProps.data.estado}`" />
+                </template>
+            </Column>
+            <Column header="Acciones">
+                <template #body="slotProps">
+                    <Button v-if="slotProps.data.estado === 'En proceso'" icon="pi pi-send"
+                        @click="Preparar(slotProps.data)"></Button>
+                    <Image v-tooltip.top="'Comprobante de entrega'" v-if="slotProps.data.estado == 'Entregado'"
+                        :src="slotProps.data.transferencia.comprobante" alt="Imagen del premio" width="50" preview />
+
                 </template>
             </Column>
         </DataTable>
-        <Dialog v-model:visible="modalServicios"
-            :header="`Servicios Disponibles: ${servicios.length} - Servicios selesccionado: ${selectedServicios.length}`"
-            :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top"
-            :modal="true" :draggable="false">
-            <DataTable :value="servicios" :filters="filters" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-                tableStyle="min-width: 100%">
-                <template #header>
-                    <div class="flex items-center gap-2 flex-end w-full justify-content-end">
-                        <div class="botones flex gap-2">
-                            <span class="p-input-icon-left">
-                                <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Buscar.." />
-                            </span>
-                            <Button icon="pi pi-trash" label="Vaciar" @click="selectedServicios = []" />
-                        </div>
+        <Dialog v-model:visible="EnviarModal" header="Confimacion " :style="{ width: '35rem' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
+            <div v-if="datosTransferencia.tipo_premio === 'Efectivo'">
+                <div class="flex gap-2 sm:flex-column md:flex-row"
+                    v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
+                    <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
+                        <label class="font-semibold">Tipo de Cuenta</label>
+                        <InputText disabled :placeholder="datosTransferencia.transferencia.tipo_cuenta.tipo"
+                            class="flex-auto" autocomplete="off" />
                     </div>
-                </template>
-                <Column field="service" header="Código" />
-                <Column field="name" header="Nombre" />
-                <Column field="type" header="Tipo" />
-                <Column field="category" header="Categoría" />
-                <Column field="rate" header="Costo" />
-                <Column field="min" header="Minimo" />
-                <Column field="max" header="Maximo" />
-                <Column field="dripfeed" header="Dripfeed" />
-                <Column field="refill" header="Refill" />
-                <Column field="cancel" header="Cancel" />
-                <Column header="Agencia">
-                    <template #body="slotProps">
-                        <Checkbox v-model="selectedServicios" :inputId="slotProps.data.service" name="serviceSelect"
-                            :value="slotProps.data" />
-                    </template>
-                </Column>
+                    <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
+                        <label class="font-semibold">Numero de Cuenta</label>
+                        <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
+                            autocomplete="off" />
+                    </div>
+                </div>
+                <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'nequi'">
+                    <label class="font-semibold ">Numero De Cuenta Nequi</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'paypal'">
+                    <label class="font-semibold">Correo de Paypal</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
+                        autocomplete="off" />
+                </div>
 
-            </DataTable>
-            <template #footer>
-                <Button label="Cancelar" @click="modalServicios = false" text severity="danger" autofocus />
-                <Button :icon="btnServiciosIcon" label="Actualizar" @click="actualizarServiciosActive()"
-                    :disabled="btnServiciosSelect" severity="success" />
-            </template>
-        </Dialog>
-        <Dialog v-model:visible="modalCambiarSaldo" :header="`Actualizar Saldo: ${actualizarSaldo.usuario}`"
-            :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center"
-            :modal="true" :draggable="false">
-            <div class="flex flex-column gap-1 mb-2">
-                <label for="excel" class="font-bold block">$ Saldo</label>
-                <InputText type="number" id="saldo" v-model="actualizarSaldo.saldo" />
-                <small id="saldo">Advertencia: Revise bien el saldo</small>
+                <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
+                    <label class="font-semibold">Nombre Del Banco</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.banco" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
+                    <label class="font-semibold">Nombre Del Titular</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.titular_cuenta" class="flex-auto"
+                        autocomplete="off" />
+
+                </div>
+                <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
+                    <label class="font-semibold">Numero de Cedula</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.cedula" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'binance'">
+                    <label class="font-semibold ">ID Binance</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
+                        autocomplete="off" />
+
+                </div>
+            </div>
+            <div v-if="datosTransferencia.transferencia.metodo_pago === 'Envio'">
+                <div class="flex gap-2 sm:flex-column md:flex-row">
+                    <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
+                        <label class="font-semibold">Pais</label>
+                        <InputText disabled :placeholder="datosTransferencia.transferencia.pais" class="flex-auto"
+                            autocomplete="off" />
+                    </div>
+                    <div class="flex flex-column gap-2">
+                        <label class="font-semibold">Codigo postal</label>
+                        <InputText disabled :placeholder="datosTransferencia.transferencia.codigo_postal"
+                            class="flex-auto" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="flex gap-2 sm:flex-column md:flex-row">
+                    <div class="flex flex-column gap-2">
+                        <label class="font-semibold">Departamento</label>
+                        <InputText disabled :placeholder="datosTransferencia.transferencia.departamento"
+                            class="flex-auto" autocomplete="off" />
+                    </div>
+                    <div class="flex flex-column gap-2">
+                        <label class="font-semibold">Ciudad</label>
+                        <InputText disabled :placeholder="datosTransferencia.transferencia.ciudad" class="flex-auto"
+                            autocomplete="off" />
+                    </div>
+                </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Direccion</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.direccion" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Numero de Cedula</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.cedula" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Nombre Del Titular</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.titular_cuenta" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Telefono</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.telefono" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+            </div>
+            <div class="flex flex-column gap-2">
+                <label class="font-semibold">Comprobante</label>
+                <InputText type="file" id="comprobante" accept="image/*"
+                    @change="(event) => paquete.comprobante = event.target.files[0]" />
             </div>
             <template #footer>
-                <Button label="Cancelar" @click="modalCambiarSaldo = false" text severity="danger" autofocus />
-                <Button label="Actualizar" @click="updateSaldo()" :disabled="btnActualizarSaldo" severity="success" />
+                <Button label="Cancelar" @click="EnviarModal = false" text severity="danger" />
+                <Button label="Enviar" @click="EnviarPremio" text autofocus></Button>
             </template>
         </Dialog>
     </Panel>
@@ -96,136 +146,102 @@
 <script>
 import axios from "axios";
 import { useStoreEvento } from "../store";
-import { FilterMatchMode, FilterOperator } from 'primevue/api';
 
 export default {
     data: () => ({
         API: import.meta.env.VITE_APP_API,
         token: null,
-        modalServicios: false,
-        modalCambiarSaldo: false,
-        actualizarSaldo: {
-            saldo: null,
-            id: null,
-            usuario: null,
-        },
-        btnActualizarSaldo: false,
         servicios: [],
-        selectedServicios: [],
-        btnServiciosSelect: false,
-        btnServiciosIcon: '',
-        filters: {
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] }
-        },
-        filtersCreadores: {
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] }
-        },
-        creadores: [],
+        usuarios: null,
+        EnviarModal: false,
+        Usuarios: [],
+        premios: [],
         tipo: null,
-        nodes: [
-            {
-                label: 'silla',
-                value: '1',
-                icon: '../assets/img/cinta_cobre.png'
-            },
-            {
-                label: 'telefono',
-                value: '2',
-            }
-        ]
+        sortField: 'estado',
+        sortOrder: 1,
+        paquete: { usuario: null, comprobante: null, id_concurso: null },
+        datosTransferencia: {}
 
     }),
     methods: {
-        async getServicios() {
-            await axios.get(`${this.API}/promocion/servicesALL`, this.token).then(response => {
-                this.servicios = response.data;
-            }).catch((error) => {
-                switch (error.response.data.statusCode) {
-                    case 401:
-                        //Se le termino la sesión
-                        this.store.clearUser();
-                        this.$router.push("/login");
-                        break;
-                    default:
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Obtener Servicios de API Promociones",
-                            detail: "Sucedió un error, Comuniquese con soporte",
-                            life: 1500,
-                        });
-                        console.log("Error: ", error);
-                        break;
-                }
-            });
-        },
-        async getServiciosActive() {
-            await axios.get(`${this.API}/promocion/servicesActive`, this.token).then((response) => {
-                this.selectedServicios = response.data;
-            }).catch((error) => {
-                switch (error.response.data.statusCode) {
-                    case 401:
-                        console.log(error);
-                        break;
-                    default:
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Obtener servicios Activos",
-                            detail: "Sucedió un error, Comuniquese con soporte",
-                            life: 1500,
-                        });
-                        console.log("Error: ", error);
-                        break;
-                }
-            });
-        },
-        async actualizarServiciosActive() {
-            this.btnServiciosIcon = 'pi pi-spin pi-spinner';
-            this.btnServiciosSelect = true;
-            await axios.post(`${this.API}/promocion/servicesActive`, this.selectedServicios, this.token).then((response) => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Actualizar servicios",
-                        detail: "Se actualizo correctamente",
-                        life: 1500,
-                    });
-                } else {
-                    this.$toast.add({
-                        severity: "error",
-                        summary: "Actualizar servicios",
-                        detail: "Comuniquese con soporte",
-                        life: 1500,
-                    });
-                }
-            }).catch((error) => {
-                switch (error.response.data.statusCode) {
-                    case 401:
-                        console.log(error);
-                        break;
-                    default:
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Actualizar servicios",
-                            detail: "Sucedió un error, Comuniquese con soporte",
-                            life: 1500,
-                        });
-                        console.log("Error: ", error);
-                        break;
-                }
-            });
-            this.btnServiciosIcon = '';
-            this.btnServiciosSelect = false;
-            this.modalServicios = false;
-        },
         async getCreadores() {
-            await axios
-                .get(`${this.API}/usuario`, this.token)
-                .then((response) => {
-                    this.creadores = response.data;
-                })
-                .catch((error) => {
+            try {
+                const response = await axios.get(`${this.API}/usuario`, this.token);
+                if (response && response.data) {
+                    this.premios = response.data.reduce((acc, user) => {
+                        user.premios.forEach((premio) => {
+                            if (premio.fecha_obtenido) {
+                                let fecha;
+                                if (premio.estado == "Entregado") {
+                                    fecha = premio.transferencia && premio.transferencia.fecha_reclamado ? premio.transferencia.fecha_reclamado.slice(0, 10) : '';
+                                } else {
+                                    fecha = premio.fecha_obtenido.slice(0, 10)
+                                }
+                                acc.push({
+                                    nombre: user.usuario,
+                                    usuario: user._id,
+                                    id_concurso: premio.id_concurso,
+                                    premio: premio.premio,
+                                    descripcion: premio.descripcion,
+                                    fecha_obtenido: fecha,
+                                    tipo_premio: premio.tipo_premio,
+                                    transferencia: premio.transferencia,
+                                    estado: premio.estado
+                                });
+                            }
+                        });
+                        return acc;
+                    }, []);
+                } else {
+                    console.error('No se recibió una respuesta válida del servidor.');
+                }
+            } catch (error) {
+                console.error('Error al obtener los usuarios:', error);
+                if (error.response && error.response.status === 401) {
+                    // Se le terminó la sesión
+                    this.store.clearUser();
+                    this.$router.push("/login");
+                }
+            }
+        },
+
+        ponerEstado(estado) {
+            if (estado == "Sin reclamar") {
+                return "warning";
+            } else if (estado == "En proceso") {
+                return "info";
+            } else {
+                return "success";
+            }
+        },
+        customSort(event) {
+            // Define el orden de los estados
+            const order = { "En proceso": 0, "Entregado": 1, "Sin reclamar": 2 };
+
+            // Obtiene los valores de estado para los dos elementos
+            const value1 = event.data1.estado.toLowerCase();
+            const value2 = event.data2.estado.toLowerCase();
+
+            // Compara los valores según el orden definido
+            if (order[value1] < order[value2]) {
+                return -1;
+            }
+            if (order[value1] > order[value2]) {
+                return 1;
+            }
+            return 0;
+        },
+        async EnviarPremio() {
+            if (this.paquete.comprobante != null) {
+
+
+                await axios.putForm(`${this.API}/usuario/confirmarPremio`, this.paquete, {
+                    headers: {
+                        Authorization: `Bearer ${this.store.getToken()}`
+                    }
+                }).then(response => {
+                    console.log(response.data);
+                }).catch((error) => {
                     switch (error.response.data.statusCode) {
                         case 401:
                             //Se le termino la sesión
@@ -236,46 +252,31 @@ export default {
                             console.log("Error: ", error);
                             break;
                     }
+                }).finally(() => {
+                    this.EnviarModal = false;
+                    this.$toast.add({ severity: 'success', summary: 'Reclamo exitoso', life: 1600 });
+                    this.getCreadores();
                 });
+            } else {
+                this.$toast.add({ severity: 'error', summary: 'Cargar Comprobante', detail: 'Debes subir el comprobante para su verificacion', life: 1600 });
+            }
         },
-        async updateSaldo() {
-            this.btnActualizarSaldo = true;
-            await axios.post(`${this.API}/promocion/updateSaldo`, this.actualizarSaldo, this.token).then((response) => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Actualizar saldo",
-                        detail: "Se actualizo correctamente",
-                        life: 1500,
-                    });
-                } else {
-                    this.$toast.add({
-                        severity: "error",
-                        summary: "Actualizar saldo",
-                        detail: "Comuniquese con soporte",
-                        life: 1500,
-                    });
-                }
-            }).catch((error) => {
-                switch (error.response.data.statusCode) {
-                    case 401:
-                        console.log(error);
-                        break;
-                    default:
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Actualizar saldo",
-                            detail: "Sucedió un error, Comuniquese con soporte",
-                            life: 1500,
-                        });
-                        console.log("Error: ", error);
-                        break;
-                }
-            });
-            await this.getCreadores();
-            this.btnActualizarSaldo = false;
-            this.modalCambiarSaldo = false;
+        ponerEstado(estado) {
+            if (estado == "Sin reclamar") {
+                return "warning";
+            } else if (estado == "En proceso") {
+                return "info";
+            } else {
+                return "success";
+            }
+        },
+        Preparar(datos) {
+            this.EnviarModal = true;
+            this.paquete.id_concurso = datos.id_concurso;
+            this.paquete.usuario = datos.usuario;
+            this.datosTransferencia = datos;
         }
+
     },
     async created() {
         this.store = useStoreEvento();
@@ -288,8 +289,6 @@ export default {
             },
         }
         await this.getCreadores();
-        await this.getServicios();
-        await this.getServiciosActive();
     }
 }
 </script>

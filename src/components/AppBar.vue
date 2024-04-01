@@ -210,11 +210,6 @@ export default {
                             label: 'Gestionar Promoción',
                             icon: 'pi pi-thumbs-up-fill',
                             route: '/panel/promocion',
-                        },
-                        {
-                            label: 'Premios',
-                            icon: 'pi pi-wallet',
-                            route: '/panel/premio',
                         }
                     ]
                 },
@@ -246,8 +241,8 @@ export default {
                             route: '#action'
                         },
                         {
-                            label: 'Asignar Premios',
-                            icon: 'pi pi-star',
+                            label: 'Entregar Premios',
+                            icon: 'pi pi-gift',
                             route: '/panel/asignar'
                         },
 
@@ -313,6 +308,11 @@ export default {
                     label: 'DuckRacer',
                     icon: 'pi pi-dollar',
                     route: '/duckracer'
+                },
+                {
+                    label: 'Premios',
+                    icon: 'pi pi-gift',
+                    route: '/panel/premio',
                 },
                 {
                     separator: true
