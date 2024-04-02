@@ -47,8 +47,8 @@
                         <template #start>
                             <button v-ripple
                                 class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-surface-700 dark:text-surface-0/80 hover:bg-surface-200 dark:hover:bg-surface-600 rounded-none">
-                                <Avatar v-if="store.isAdmin() || store.getFoto().length == 0" icon="pi pi-user" class="mr-2"
-                                    shape="circle" />
+                                <Avatar v-if="store.isAdmin() || store.getFoto().length == 0" icon="pi pi-user"
+                                    class="mr-2" shape="circle" />
                                 <Avatar v-else :image="store.getFoto()" class="mr-2" shape="circle" />
 
                                 <span class="inline-flex flex-column justify-start">
@@ -59,7 +59,8 @@
                         </template>
 
                         <template #item="{ item, props }">
-                            <a v-ripple class="flex items-center" @click="actionMenu(item.action)" v-bind="props.action">
+                            <a v-ripple class="flex items-center" @click="actionMenu(item.action)"
+                                v-bind="props.action">
                                 <span :class="item.icon" />
                                 <span class="ml-2">{{ item.label }}</span>
                             </a>
@@ -72,7 +73,8 @@
         <dialogMiPerfil :mostrarMiPerfil="mostrarPerfil" @dialogPerfilOculto="mostrarPerfil = false" />
         <dialogEditarPerfil :mostrarEditar="mostrarEditar" @dialogEditarOculto="mostrarEditar = false"
             @perfilActualizado="getNewDatos" />
-        <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias" @dialogOculto="mostrarInsignias = false">
+        <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias"
+            @dialogOculto="mostrarInsignias = false">
         </Insignias>
         <Dialog v-model:visible="addCreador" maximizable :header="store.isAdmin() ? 'Credenciales backstage' : 'Agregar creador'" :style="{ width: store.isAdmin() ? '34rem' : '45rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
@@ -372,6 +374,11 @@ export default {
                             icon: 'pi pi-star',
                             action: 'insignia_abrir',
                             route: '#action'
+                        },
+                        {
+                            label: 'Entregar Premios',
+                            icon: 'pi pi-gift',
+                            route: '/panel/asignar'
                         },
 
                         {
