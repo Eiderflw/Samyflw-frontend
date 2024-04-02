@@ -16,6 +16,10 @@
   color: #69C9D0 !important;
 }
 
+.cursor-auto {
+  cursor: auto !important;
+}
+
 .color-rojo {
   color: #EE1D52 !important;
 }

@@ -1,7 +1,7 @@
 <template>
     <Panel class="perfil">
         <div
-            class="container-perfil flex gap-7 w-full sm:flex-wrap xs:flex-wrap xs:justify-content-center md:flex-wrap sm:justify-content-center">
+            class="container-perfil flex gap-2 w-full sm:flex-wrap xs:flex-wrap xs:justify-content-center md:flex-wrap sm:justify-content-center">
             <div class="flex align-items-center mt-4 flex-column gap-2" style="width: 490px;">
                 <div class="flex flex-column text-center items-center gap-2 flex-end w-full justify-content-between">
                     <h1 class="m-0 font-gamers uppercase text-6xl">MI PERFIL</h1>
@@ -55,7 +55,7 @@
                 <h2 class="mb-0 sm:text-center xs:text-center font-gamers">Actualización {{ fechaAct }}</h2>
                 <img src="/assets/img/eventos/divisor-titulo.png" class="w-full" alt="Divisor">
 
-                <div class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-wrap md:gap-7 xs:flex-wrap justify-content-center">
+                <div class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-wrap md:gap-4 xs:flex-wrap md:justify-content-center lg:justify-content-start">
 
                     <div class="flex flex-column gap-4">
                         <div class="live flex align-items-center decorador gap-2 p-2">

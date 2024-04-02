@@ -316,6 +316,7 @@ export default {
                 this.all = false;
             } else {
                 this.creadores = [...this.arrayCreadores[0].usuarios, ...this.arrayCreadores[1].usuarios, ...this.arrayCreadores[2].usuarios];
+                this.creadores.sort((a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual);
                 this.top3 = this.creadores.slice(0, 3);
                 this.all = true;
             }
@@ -841,9 +842,11 @@ video {
     align-items: center;
     font-size: 25px;
 }
+
 .grupos.grupos3>.todos {
     padding-left: 25px;
 }
+
 .grupos>* {
     position: relative;
     cursor: pointer;

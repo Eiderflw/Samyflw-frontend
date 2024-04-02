@@ -1,5 +1,6 @@
 <template>
     <div class="appBarContainer">
+        <Toast />
         <Sidebar v-model:visible="visibleSidebar">
             <Menu :model="itemsMenu" class="w-full">
                 <!-- <template #start>
@@ -73,6 +74,47 @@
             @perfilActualizado="getNewDatos" />
         <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias" @dialogOculto="mostrarInsignias = false">
         </Insignias>
+        <Dialog v-model:visible="addCreador" maximizable :header="store.isAdmin() ? 'Credenciales backstage' : 'Agregar creador'" :style="{ width: store.isAdmin() ? '34rem' : '45rem' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+            <div v-if="store.isAdmin()">
+                <form ref="formAdd">
+                    <div class="flex flex-column gap-1 mb-2">
+                        <label for="correo" class="font-bold block">Correo</label>
+                        <InputText v-model="paquete.correo" type="email" placeholder="Correo" id="correo" />
+                    </div>
+                    <div class="flex flex-column gap-1 mb-2">
+                        <label for="contrasena" class="font-bold block">Contraseña</label>
+                        <InputText v-model="paquete.contrasena" type="text" placeholder="Contraseña" id="contrasena" />
+                    </div>
+                </form>
+            </div>
+            <div v-else>
+                <h2 class="m-0">Credenciales backstage</h2>
+                <div class="flex flex-column gap-1">
+                    <label for="correo" class="font-bold block">Correo</label>
+                    <InputText v-model="paquete.correo" disabled type="email" placeholder="Correo" id="correo" />
+                </div>
+                <div class="flex flex-column gap-1">
+                    <label for="contrasena" class="font-bold block">Contraseña</label>
+                    <InputText v-model="paquete.contrasena" disabled type="text" placeholder="Contraseña" id="contrasena" />
+                </div>
+                <div class="mt-2 mb-3">
+                    <h3 class="m-0">Guía</h3>
+                    <video width="100%" autoplay="false" muted height="300px" controls>
+                        <source src="https://res.cloudinary.com/dq2sbqjgf/video/upload/v1711917204/tutoriales/byfp8ygyo7kdv1ueclwf.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <p>Inicia sesión con las credenciales y agrega al creador</p>
+                <iframe title="TikTok Backstage" height="800px" width="100%" src="https://live-backstage.tiktok.com/login/" frameborder="0"></iframe>
+            </div>
+            <template #footer>
+                <Button label="Cerrar" @click="addCreador = false" text severity="danger" />
+                <div class="flex gap-2" v-if="store.isAdmin()">
+                    <Button :label="paquete.estado == 'Activado' ? 'Desactivar' : 'Activar'" severity="warning" @click="cambiarEstadoBackstage" />
+                    <Button label="Agregar" @click="modificarCredenciales" severity="success" />
+                </div>
+            </template>
+        </Dialog>
     </div>
 </template>
 
@@ -105,8 +147,13 @@ export default {
             correo: null,
             telefono: null
         },
-        visibleSidebar: false
-
+        visibleSidebar: false,
+        addCreador: false,
+        paquete: {
+            correo: null,
+            contrasena: null,
+            estado: 'Desactivado'
+        }
     }),
     methods: {
         toggle(event) {
@@ -131,6 +178,9 @@ export default {
                     break;
                 case 'insignia_abrir':
                     this.mostrarInsignias = true;
+                    break;
+                case 'add_creador':
+                    this.addCreador = true;
                     break;
             }
         },
@@ -173,14 +223,93 @@ export default {
                 }
             });
         },
+        async modificarCredenciales() {
+            if (this.paquete.correo != null && this.paquete.contrasena != null) {
+                const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (isEmail.test(this.paquete.correo)) {
+                    await axios.post(`${this.API}/usuario/credencialesBackstage`, this.paquete, {
+                        headers: {
+                            Authorization: `Bearer ${this.store.getToken()}`
+                        }
+                    }).then(r => {
+                        if (r.data) {
+                            this.addCreador = false;
+                        }
+                        this.$toast.add({ severity: 'success', summary: 'Credenciales backstage', detail: r.data ? 'Credenciales actualizadas correctamente' : 'No se pudo actualizar las credenciales', life: 1600 });
+                    }).catch(error => {
+                        switch (error.response.data.statusCode) {
+                            case 401:
+                                //Se le termino la sesión
+                                this.store.clearUser();
+                                this.$router.push('/login');
+                                break;
+                            default:
+                                this.$toast.add({ severity: 'error', summary: `Sucedió un problema`, detail: error.response.data.message, life: 1500 });
+                                console.log('Error: ', error);
+                                break;
+                        }
+                    });
+                } else {
+                    this.$toast.add({ severity: 'error', summary: 'Credenciales', detail: 'Ingresa un correo válido', life: 1600 });
+                }
+            } else {
+                this.$toast.add({ severity: 'error', summary: 'Credenciales', detail: 'Debes llenar todos los campos', life: 1600 });
+            }
+        },
+        async getBackstage() {
+            await axios.get(`${this.API}/usuario/backstage`, {
+                headers: {
+                    Authorization: `Bearer ${this.store.getToken()}`
+                }
+            }).then(response => {
+                if (response.data) {
+                    this.paquete = { ...response.data };
+                }
+            }).catch((error) => {
+                switch (error.response.data.statusCode) {
+                    case 401:
+                        //Se le termino la sesión
+                        this.store.clearUser();
+                        this.$router.push('/login');
+                        break;
+                    default:
+                        this.$toast.add({ severity: 'error', summary: 'Backstage', detail: 'Sucedió un problema', life: 1600 });
+                        console.log('Error: ', error);
+                        break;
+                }
+            });
+        },
+        async cambiarEstadoBackstage() {
+            this.paquete.estado = this.paquete.estado == 'Activado' ? 'Desactivado' : 'Activado';
+            await axios.put(`${this.API}/usuario/estadoBackstage`, { estado: this.paquete.estado }, {
+                headers: {
+                    Authorization: `Bearer ${this.store.getToken()}`
+                }
+            }).then(r => {
+                this.$toast.add({ severity: 'success', summary: 'Estado backstage', detail: r.data ? 'Estado cambiado correctamente' : 'No se pudo cambiar el estado', life: 1600 });
+            }).catch(error => {
+                switch (error.response.data.statusCode) {
+                    case 401:
+                        //Se le termino la sesión
+                        this.store.clearUser();
+                        this.$router.push('/login');
+                        break;
+                    default:
+                        this.$toast.add({ severity: 'error', summary: `Sucedió un problema`, detail: error.response.data.message, life: 1500 });
+                        console.log('Error: ', error);
+                        break;
+                }
+            });
+        },
         cerrarSesion() {
             this.store.clearUser();
             this.$router.push('/login');
         }
     },
-    created() {
+    async created() {
         this.store = useStoreEvento();
         const admin = this.store.isAdmin();
+        await this.getBackstage();
         if (admin) {
             this.itemsMenu = [
                 {
@@ -208,6 +337,12 @@ export default {
                             label: 'Gestionar Promoción',
                             icon: 'pi pi-thumbs-up-fill',
                             route: '/panel/promocion',
+                        },
+                        {
+                            label: 'Agregar creadores',
+                            icon: 'pi pi-user-plus',
+                            action: 'add_creador',
+                            route: '#action'
                         }
                     ]
                 },
@@ -251,7 +386,8 @@ export default {
                             icon: 'pi pi-user-edit',
                             action: 'editar_perfil',
                             route: '#action'
-                        }, {
+                        },
+                        {
                             label: 'Cerrar sesión',
                             icon: 'pi pi-sign-out',
                             action: 'cerrar_sesión',
@@ -278,54 +414,113 @@ export default {
             ];
         }
         else {
-            this.itemsMenu = [
-                {
-                    separator: true
-                },
-                {
-                    label: 'Principal',
-                    icon: 'pi pi-user',
-                    route: '/panel/bonus',
-                },
-                {
-                    label: 'Promoción',
-                    icon: 'pi pi-thumbs-up-fill ',
-                    route: '/panel/promouser'
-                },
-                {
-                    label: 'Evento',
-                    icon: 'pi pi-calendar-plus',
-                    route: '/evento'
-                },
-                {
-                    label: 'DuckRacer',
-                    icon: 'pi pi-dollar',
-                    route: '/duckracer'
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: 'Administración',
-                    items: [
-                        {
-                            label: 'Mi perfil',
-                            icon: 'pi pi-user',
-                            route: '/panel/bonus'
-                        },
-                        {
-                            label: 'Editar perfil',
-                            icon: 'pi pi-user-edit',
-                            action: 'editar_perfil',
-                            route: '#action'
-                        }, {
-                            label: 'Cerrar sesión',
-                            icon: 'pi pi-sign-out',
-                            action: 'cerrar_sesión',
-                            route: '#action'
-                        }]
-                }
-            ];
+            //Verificamos el estado del backstage
+            if (this.paquete.estado == 'Activado') {
+                this.itemsMenu = [
+                    {
+                        separator: true
+                    },
+                    {
+                        label: 'Principal',
+                        icon: 'pi pi-user',
+                        route: '/panel/bonus',
+                    },
+                    {
+                        label: 'Agregar creadores',
+                        icon: 'pi pi-user-plus',
+                        action: 'add_creador',
+                        route: '#action'
+                    },
+                    {
+                        label: 'Promoción',
+                        icon: 'pi pi-thumbs-up-fill ',
+                        route: '/panel/promouser'
+                    },
+                    {
+                        label: 'Evento',
+                        icon: 'pi pi-calendar-plus',
+                        route: '/evento'
+                    },
+                    {
+                        label: 'DuckRacer',
+                        icon: 'pi pi-dollar',
+                        route: '/duckracer'
+                    },
+                    {
+                        separator: true
+                    },
+                    {
+                        label: 'Administración',
+                        items: [
+                            {
+                                label: 'Mi perfil',
+                                icon: 'pi pi-user',
+                                route: '/panel/bonus'
+                            },
+                            {
+                                label: 'Editar perfil',
+                                icon: 'pi pi-user-edit',
+                                action: 'editar_perfil',
+                                route: '#action'
+                            }, {
+                                label: 'Cerrar sesión',
+                                icon: 'pi pi-sign-out',
+                                action: 'cerrar_sesión',
+                                route: '#action'
+                            }]
+                    }
+                ];
+            } else {
+                this.itemsMenu = [
+                    {
+                        separator: true
+                    },
+                    {
+                        label: 'Principal',
+                        icon: 'pi pi-user',
+                        route: '/panel/bonus',
+                    },
+                    {
+                        label: 'Promoción',
+                        icon: 'pi pi-thumbs-up-fill ',
+                        route: '/panel/promouser'
+                    },
+                    {
+                        label: 'Evento',
+                        icon: 'pi pi-calendar-plus',
+                        route: '/evento'
+                    },
+                    {
+                        label: 'DuckRacer',
+                        icon: 'pi pi-dollar',
+                        route: '/duckracer'
+                    },
+                    {
+                        separator: true
+                    },
+                    {
+                        label: 'Administración',
+                        items: [
+                            {
+                                label: 'Mi perfil',
+                                icon: 'pi pi-user',
+                                route: '/panel/bonus'
+                            },
+                            {
+                                label: 'Editar perfil',
+                                icon: 'pi pi-user-edit',
+                                action: 'editar_perfil',
+                                route: '#action'
+                            }, {
+                                label: 'Cerrar sesión',
+                                icon: 'pi pi-sign-out',
+                                action: 'cerrar_sesión',
+                                route: '#action'
+                            }]
+                    }
+                ];
+            }
+
             this.itemsUsuario = [
                 {
                     label: 'Editar perfil',
@@ -339,6 +534,7 @@ export default {
             ];
         }
         this.getDatosUsuario();
+
     }
 };
 </script>
