@@ -437,6 +437,24 @@ export default {
     height: 650px;
 }
 
+.usuario>.Bonus>.p-toggleable-content>.p-panel-content>.bonus-usuario>.p-datatable-wrapper::-webkit-scrollbar {
+    width: 7px;
+}
+
+.usuario>.Bonus>.p-toggleable-content>.p-panel-content>.bonus-usuario>.p-datatable-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.usuario>.Bonus>.p-toggleable-content>.p-panel-content>.bonus-usuario>.p-datatable-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.usuario>.Bonus>.p-toggleable-content>.p-panel-content>.bonus-usuario>.p-datatable-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 .usuario>.Bonus>.p-toggleable-content>.p-panel-content {
     background-image: url('/assets/img/eventos/marco-tabla.png') !important;
     background-repeat: no-repeat;

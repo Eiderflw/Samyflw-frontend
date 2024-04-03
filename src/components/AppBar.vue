@@ -380,7 +380,6 @@ export default {
                             icon: 'pi pi-gift',
                             route: '/panel/asignar'
                         },
-
                         {
                             label: 'Mi perfil',
                             icon: 'pi pi-user',
@@ -465,6 +464,11 @@ export default {
                                 route: '/panel/bonus'
                             },
                             {
+                                label: 'Mis premios',
+                                icon: 'pi pi-gift',
+                                route: '/panel/premio'
+                            },
+                            {
                                 label: 'Editar perfil',
                                 icon: 'pi pi-user-edit',
                                 action: 'editar_perfil',
@@ -512,6 +516,11 @@ export default {
                                 label: 'Mi perfil',
                                 icon: 'pi pi-user',
                                 route: '/panel/bonus'
+                            },
+                            {
+                                label: 'Mis premios',
+                                icon: 'pi pi-gift',
+                                route: '/panel/premio'
                             },
                             {
                                 label: 'Editar perfil',

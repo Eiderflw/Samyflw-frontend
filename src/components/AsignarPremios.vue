@@ -3,12 +3,13 @@
         <Toast />
         <template #header>
             <div class="flex items-center gap-2 flex-end w-full justify-content-between">
-                <h1 class="m-0">Entregar Premios</h1>
+                <h1 class="m-0">Entregar premios</h1>
 
             </div>
         </template>
         <DataTable :value="premios" dataKey="id" sortField="estado" :sortOrder="1" :customSort="customSort" paginator
             :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+            <Column field="tipo_premio" header="Tipo premio" sortable />
             <Column field="nombre" header="Usuario" sortable></Column>
             <Column field="premio" header="Premio">
                 <template #body="slotProps">
@@ -17,64 +18,68 @@
                 </template>
             </Column>
             <Column field="descripcion" header="Descripción"></Column>
-            <Column field="fecha_obtenido" header="Fecha" style="width: 35%">
+            <Column field="fecha_obtenido" header="Fecha obtenido" />
+            <Column field="transferencia" header="Fecha entrega">
+                <template #body="props">
+                    {{ props.data.transferencia.fecha_reclamado != null ? (props.data.transferencia.fecha_reclamado.slice(0, 10) + ' ' + props.data.transferencia.fecha_reclamado.slice(11, 16)) : null }}
+                </template>
             </Column>
             <Column field="estado" header="Estado">
                 <template #body="slotProps">
                     <Tag :severity="ponerEstado(slotProps.data.estado)"
-                        :value="`${slotProps.data.estado === 'Reclamado' ? ('Reclamado | ' + slotProps.data.transferencia.fecha_reclamado.slice(0, 10)) : slotProps.data.estado}`" />
+                        :value="`${slotProps.data.estado === 'Entregado' ? ('Entregado | ' + slotProps.data.transferencia.fecha_reclamado.slice(0, 10) + ' ' + slotProps.data.transferencia.fecha_reclamado.slice(11, 16)) : slotProps.data.estado}`" />
                 </template>
             </Column>
             <Column header="Acciones">
                 <template #body="slotProps">
                     <Button v-if="slotProps.data.estado === 'En proceso'" icon="pi pi-send"
                         @click="Preparar(slotProps.data)"></Button>
-                    <Image v-tooltip.top="'Comprobante de entrega'" v-if="slotProps.data.estado == 'Entregado'"
+                    <Image v-tooltip.top="'Comprobante de entrega'" v-if="slotProps.data.estado == 'Entregado' && slotProps.data.tipo_premio != 'SaldoApi'"
                         :src="slotProps.data.transferencia.comprobante" alt="Imagen del premio" width="50" preview />
 
                 </template>
             </Column>
         </DataTable>
-        <Dialog v-model:visible="EnviarModal" header="Confimacion " :style="{ width: '35rem' }"
+        <Dialog v-model:visible="EnviarModal" :header="`Pago: ${datosTransferencia.transferencia.metodo_pago != null ? datosTransferencia.transferencia.metodo_pago.toUpperCase() : ''}`" :style="{ width: '40rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
             <div v-if="datosTransferencia.tipo_premio === 'Efectivo'">
                 <div class="flex gap-2 sm:flex-column md:flex-row"
                     v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
                     <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
-                        <label class="font-semibold">Tipo de Cuenta</label>
+                        <label class="font-semibold">Tipo de cuenta</label>
                         <InputText disabled :placeholder="datosTransferencia.transferencia.tipo_cuenta.tipo"
                             class="flex-auto" autocomplete="off" />
                     </div>
                     <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
-                        <label class="font-semibold">Numero de Cuenta</label>
+                        <label class="font-semibold">Número de cuenta</label>
                         <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
                             autocomplete="off" />
                     </div>
                 </div>
                 <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'nequi'">
-                    <label class="font-semibold ">Numero De Cuenta Nequi</label>
+                    <label class="font-semibold ">Cuenta Nequi</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
                         autocomplete="off" />
                 </div>
                 <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'paypal'">
-                    <label class="font-semibold">Correo de Paypal</label>
+                    <label class="font-semibold">Correo PayPal</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.cuenta" class="flex-auto"
                         autocomplete="off" />
                 </div>
 
                 <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
-                    <label class="font-semibold">Nombre Del Banco</label>
+                    <label class="font-semibold">Banco</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.banco" class="flex-auto"
                         autocomplete="off" />
                 </div>
                 <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
-                    <label class="font-semibold">Nombre Del Titular</label>
+                    <label class="font-semibold">Titular</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.titular_cuenta" class="flex-auto"
                         autocomplete="off" />
 
                 </div>
                 <div class="flex flex-column gap-2" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
-                    <label class="font-semibold">Numero de Cedula</label>
+                    <label class="font-semibold">Cédula</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.cedula" class="flex-auto"
                         autocomplete="off" />
                 </div>
@@ -86,59 +91,58 @@
                 </div>
             </div>
             <div v-if="datosTransferencia.transferencia.metodo_pago === 'Envio'">
-                <div class="flex gap-2 sm:flex-column md:flex-row">
-                    <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
-                        <label class="font-semibold">Pais</label>
-                        <InputText disabled :placeholder="datosTransferencia.transferencia.pais" class="flex-auto"
-                            autocomplete="off" />
-                    </div>
-                    <div class="flex flex-column gap-2">
-                        <label class="font-semibold">Codigo postal</label>
-                        <InputText disabled :placeholder="datosTransferencia.transferencia.codigo_postal"
-                            class="flex-auto" autocomplete="off" />
-                    </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Cédula</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.cedula" class="flex-auto"
+                        autocomplete="off" />
                 </div>
-                <div class="flex gap-2 sm:flex-column md:flex-row">
-                    <div class="flex flex-column gap-2">
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Nombre receptor</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.titular_cuenta" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex flex-column gap-2 w-full">
+                    <label class="font-semibold">País</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.pais" class="flex-auto"
+                        autocomplete="off" />
+                </div>
+                <div class="flex gap-2 xs:flex-column sm:flex-column md:flex-row">
+                    <div class="flex flex-column gap-2 xs:w-full sm:w-full md:w-6">
                         <label class="font-semibold">Departamento</label>
                         <InputText disabled :placeholder="datosTransferencia.transferencia.departamento"
                             class="flex-auto" autocomplete="off" />
                     </div>
-                    <div class="flex flex-column gap-2">
+                    <div class="flex flex-column gap-2 sm:w-full md:w-6">
                         <label class="font-semibold">Ciudad</label>
                         <InputText disabled :placeholder="datosTransferencia.transferencia.ciudad" class="flex-auto"
                             autocomplete="off" />
                     </div>
                 </div>
                 <div class="flex flex-column gap-2">
-                    <label class="font-semibold">Direccion</label>
+                    <label class="font-semibold">Dirección</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.direccion" class="flex-auto"
                         autocomplete="off" />
                 </div>
+
                 <div class="flex flex-column gap-2">
-                    <label class="font-semibold">Numero de Cedula</label>
-                    <InputText disabled :placeholder="datosTransferencia.transferencia.cedula" class="flex-auto"
-                        autocomplete="off" />
-                </div>
-                <div class="flex flex-column gap-2">
-                    <label class="font-semibold">Nombre Del Titular</label>
-                    <InputText disabled :placeholder="datosTransferencia.transferencia.titular_cuenta" class="flex-auto"
-                        autocomplete="off" />
-                </div>
-                <div class="flex flex-column gap-2">
-                    <label class="font-semibold">Telefono</label>
+                    <label class="font-semibold">Teléfono</label>
                     <InputText disabled :placeholder="datosTransferencia.transferencia.telefono" class="flex-auto"
                         autocomplete="off" />
                 </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-semibold">Código postal</label>
+                    <InputText disabled :placeholder="datosTransferencia.transferencia.codigo_postal"
+                        class="flex-auto" autocomplete="off" />
+                </div>
             </div>
-            <div class="flex flex-column gap-2">
+            <div class="flex flex-column gap-2 mt-4">
                 <label class="font-semibold">Comprobante</label>
                 <InputText type="file" id="comprobante" accept="image/*"
                     @change="(event) => paquete.comprobante = event.target.files[0]" />
             </div>
             <template #footer>
-                <Button label="Cancelar" @click="EnviarModal = false" text severity="danger" />
-                <Button label="Enviar" @click="EnviarPremio" text autofocus></Button>
+                <Button label="Cancelar" @click="EnviarModal = false" autofocus text severity="danger" />
+                <Button label="Entregar premio" @click="EnviarPremio"></Button>
             </template>
         </Dialog>
     </Panel>
@@ -160,7 +164,23 @@ export default {
         sortField: 'estado',
         sortOrder: 1,
         paquete: { usuario: null, comprobante: null, id_concurso: null },
-        datosTransferencia: {}
+        datosTransferencia: {
+            transferencia: {
+                metodo_pago: null,
+                tipo_premio: null,
+                tipo_cuenta: null,
+                cuenta: null,
+                banco: null,
+                titular_cuenta: null,
+                cedula: null,
+                pais: null,
+                departamento: null,
+                ciudad: null,
+                direccion: null,
+                telefono: null,
+                codigo_postal: null
+            }
+        }
 
     }),
     methods: {

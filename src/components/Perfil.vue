@@ -55,7 +55,7 @@
                 <h2 class="mb-0 sm:text-center xs:text-center font-gamers">Actualización {{ fechaAct }}</h2>
                 <img src="/assets/img/eventos/divisor-titulo.png" class="w-full" alt="Divisor">
 
-                <div class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-wrap md:gap-4 xs:flex-wrap md:justify-content-center lg:justify-content-start">
+                <div class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-wrap md:gap-4 xs:flex-wrap xs:justify-content-center md:justify-content-center lg:justify-content-start">
 
                     <div class="flex flex-column gap-4">
                         <div class="live flex align-items-center decorador gap-2 p-2">
@@ -504,30 +504,6 @@ export default {
     .clasificacion,
     .top {
         height: 270px !important;
-    }
-
-    .xs\:flex-column {
-        flex-direction: column !important;
-    }
-
-    .xs\:w-full {
-        width: 100% !important;
-    }
-
-    .xs\:flex-wrap {
-        flex-wrap: wrap !important;
-    }
-
-    .xs\:text-center {
-        text-align: center !important;
-    }
-
-    .xs\:justify-content-center {
-        justify-content: center !important;
-    }
-
-    .xs\:gap-3 {
-        gap: 3rem !important;
     }
 }
 </style>

@@ -32,8 +32,6 @@
                     </template>
                 </Column>
             </DataTable>
-            <CajaSorpresa :mostrarCaja="cajaSorpresa.mostrar" :tipo_premio="cajaSorpresa.tipo_premio" :premio="cajaSorpresa.premio" @cerrarCaja="cajaSorpresa.mostrar = false" />
-
         </Panel>
         <Panel class="concursos">
 
@@ -263,11 +261,6 @@ export default {
         modalGanadores: false,
         premioConcurso: '',
         ganadoresConcurso: [],
-        cajaSorpresa: {
-            mostrar: false,
-            tipo_premio: 'Objeto',
-            premio: 'https://res.cloudinary.com/dq2sbqjgf/image/upload/v1711048311/creadores/foto_1711048309972-924694922_pz5oqq.jpg'
-        },
         store: null,
         modalConcurso: false,
         modalPremioAleatorio: false,

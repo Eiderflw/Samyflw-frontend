@@ -51,4 +51,38 @@ body,
 .app {
   background-color: #000000 !important;
 }
+
+.p-inputtext {
+  width: 100% !important;
+}
+
+@media (max-width: 575px) {
+  .xs\:flex-column {
+    flex-direction: column !important;
+  }
+
+  .xs\:w-full {
+    width: 100% !important;
+  }
+
+  .xs\:flex-wrap {
+    flex-wrap: wrap !important;
+  }
+
+  .xs\:text-center {
+    text-align: center !important;
+  }
+
+  .xs\:justify-content-center {
+    justify-content: center !important;
+  }
+
+  .xs\:justify-content-start {
+    justify-content: flex-start !important;
+  }
+
+  .xs\:gap-3 {
+    gap: 3rem !important;
+  }
+}
 </style>

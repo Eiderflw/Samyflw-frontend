@@ -87,12 +87,20 @@ export default {
                 this.$refs.abierto.classList += ' opacity-0 cursor-auto';
                 this.$refs.abierto.pause();
                 // this.estado = 'cerrando';
+                this.cajaAbierta();
             }, 2000);
-
+        },
+        cajaAbierta() {
+            this.interval = setTimeout(() => {
+                this.$emit('reclamandoPremio');
+                clearTimeout(this.interval);
+            }, 1000);
         },
         cerrarDialog() {
-            this.$refs.abriendo_caja.pause();
-            console.log('cerrando');
+            if (this.$refs.abriendo_caja != null) {
+                this.$refs.abriendo_caja.pause();
+            }
+            this.estado = 'abrir';
             this.$emit('cerrarCaja');
         }
     }
