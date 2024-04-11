@@ -71,13 +71,10 @@
             </template>
         </Menubar>
         <dialogMiPerfil :mostrarMiPerfil="mostrarPerfil" @dialogPerfilOculto="mostrarPerfil = false" />
-        <dialogEditarPerfil :mostrarEditar="mostrarEditar" @dialogEditarOculto="mostrarEditar = false"
-            @perfilActualizado="getNewDatos" />
-        <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias"
-            @dialogOculto="mostrarInsignias = false">
+        <dialogEditarPerfil :mostrarEditar="mostrarEditar" @dialogEditarOculto="mostrarEditar = false" @perfilActualizado="getNewDatos" />
+        <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias" @dialogOculto="mostrarInsignias = false">
         </Insignias>
-        <Dialog v-model:visible="addCreador" maximizable :header="store.isAdmin() ? 'Credenciales backstage' : 'Agregar creador'" :style="{ width: store.isAdmin() ? '34rem' : '45rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+        <Dialog v-model:visible="addCreador" maximizable :header="store.isAdmin() ? 'Credenciales backstage' : 'Agregar creador'" :style="{ width: store.isAdmin() ? '34rem' : '45rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
             <div v-if="store.isAdmin()">
                 <form ref="formAdd">
                     <div class="flex flex-column gap-1 mb-2">
@@ -360,7 +357,11 @@ export default {
                             label: 'Vista Previa',
                             icon: 'pi pi-desktop',
                             route: '/evento'
-                        }
+                        }, {
+                            label: 'Batallas',
+                            icon: 'pi pi-calendar-plus',
+                            route: '/panel/batalla'
+                        },
                     ]
                 },
                 {
@@ -446,6 +447,11 @@ export default {
                         label: 'Evento',
                         icon: 'pi pi-calendar-plus',
                         route: '/evento'
+                    },
+                    {
+                        label: 'Batallas',
+                        icon: 'pi pi-calendar-plus',
+                        route: '/panel/batalla'
                     },
                     {
                         label: 'DuckRacer',

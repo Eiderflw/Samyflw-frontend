@@ -3,7 +3,7 @@
         <Toast />
         <template #header>
             <div class="flex items-center gap-2 flex-end w-full justify-content-between">
-                <h1 class="m-0">Promocion</h1>
+                <h1 class="m-0">Promoción</h1>
                 <div class="botones flex gap-2">
                     <span class="p-input-icon-left">
                         <i class="pi pi-search" />
@@ -13,8 +13,7 @@
                 </div>
             </div>
         </template>
-        <DataTable :value="creadores" :filters="filtersCreadores" sortField="saldo" :sortOrder="-1" paginator :rows="5"
-            :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+        <DataTable :value="creadores" :filters="filtersCreadores" sortField="saldo" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
             <Column field="usuario" header="Usuario" sortable></Column>
             <Column field="grupo" header="Grupo" sortable>
                 <template #body="slotProps">
@@ -35,16 +34,36 @@
                         actualizarSaldo.id = slotProps.data._id;
                         actualizarSaldo.saldo = slotProps.data.saldo;
                         actualizarSaldo.usuario = slotProps.data.usuario;
-                    }"></Button>
+                    }" />
+                    <Button v-if="slotProps.data.ordenes.length > 0" outlined rounded severity="info" class="ml-2" v-tooltip.top="'Ver gastos'" icon="pi pi-eye" @click="() => { ordenesUsuario = slotProps.data.ordenes; modalGastos = true; }" />
                 </template>
             </Column>
         </DataTable>
-        <Dialog v-model:visible="modalServicios"
-            :header="`Servicios Disponibles: ${servicios.length} - Servicios selesccionado: ${selectedServicios.length}`"
-            :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true"
-            :draggable="false">
-            <DataTable :value="servicios" :filters="filters" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-                tableStyle="min-width: 100%">
+        <DataTable :value="ordenesHistorial" sortField="orden.fecha" :sortOrder="-1" tableStyle="min-width: 100%">
+            <template #header>
+                <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <h1 class="m-0 text-white">Historial ordenes</h1>
+                </div>
+            </template>
+            <Column field="usuario" header="Creador" sortable style="min-width: 6rem;" />
+            <Column field="orden.fecha" header="Fecha" sortable style="min-width: 11rem;">
+                <template #body="props">
+                    {{ props.data.orden.fecha.slice(0, 10) }} {{ props.data.orden.fecha.slice(11, 16) }}
+                </template>
+            </Column>
+            <Column field="orden.service" header="ID Service" sortable />
+            <Column field="orden.descripcion" header="Descripcion" class="word-wrap" sortable />
+            <Column field="orden.cantidad" header="Cantidad" />
+            <Column field="orden.link" header="Publicación">
+                <template #body="props">
+                    <a :href="props.data.link" target="_blank" rel="noopener noreferrer">Ver publicación</a>
+                </template>
+            </Column>
+            <Column field="orden.pagar" header="Pago" sortable />
+            <Column field="orden.order" header="Order ID" sortable />
+        </DataTable>
+        <Dialog v-model:visible="modalServicios" :header="`Servicios Disponibles: ${servicios.length} - Servicios seleccionados: ${selectedServicios.length}`" :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+            <DataTable :value="servicios" :filters="filters" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
                 <template #header>
                     <div class="flex items-center gap-2 flex-end w-full justify-content-end">
                         <div class="botones flex gap-2">
@@ -80,9 +99,7 @@
                     :disabled="btnServiciosSelect" severity="success" />
             </template>
         </Dialog>
-        <Dialog v-model:visible="modalCambiarSaldo" :header="`Actualizar Saldo: ${actualizarSaldo.usuario}`"
-            :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true"
-            :draggable="false">
+        <Dialog v-model:visible="modalCambiarSaldo" :header="`Actualizar Saldo: ${actualizarSaldo.usuario}`" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
             <div class="flex flex-column gap-1 mb-2">
                 <label for="excel" class="font-bold block">$ Saldo</label>
                 <InputText type="number" id="saldo" v-model="actualizarSaldo.saldo" />
@@ -91,6 +108,28 @@
             <template #footer>
                 <Button label="Cancelar" @click="modalCambiarSaldo = false" text severity="danger" autofocus />
                 <Button label="Actualizar" @click="updateSaldo()" :disabled="btnActualizarSaldo" severity="success" />
+            </template>
+        </Dialog>
+        <Dialog v-model:visible="modalGastos" header="Gastos" :style="{ width: '60rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+            <DataTable :value="ordenesUsuario" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+                <Column field="fecha" header="Fecha" sortable style="min-width: 11rem;">
+                    <template #body="props">
+                        {{ props.data.fecha.slice(0, 10) }} {{ props.data.fecha.slice(11, 16) }}
+                    </template>
+                </Column>
+                <Column field="service" header="ID Service" sortable />
+                <Column field="descripcion" header="Descripcion" class="word-wrap" sortable />
+                <Column field="cantidad" header="Cantidad" />
+                <Column field="link" header="Publicación">
+                    <template #body="props">
+                        <a :href="props.data.link" target="_blank" rel="noopener noreferrer">Ver publicación</a>
+                    </template>
+                </Column>
+                <Column field="pagar" header="Pago" sortable />
+                <Column field="order" header="Order ID" sortable />
+            </DataTable>
+            <template #footer>
+                <Button label="Cerrar" @click="modalGastos = false" text severity="danger" autofocus />
             </template>
         </Dialog>
     </Panel>
@@ -104,8 +143,10 @@ export default {
     data: () => ({
         API: import.meta.env.VITE_APP_API,
         token: null,
+        store: null,
         modalServicios: false,
         modalCambiarSaldo: false,
+        modalGastos: false,
         actualizarSaldo: {
             saldo: null,
             id: null,
@@ -124,8 +165,9 @@ export default {
             global: { value: null, matchMode: FilterMatchMode.CONTAINS },
             name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] }
         },
-        creadores: []
-
+        creadores: [],
+        ordenesUsuario: [],
+        ordenesHistorial: [],
     }),
     methods: {
         async getServicios() {
@@ -156,7 +198,9 @@ export default {
             }).catch((error) => {
                 switch (error.response.data.statusCode) {
                     case 401:
-                        console.log(error);
+                        //Se le termino la sesión
+                        this.store.clearUser();
+                        this.$router.push("/login");
                         break;
                     default:
                         this.$toast.add({
@@ -192,7 +236,9 @@ export default {
             }).catch((error) => {
                 switch (error.response.data.statusCode) {
                     case 401:
-                        console.log(error);
+                        //Se le termino la sesión
+                        this.store.clearUser();
+                        this.$router.push("/login");
                         break;
                     default:
                         this.$toast.add({
@@ -249,7 +295,9 @@ export default {
             }).catch((error) => {
                 switch (error.response.data.statusCode) {
                     case 401:
-                        console.log(error);
+                        //Se le termino la sesión
+                        this.store.clearUser();
+                        this.$router.push("/login");
                         break;
                     default:
                         this.$toast.add({
@@ -265,6 +313,28 @@ export default {
             await this.getCreadores();
             this.btnActualizarSaldo = false;
             this.modalCambiarSaldo = false;
+        },
+        async getOrdenesHistorial() {
+            await axios.get(`${this.API}/usuario/ordenes`, this.token).then(response => {
+                this.ordenesHistorial = response.data;
+            }).catch((error) => {
+                switch (error.response.data.statusCode) {
+                    case 401:
+                        //Se le termino la sesión
+                        this.store.clearUser();
+                        this.$router.push("/login");
+                        break;
+                    default:
+                        this.$toast.add({
+                            severity: "error",
+                            summary: "Obtener ordenes",
+                            detail: "Sucedió un error, Comuniquese con soporte",
+                            life: 1500,
+                        });
+                        console.log("Error: ", error);
+                        break;
+                }
+            });
         }
     },
     async created() {
@@ -278,6 +348,7 @@ export default {
             },
         }
         await this.getCreadores();
+        await this.getOrdenesHistorial();
         await this.getServicios();
         await this.getServiciosActive();
     }

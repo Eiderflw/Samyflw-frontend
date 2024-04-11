@@ -14,10 +14,10 @@
             <Card v-else class="px-0">
                 <template #content>
                     <TabView class="font-gamers">
-                        <TabPanel v-for="evento in   eventos " :key="evento" :header="evento.titulo">
+                        <TabPanel v-for="evento in eventos " :key="evento" :header="evento.titulo">
                             <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                 <div class="descripcion">
-                                    <div class="container">
+                                    <div class="container py-1">
                                         <p class="m-0">{{ evento.descripcion }}</p>
                                     </div>
                                 </div>
@@ -37,21 +37,6 @@
                                         <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]" :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">{{ calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1] }}%</div>
                                     </div>
                                 </div>
-                                <!-- <Fieldset legend="Descripción" :toggleable="true">
-                                    <p class="m-0">
-                                        {{ evento.descripcion }}
-                                    </p>
-                                </Fieldset>
-                                <Fieldset legend="Reglas" :toggleable="true">
-                                    <p class="m-0">
-                                        {{ evento.reglas }}
-                                    </p>
-                                </Fieldset>
-                                <Fieldset :legend="`${evento.fecha_inicio} | ${evento.fecha_fin}`" :toggleable="true">
-                                    <ProgressBar style="min-width: 300px;"
-                                        :value="calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)">
-                                    </ProgressBar>
-                                </Fieldset> -->
                             </div>
                             <div class="flex justify-content-around flex-wrap mt-5" style="row-gap: 25px;">
                                 <div v-for="(premio, index) in Object.values(evento.premios)" :key="index" :class="`puesto${index + 1}`">
@@ -88,23 +73,6 @@
                                     </div>
                                 </div> -->
                             </div>
-                            <!-- <Carousel :value="Object.values(evento.premios)" :numVisible="3" :numScroll="3"
-                                :responsiveOptions="responsiveOptions">
-                                <template #item="slotProps">
-                                    <div class="border-1 surface-border border-round m-2  p-3">
-                                        <div class="mb-3">
-                                            <div class="relative mx-auto">
-                                                <img width="100%" :src="slotProps.data.imagen"
-                                                    :alt="slotProps.data.descripcion" class="border-round imgPremio" />
-                                                <Tag :value="'Puesto ' + (slotProps.index + 1)" class="absolute"
-                                                    style="left:5px; top: 5px" />
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 font-medium">{{ slotProps.data.descripcion }}</div>
-
-                                    </div>
-                                </template>
-</Carousel> -->
                         </TabPanel>
 
                     </TabView>
@@ -708,7 +676,7 @@ video {
     overflow-x: auto;
     height: 100%;
     width: 100%;
-    display: flex;
+   /*  display: flex; */
     justify-content: center;
     flex-direction: column;
     text-align: center;
