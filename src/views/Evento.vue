@@ -53,25 +53,6 @@
                                         <p class="m-0">{{ premio.descripcion }}</p>
                                     </div>
                                 </div>
-                                <!-- <div class="puesto2">
-                                    <div class="titulo">
-                                        <p class="m-0">Puesto 2</p>
-                                    </div>
-                                    <div class="imagen">
-                                        <img width="100%" :src="evento.premios.top2.imagen"
-                                            :alt="evento.premios.top2.descripcion" class="border-round imgPremio" />
-                                    </div>
-                                    <div class="descripcion">{{ Object.values(evento.premios) }}</div>
-                                </div>
-                                <div class="puesto3">
-                                    <div class="titulo">
-                                        <p class="m-0">Puesto 3</p>
-                                    </div>
-                                    <div class="imagen">
-                                        <img width="100%" :src="evento.premios.top3.imagen"
-                                            :alt="evento.premios.top3.descripcion" class="border-round imgPremio" />
-                                    </div>
-                                </div> -->
                             </div>
                         </TabPanel>
 
@@ -85,12 +66,6 @@
                                 <p class="m-0 text-inline-evento text-6xl color-blue" v-if="all != true">GRUPO {{ grupoMostrado }}</p>
                                 <p class="m-0 text-inline-evento text-6xl color-blue" v-else>TODOS</p>
                             </div>
-                            <!-- <InlineMessage v-if="all != true" class="text-inline-evento" icon="pi pi-vedied" severity="success">
-
-                                </InlineMessage>
-                                <InlineMessage v-else class="text-inline-evento" icon="pi pi-vedied" severity="success">
-                                    Todos
-                                </InlineMessage> -->
                             <div class="grupos mt-3 mb-5 uppercase font-gamers color-blue" style="z-index: 1;" v-if="gruposMezcla == null || gruposMezcla == ''">
                                 <span class="todos" @click="changeCreador('Todos')">Todos</span>
                                 <span class="A" @click="changeCreador('A')">A</span>
@@ -108,34 +83,11 @@
                                 <span v-if="gruposMezcla == 'C-B' || gruposMezcla == 'B-C'" class="A" @click="changeCreador('A')">A</span>
                                 <span v-if="gruposMezcla == 'C-B' || gruposMezcla == 'B-C'" class="B-C" @click="changeCreador('B-C')">B-C</span>
                             </div>
-                            <!-- <div class="flex gap-2">
-                                    <Button @click="changeCreador('Todos')" label="Todos" severity="warning" />
-                                    <div class="flex gap-2" v-if="gruposMezcla == 'A-B' || gruposMezcla == 'B-A'">
-                                        <Button @click="changeCreador('A-B')" label="A-B" severity="success" />
-                                        <Button @click="changeCreador('C')" label="C" severity="danger" />
-                                    </div>
-                                    <div class="flex gap-2" v-else-if="gruposMezcla == 'A-C' || gruposMezcla == 'C-A'">
-                                        <Button @click="changeCreador('A-C')" label="A-C" severity="success" />
-                                        <Button @click="changeCreador('B')" label="B" severity="info" />
-                                    </div>
-                                    <div class="flex gap-2" v-else-if="gruposMezcla == 'C-B' || gruposMezcla == 'B-C'">
-                                        <Button @click="changeCreador('A')" label="A" severity="success" />
-                                        <Button @click="changeCreador('B-C')" label="B-C" severity="info" />
-                                    </div>
-                                    <div class="flex gap-2" v-else>
-                                        <Button @click="changeCreador('A')" label="A" severity="success" />
-                                        <Button @click="changeCreador('B')" label="B" severity="info" />
-                                        <Button @click="changeCreador('C')" label="C" severity="danger" />
-                                    </div>
-                                </div> -->
-
                             <div class="containerC">
-                                <!-- <div class="video-container2"> -->
                                 <video autoplay muted loop class="tabla-fondo-header">
                                     <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
                                     Tu navegador no soporta esta funcionalidad video
                                 </video>
-                                <!--  </div> -->
                                 <Clasificacion :nombre="top3[1].usuario" top="2" tipo="Platino" :foto="top3[1].foto" />
                                 <Clasificacion top="1" tipo="Oro" :nombre="top3[0].usuario" :foto="top3[0].foto" />
                                 <Clasificacion :nombre="top3[2].usuario" top="3" tipo="Cobre" :foto="top3[2].foto" />
@@ -169,12 +121,6 @@
                         <Column field="grupo" class="font-gamers" header="Grupo">
                             <template #body="props">
                                 <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
-                                <!-- <Badge v-if="slotProps.data.grupo == 'A'" :value="slotProps.data.grupo" severity="success">
-                                </Badge>
-                                <Badge v-if="slotProps.data.grupo == 'B'" :value="slotProps.data.grupo" severity="info">
-                                </Badge>
-                                <Badge v-if="slotProps.data.grupo == 'C'" :value="slotProps.data.grupo" severity="danger">
-                                </Badge> -->
                             </template>
                         </Column>
                     </DataTable>
@@ -308,6 +254,14 @@ export default {
     },
     async created() {
         this.storeMezcla = useStoreMezcla();
+        await axios
+            .get(
+                `${this.API}/bonus/gruposMezclados`
+            ).then(response => {
+                if (response.data != '' && response.data != null) {
+                    this.storeMezcla.saveMezcla(response.data.grupos);
+                }
+            });
         this.gruposMezcla = this.storeMezcla.getGrupo();
         this.gruposMezcla = this.gruposMezcla == '' ? null : this.gruposMezcla;
         await axios.get(`${this.API}/usuario/agrupados`).then((resp) => {
@@ -676,7 +630,7 @@ video {
     overflow-x: auto;
     height: 100%;
     width: 100%;
-   /*  display: flex; */
+    /*  display: flex; */
     justify-content: center;
     flex-direction: column;
     text-align: center;
@@ -825,7 +779,11 @@ video {
 }
 
 .grupos>.A {
-    left: -9px;
+    left: 15px;
+}
+
+.grupos>.B-C {
+    left: 20px;
 }
 
 .grupos>.B {
@@ -882,7 +840,7 @@ video {
     }
 
     .grupos>.todos {
-        padding-left: 0;
+        padding-left: 10px !important;
         padding-right: 0;
     }
 
@@ -891,7 +849,11 @@ video {
     }
 
     .grupos>.A {
-        left: -3px !important;
+        left: 9px !important;
+    }
+
+    .grupos>.B-C {
+        left: 14px !important;
     }
 }
 

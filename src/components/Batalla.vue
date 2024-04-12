@@ -52,13 +52,13 @@
                 <div class="flex flex-row gap-1 mt-2 align-items-center justify-content-center xs:flex-wrap xs:flex-column sm:flex-wrap sm:flex-column md:flex-nowrap md:flex-row" v-if="store.isAdmin()">
                     <div class="flex flex-column gap-1 mt-2 xs:w-full sm:w-full">
                         <label for="retar" class="font-bold block">Petición de batalla</label>
-                        <Dropdown v-model="paquete.retador" name="retar" id="retar" editable filter :options="creadores" optionLabel="usuario" optionValue="usuario" placeholder="Selecciona creador" class="w-full" aria-describedby="retar-help" />
+                        <Dropdown v-model="paquete.retador" name="retar" id="retar" @change="escogerContrincante" editable filter :options="creadores" optionLabel="usuario" optionValue="usuario" placeholder="Selecciona creador" class="w-full" aria-describedby="retar-help" />
                         <small class="w-full retar-help">Si no lo encuentras, solo escribe su nombre de usuario y continua.</small>
                     </div>
                     <span class="font-bold">VS</span>
                     <div class="flex flex-column gap-1 mt-2 xs:w-full sm:w-full">
                         <label for="contricante" class="font-bold block">Contrincante</label>
-                        <Dropdown v-model="paquete.contrincante" name="retar" id="retar" editable filter :options="creadores" optionLabel="usuario" optionValue="usuario" placeholder="Selecciona creador" class="w-full" aria-describedby="retar-help" />
+                        <Dropdown v-model="paquete.contrincante" name="retar" id="retar" editable filter :options="creadoresAsignar" optionLabel="usuario" optionValue="usuario" placeholder="Selecciona creador" class="w-full" aria-describedby="retar-help" />
                         <small class="w-full retar-help">Si no lo encuentras, solo escribe su nombre de usuario y continua.</small>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
             </form>
             <template #footer>
                 <Button label="Cancelar" @click="modalBatalla = false" autofocus text severity="danger" />
-                <Button label="Pedir" @click="pedirBatalla" />
+                <Button label="Pedir" :disabled="btnPedir" @click="pedirBatalla" />
             </template>
         </Dialog>
         <Dialog v-model:visible="modalCambioEstado" header="Cambiar estado" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
@@ -212,6 +212,7 @@ export default {
                 Authorization: null
             }
         },
+        btnPedir: false,
         creadores: [],
         creadoresAsignar: [],
         batallas: [],
@@ -222,7 +223,7 @@ export default {
             fecha_batalla: null,
             con_rondas: 'No',
             rondas: 1,
-            objetivo: '',
+            objetivo: null,
             con_potenciadores: 'No',
             descripcion_potenciadores: '',
             confirmado_retador: '',
@@ -251,7 +252,8 @@ export default {
     }),
     methods: {
         async pedirBatalla() {
-            if (this.validateForm()) {
+            if (await this.validateForm()) {
+                this.btnPedir = true;
                 await axios.post(`${this.API}/batalla/crear`, { ...this.paquete, rondas: this.paquete.con_rondas == 'No' ? 0 : parseInt(this.paquete.rondas) }, this.token).then(resp => {
                     if (resp.data.creado) {
                         if (this.store.isAdmin()) {
@@ -267,7 +269,7 @@ export default {
                             fecha_batalla: null,
                             con_rondas: 'No',
                             rondas: 1,
-                            objetivo: '',
+                            objetivo: null,
                             con_potenciadores: 'No',
                             descripcion_potenciadores: ''
                         }
@@ -286,6 +288,7 @@ export default {
                             break;
                     }
                 });
+                this.btnPedir = false;
             } else {
                 this.$toast.add({ severity: 'warning', summary: 'Nueva batalla', detail: 'Debes llenar todos los campos', life: 1600 });
             }
@@ -293,11 +296,21 @@ export default {
         },
         async validateForm() {
             const keysValidate = Object.keys(this.paquete);
-            for (let i = 0; i < keysValidate.length; i++) {
-                if (this.paquete[keysValidate[i]] == null) {
-                    return false;
+            if (this.store.isAdmin()) {
+                for (let i = 0; i < keysValidate.length; i++) {
+                    if (this.paquete[keysValidate[i]] == null) {
+                        return false;
+                    }
+                }
+            } else {
+                for (let i = 0; i < keysValidate.length; i++) {
+                    if (this.paquete[keysValidate[i]] == null && keysValidate[i] != 'contrincante') {
+
+                        return false;
+                    }
                 }
             }
+
             return true;
 
         },
@@ -516,6 +529,12 @@ export default {
                 this.creadoresAsignar = this.creadores.filter((creador) => creador.usuario != retador);
                 this.modalContrincante = true;
             }
+        },
+        escogerContrincante() {
+            if (this.paquete.retador != null && this.paquete.retador != '') {
+                this.creadoresAsignar = this.creadores.filter(creador => creador.usuario != this.paquete.retador);
+                this.paquete.contrincante = null;
+            }
         }
     },
     created() {
@@ -531,8 +550,8 @@ export default {
             this.paquete.confirmado_contrincante = 'Esperando contrincante';
             this.getMisBatallas();
         } else {
-            this.paquete.confirmado_retador = 'Pendiente por aceptar';
-            this.paquete.confirmado_contrincante = 'Pendiente por aceptar';
+            this.paquete.confirmado_retador = 'Asistencia confirmada';
+            this.paquete.confirmado_contrincante = 'Asistencia confirmada';
             this.getBatallas();
         }
 
