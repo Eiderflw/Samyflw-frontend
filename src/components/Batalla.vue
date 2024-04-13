@@ -39,10 +39,11 @@
                         <Button v-tooltip.top="getTextoConf(props.data)" v-if="puedeAceptar(props.data)" icon="pi pi-check-circle" outlined rounded severity="info"
                             @click="modificarEstado(props.data)" />
                     </div>
-                    <div v-else-if="store.isAdmin()">
+                    <div v-else-if="store.isAdmin()" class="flex gap-2">
                         <Button v-tooltip.top="'Asignar contrincante'" v-if="props.data.contrincante == null" icon="pi pi-users" outlined rounded severity="success" @click="asignarContrincante(props.data.retador, props.data._id)" />
                         <Button v-tooltip.top="props.data.rondas == 0 ? 'Definir ganador' : 'Agregar puntos'" v-if="props.data.confirmado_contrincante == 'Asistencia confirmada' && props.data.confirmado_retador == 'Asistencia confirmada' && props.data.ganador == ''" icon="pi pi-plus" outlined rounded severity="info"
                             @click="agregarPuntos(props.data)" />
+                        <Button icon="pi pi-trash" outlined rounded severity="danger" autofocus="false" @click="eliminarBatalla(props.data._id)" />
                     </div>
                 </template>
             </Column>
@@ -458,6 +459,28 @@ export default {
             } else {
                 this.$toast.add({ severity: 'warning', summary: 'Asignar contrincante', detail: 'Debes seleccionar una batalla y un contrincante', life: 1600 });
 
+            }
+        },
+        async eliminarBatalla(batalla = null) {
+            if (batalla != null) {
+                await axios.delete(`${this.API}/batalla/${batalla}`, this.token).then(resp => {
+                    if (resp.data.eliminado) {
+                        this.getBatallas();
+                    }
+                    this.$toast.add({ severity: resp.data.eliminado ? 'success' : 'error', summary: 'Eliminar batalla', detail: resp.data.message, life: 1630 });
+                }).catch(error => {
+                    switch (error.response.data.statusCode) {
+                        case 401:
+                            //Se le termino la sesión
+                            this.store.clearUser();
+                            this.$router.push('/login');
+                            break;
+                        default:
+                            this.$toast.add({ severity: 'danger', summary: 'Eliminar batalla', detail: error.response.data.message, life: 1500 });
+                            console.log('Error: ', error);
+                            break;
+                    }
+                })
             }
         },
         definirEstadoConfirmacion(confirmacion = null) {
