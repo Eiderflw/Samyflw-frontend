@@ -108,6 +108,7 @@ export default {
             this.min = parseInt(event.min);
             this.max = parseInt(event.max);
             this.precioRate = (parseFloat(event.rate) / 1000);
+            this.calcularPago();
         },
         calcularPago() {
             this.paquetePromocion.pagar = this.paquetePromocion.cantidad * this.precioRate;

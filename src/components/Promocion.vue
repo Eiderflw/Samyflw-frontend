@@ -2,8 +2,9 @@
     <Panel class="creadores">
         <Toast />
         <template #header>
-            <div class="flex items-center gap-2 flex-end w-full justify-content-between">
+            <div class="flex align-items-center gap-2 flex-end w-full justify-content-between">
                 <h1 class="m-0">Promoción</h1>
+                <h3 class="m-0 p-0">Saldo creadores: ${{ saldoCreadores }}</h3>
                 <div class="botones flex gap-2">
                     <span class="p-input-icon-left">
                         <i class="pi pi-search" />
@@ -43,6 +44,7 @@
             <template #header>
                 <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
                     <h1 class="m-0 text-white">Historial ordenes</h1>
+                    <h3 class="m-0 p-0 text-white">Total gastado: ${{ totalGastado }}</h3>
                 </div>
             </template>
             <Column field="usuario" header="Creador" sortable style="min-width: 6rem;" />
@@ -56,7 +58,7 @@
             <Column field="orden.cantidad" header="Cantidad" />
             <Column field="orden.link" header="Publicación">
                 <template #body="props">
-                    <a :href="props.data.link" target="_blank" rel="noopener noreferrer">Ver publicación</a>
+                    <a :href="props.data.orden.link" target="_blank" rel="noopener noreferrer">Ver publicación</a>
                 </template>
             </Column>
             <Column field="orden.pagar" header="Pago" sortable />
@@ -335,6 +337,16 @@ export default {
                         break;
                 }
             });
+        }
+    },
+    computed: {
+        saldoCreadores() {
+            const saldo = this.creadores.reduce((acum, val) => acum += parseFloat(val.saldo), 0);
+            return saldo;
+        },
+        totalGastado() {
+            const total = this.ordenesHistorial.reduce((acum, val) => acum += parseFloat(val.orden.pagar), 0);
+            return total;
         }
     },
     async created() {
