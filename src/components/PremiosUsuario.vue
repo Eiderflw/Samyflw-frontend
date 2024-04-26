@@ -7,8 +7,7 @@
             </div>
         </template>
 
-        <DataTable :value="premios" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 100%">
+        <DataTable :value="premios" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
             <Column field="tipo_premio" header="Tipo" />
             <Column header="Premio" field="premio" sortable>
                 <template #body="slotProps">
@@ -43,16 +42,15 @@
             <Column header="Acciones">
                 <template #body="slotProps">
                     <Button v-if="slotProps.data.estado == 'Sin reclamar'" icon="pi pi-send" @click="() => {
-            Reclamar(slotProps.data.tipo_premio, slotProps.data.id_concurso, slotProps.data.estado, slotProps.data.premio, slotProps.data.descripcion);
-        }"></Button>
+                        Reclamar(slotProps.data.tipo_premio, slotProps.data.id_concurso, slotProps.data.estado, slotProps.data.premio, slotProps.data.descripcion);
+                    }"></Button>
                     <Image v-tooltip.top="'Comprobante de entrega'" v-if="slotProps.data.estado == 'Entregado' && slotProps.data.tipo_premio != 'SaldoApi'"
                         :src="slotProps.data.transferencia.comprobante" alt="Imagen del premio" width="50" preview />
                 </template>
             </Column>
         </DataTable>
-        <Dialog v-model:visible="cuenta" :header="mensaje" :style="{ width: '37rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
-            <div class="flex flex-wrap gap-2 mb-2" v-if="dialogo === 'Efectivo'">
+        <Dialog v-model:visible="cuenta" :header="mensaje" :style="{ width: '37rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
+            <div class="flex flex-wrap gap-2 mb-2" v-if="dialogo === 'Efectivo' || dialogo == 'Bonus'">
                 <RadioButton v-model="cuentas" inputId="1" name="nequi" value="nequi" />
                 <label class="ml-2">Nequi</label>
                 <RadioButton v-model="cuentas" inputId="2" name="paypal" value="paypal" />
@@ -64,17 +62,15 @@
             </div>
 
             <form ref="formEnviar" class="formEnviar">
-                <div v-if="dialogo === 'Efectivo'">
+                <div v-if="dialogo === 'Efectivo' || dialogo == 'Bonus'">
                     <div class="flex gap-2 sm:flex-column md:flex-row" v-if="cuentas === 'banco'">
                         <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
                             <label class="font-semibold">Tipo cuenta</label>
-                            <Dropdown v-model="transferencia.tipo_cuenta" :options="TipoCuenta" optionLabel="tipo"
-                                placeholder="Tipo de cuenta" />
+                            <Dropdown v-model="transferencia.tipo_cuenta" :options="TipoCuenta" optionLabel="tipo" placeholder="Tipo de cuenta" />
                         </div>
                         <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6" v-if="cuentas === 'banco'">
                             <label class="font-semibold">Número cuenta</label>
-                            <InputNumber v-model="transferencia.cuenta" class="p-1" inputId="withoutgrouping" :useGrouping="false"
-                                autocomplete="off" />
+                            <InputNumber v-model="transferencia.cuenta" class="p-1" inputId="withoutgrouping" :useGrouping="false" autocomplete="off" />
                         </div>
                     </div>
                     <div class="flex flex-column gap-2" v-if="cuentas === 'nequi'">
@@ -100,22 +96,18 @@
                     </div>
                     <div class="flex flex-column gap-2" v-if="cuentas === 'banco'">
                         <label class="font-semibold">Cédula</label>
-                        <InputNumber v-model="transferencia.cedula" inputId="withoutgrouping" :useGrouping="false"
-                            autocomplete="off" />
+                        <InputNumber v-model="transferencia.cedula" inputId="withoutgrouping" :useGrouping="false" autocomplete="off" />
                     </div>
                 </div>
                 <div v-if="dialogo === 'Envio'">
                     <div class="flex gap-2 sm:flex-column md:flex-row">
                         <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
                             <label class="font-semibold">País</label>
-                            <Dropdown v-model="paisSelect" filter
-                                @update:modelValue="(event) => transferencia.pais = event.pais" :options="paises"
-                                optionLabel="pais" placeholder="Pais" />
+                            <Dropdown v-model="paisSelect" filter @update:modelValue="(event) => transferencia.pais = event.pais" :options="paises" optionLabel="pais" placeholder="Pais" />
                         </div>
                         <div class="flex flex-column gap-2">
                             <label class="font-semibold">Código postal</label>
-                            <InputNumber v-model="transferencia.codigo_postal" inputId="withoutgrouping"
-                                :useGrouping="false" autocomplete="off" />
+                            <InputNumber v-model="transferencia.codigo_postal" inputId="withoutgrouping" :useGrouping="false" autocomplete="off" />
                         </div>
                     </div>
                     <div class="flex gap-2 sm:flex-column md:flex-row">
@@ -134,8 +126,7 @@
                     </div>
                     <div class="flex flex-column gap-2">
                         <label class="font-semibold">Numero de Cédula</label>
-                        <InputNumber v-model="transferencia.cedula" inputId="withoutgrouping" :useGrouping="false"
-                            autocomplete="off" />
+                        <InputNumber v-model="transferencia.cedula" inputId="withoutgrouping" :useGrouping="false" autocomplete="off" />
                     </div>
                     <div class="flex flex-column gap-2">
                         <label class="font-semibold">Nombre del Titular</label>
@@ -143,8 +134,7 @@
                     </div>
                     <div class="flex flex-column gap-2">
                         <label class="font-semibold">Teléfono</label>
-                        <InputNumber v-model="transferencia.telefono" inputId="withoutgrouping" :useGrouping="false"
-                            autocomplete="off" />
+                        <InputNumber v-model="transferencia.telefono" inputId="withoutgrouping" :useGrouping="false" autocomplete="off" />
                     </div>
 
                 </div>
@@ -394,7 +384,6 @@ export default {
                 .get(`${this.API}/usuario/${this.usuario}`, this.token)
                 .then((response) => {
                     this.premios = response.data.premios;
-                    console.log("premio ", this.premios);
                 })
                 .catch((error) => {
                     switch (error.response.data.statusCode) {
@@ -412,14 +401,15 @@ export default {
 
         async Reclamar(tipo, posicion, estado, premio = null, descripcion = null) {
             if (estado == "Sin reclamar") {
+                this.transferencia.usuario = this.usuario;
                 // sin reclamar
                 if (tipo == "Objeto") {
                     this.mensaje = "Medio de envio";
                     this.dialogo = "Envio"
                     this.cuentas = "Envio"
-                } else if (tipo == "Efectivo") {
+                } else if (tipo == "Efectivo" || tipo == 'Bonus') {
                     this.mensaje = "Medio de Pago";
-                    this.dialogo = "Efectivo"
+                    this.dialogo = tipo;
                 }
                 this.transferencia.posPremio = posicion;
                 //Para usar en el emit
@@ -432,6 +422,7 @@ export default {
             }
         },
         Enviar() {
+            this.transferencia.pais = this.paisSelect.pais;
             if (this.paqueteReclamando.tipo_premio == null || this.paqueteReclamando.tipo_premio != "SaldoApi") {
                 this.transferencia.metodo_pago = this.cuentas;
                 if (this.cuentas == "banco") {
@@ -475,8 +466,8 @@ export default {
                 headers: {
                     Authorization: `Bearer ${this.store.getToken()}`
                 }
-            }).then(response => {
-                console.log(response.data);
+            }).then(() => {
+
             }).finally(() => {
                 this.cajaSorpresa.mostrar = false;
                 this.cuenta = false;

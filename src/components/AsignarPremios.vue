@@ -42,7 +42,7 @@
         </DataTable>
         <Dialog v-model:visible="EnviarModal" :header="`Pago: ${datosTransferencia.transferencia.metodo_pago != null ? datosTransferencia.transferencia.metodo_pago.toUpperCase() : ''}`" :style="{ width: '40rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="center" :modal="true" :draggable="false">
-            <div v-if="datosTransferencia.tipo_premio === 'Efectivo'">
+            <div v-if="datosTransferencia.tipo_premio === 'Efectivo' || datosTransferencia.tipo_premio=='Bonus'">
                 <div class="flex gap-2 sm:flex-column md:flex-row"
                     v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
                     <div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">

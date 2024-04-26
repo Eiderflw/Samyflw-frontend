@@ -103,3 +103,8 @@ export default {
     border-width: 0 !important;
 }
 </style>
+<style>
+.p-tag {
+    width: max-content !important;
+}
+</style>

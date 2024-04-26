@@ -52,10 +52,6 @@
                     <Column field="bonificacion" header="Bonificacion" class="font-gamers" />
                     <Column header="Estado" class="font-gamers">
                         <template #body="slotProps">
-                            <!--<Badge
-                                v-if="estadisticas.dias >= slotProps.data.dias && estadisticas.horas >= slotProps.data.horas && estadisticas.diamantes >= slotProps.data.meta"
-                                value="Aplica" />
-                            <Badge v-else value="No Aplica" severity="danger" />-->
                             <div class="aplica color-verde" v-if="estadisticas.dias >= slotProps.data.dias && estadisticas.horas >= slotProps.data.horas && estadisticas.diamantes >= slotProps.data.meta">Aplica</div>
                             <div class="aplica color-rojo" v-else>No aplica</div>
                         </template>
@@ -99,8 +95,7 @@
 
             </DataTable>
         </Panel>
-        <Dialog v-model:visible="modalBonus" header="Crear Bonus" :style="{ width: '50rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+        <Dialog v-model:visible="modalBonus" header="Crear Bonus" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
             <form ref="formBonus">
                 <div class="flex gap-1 mb-2">
                     <Checkbox v-model="paqueteBonus.exclusivo" inputId="exclusivo" name="exclusivo" value="exclusivo" :binary="true" />
@@ -136,8 +131,7 @@
                 <Button label="Crear" @click="crearBonus()" :disabled="btnBonus" severity="success" />
             </template>
         </Dialog>
-        <Dialog v-model:visible="modalMultiplicador" header="Multiplicador" :style="{ width: '50rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+        <Dialog v-model:visible="modalMultiplicador" header="Multiplicador" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
             <form ref="formBonus">
                 <div class="flex flex-column gap-1 mb-2">
                     <label for="nivel" class="font-bold block">Multiplicador</label>
@@ -150,8 +144,7 @@
                 <Button label="Actualizar" :disabled="btnMultiplicador" @click="actualizarMultiplicador()" severity="success" />
             </template>
         </Dialog>
-        <Dialog v-model:visible="deleteBonusDialog" :style="{ width: '450px' }" :header="headerBonusDelete" :modal="true"
-            class="p-fluid ">
+        <Dialog v-model:visible="deleteBonusDialog" :style="{ width: '450px' }" :header="headerBonusDelete" :modal="true" class="p-fluid ">
             <div class="d-flex">
                 <Button label="Cancelar" severity="info" icon="pi pi-times" text @click="deleteBonusDialog = false" />
                 <Button label="Eliminar" severity="danger" icon="pi pi-check" text @click="deleteBonusBd()" />
@@ -369,8 +362,6 @@ export default {
                 this.multiplicador = resp.data.multiplicador;
             })
         }
-
-
     },
     async created() {
         this.store = useStoreEvento();
@@ -388,6 +379,7 @@ export default {
             this.estadisticas.dias = parseInt(this.usuario.dias_validos_mes_actual);
             this.estadisticas.horas = parseInt(this.usuario.last_live_duration_mes_actual.split('h')[0]);
             this.estadisticas.diamantes = parseInt(this.usuario.diamantes_mes_actual);
+            //axios.get(`${this.API}/bonus/definirBonus`);
         }
         await this.obtenerBonus();
         await this.getMultiplicador();
