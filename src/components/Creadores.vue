@@ -11,8 +11,7 @@
         </div>
       </div>
     </template>
-    <DataTable :value="creadores" sortField="diamantes_mes_actual" :sortOrder="-1" paginator :rows="5"
-      :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+    <DataTable :value="creadores" sortField="diamantes_mes_actual" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
       <Column field="usuario" header="Usuario" sortable></Column>
       <Column field="grupo" header="Grupo" sortable>
         <template #body="slotProps">
@@ -40,14 +39,11 @@
       </Column>
     </DataTable>
     <!-- Modal agregar evento -->
-    <Dialog v-model:visible="modalExcel" header="Subir excel" :style="{ width: '50rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalExcel" header="Subir excel" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <form ref="formExcel" enctype="multipart/form-data">
         <div class="flex flex-column gap-1 mb-2">
           <label for="excel" class="font-bold block">Excel</label>
-          <InputText type="file" id="excel"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            @change="asignarExcel" required aria-describedby="excel-help" />
+          <InputText type="file" id="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" @change="asignarExcel" required aria-describedby="excel-help" />
           <small id="excel-help">El archivo debe ser .xlsx, .xls.</small>
         </div>
       </form>
@@ -57,13 +53,11 @@
       </template>
     </Dialog>
     <!-- Modal de las insignias -->
-    <Dialog v-model:visible="modalInsignias" header="Subir Insignias" :style="{ width: '50rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalInsignias" header="Subir Insignias" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <form ref="formInsignias" enctype="multipart/form-data">
         <div class="flex flex-column gap-1 mb-2">
           <label for="excel" class="font-bold block">Insignias</label>
-          <InputText type="file" id="insignia" accept="image/*" @change="asignarInsignia" required
-            aria-describedby="excel-help" />
+          <InputText type="file" id="insignia" accept="image/*" @change="asignarInsignia" required aria-describedby="excel-help" />
           <small id="excel-help">El archivo debe ser .extensiones de imagenes</small>
           <label for="descripcion" class="font-bold block">Descripción</label>
           <InputText v-model="descripcionInsignia" type="text" id="descripcion" required />
@@ -74,17 +68,14 @@
         <Button label="Subir" @click="subirInsignia" :disabled="btnSubirInsignia" severity="success" />
       </template>
     </Dialog>
-    <Dialog v-model:visible="modalInsigniasUser" header="Actualizar Insignias" :style="{ width: '50rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalInsigniasUser" header="Actualizar Insignias" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <div class="flex gap-6 flex-wrap justify-content-center">
         <div style="width: 120px; height: 200px" v-for="insignia in insignias" :key="insignia.secure_url">
           <div class="relative flex justify-content-center" style="margin-bottom: 10px">
-            <img width="120px" height="120px" :src="insignia.secure_url" alt="Insignia" class="border-round imgInsignias"
-              v-tooltip="insignia.descripcion" />
+            <img width="120px" height="120px" :src="insignia.secure_url" alt="Insignia" class="border-round imgInsignias" v-tooltip="insignia.descripcion" />
           </div>
           <div class="flex justify-content-center align-items-center">
-            <Checkbox v-model="paqueteActualizarInsigniasUsuario.selectedInsignias" :inputId="insignia.secure_url"
-              :value="insignia" />
+            <Checkbox v-model="paqueteActualizarInsigniasUsuario.selectedInsignias" :inputId="insignia.secure_url" :value="insignia" />
           </div>
         </div>
       </div>
@@ -95,8 +86,7 @@
       </template>
     </Dialog>
 
-    <Dialog v-model:visible="modalMezclar" header="Mezclar grupos" :style="{ width: '30rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalMezclar" header="Mezclar grupos" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <form>
         <div class="flex flex-column gap-2">
           <div class="flex flex-wrap gap-3">
@@ -338,6 +328,8 @@ export default {
                 break;
             }
           });
+        await axios.get(`${this.API}/bonus/definirBonus`);
+        await axios.get(`${this.API}/bonus-categoria/definir/ganadores`);
       } else {
         this.$toast.add({
           severity: "info",

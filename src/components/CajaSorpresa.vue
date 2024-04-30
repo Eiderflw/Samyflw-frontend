@@ -18,7 +18,7 @@
                 Este navegador no soporta video
             </video>
             <div class="ganancia-detalle hidden absolute p-3" ref="ganancia_detalle">
-                <div v-if="tipo_premio == 'Efectivo' || tipo_premio=='Bonus'" class="ganancia efectivo fadein p-2 animation-duration-1000 line-height-2 flex align-items-center justify-content-center">
+                <div v-if="tipo_premio == 'Efectivo' || tipo_premio == 'Bonus'" class="ganancia efectivo fadein p-2 animation-duration-1000 line-height-2 flex align-items-center justify-content-center">
                     <span class="m-0 font-bold uppercase text-black"> {{ premio }}</span>
                 </div>
                 <div v-else-if="tipo_premio == 'SaldoApi'" class="ganancia saldo fadein p-2 animation-duration-1000 line-height-2 flex align-items-center justify-content-center">
