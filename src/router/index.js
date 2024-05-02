@@ -16,13 +16,19 @@ import Admingame from '../views/game/Admin.vue'
 import PremiosUsuario from '../components/PremiosUsuario.vue'
 import AsignarPremios from '../components/AsignarPremios.vue'
 import Batalla from "../components/Batalla.vue";
+import EventoEspecial from "../components/EventoEspecial.vue"
 import { useStoreEvento } from '../store'
+import EventoEspecialView from "../views/EventoEspecial.vue";
+
+
 
 const routes = [
     { path: '/', name: 'Home', component: Home },
     { path: '/evento', name: 'EventoView', component: EventoView },
     { path: '/login', name: 'LoginEvento', component: LoginEvento },
     { path: '/registro', name: 'RegistroEvento', component: Registro },
+    { path: '/EventoEspecialView', name: 'EventoEspecialView', component: EventoEspecialView },
+
     {
         path: '/panel',
         name: 'Panel',
@@ -31,6 +37,18 @@ const routes = [
                 path: '/panel/evento',
                 name: 'Evento',
                 component: Evento,
+                beforeEnter: (to, from, next) => {
+                    const store = useStoreEvento();
+                    if (store.isActive()) {
+                        return store.isAdmin() ? next() : next(from);
+                    }
+                    return next('/login');
+                }
+            },
+            {
+                path: '/panel/eventoEspecial',
+                name: 'EventoEspecial',
+                component: EventoEspecial,
                 beforeEnter: (to, from, next) => {
                     const store = useStoreEvento();
                     if (store.isActive()) {

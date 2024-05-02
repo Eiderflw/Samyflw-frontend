@@ -29,6 +29,7 @@
                     <a href="#footer">Redes Sociales</a>
                     <router-link to="/evento">Eventos</router-link>
                     <router-link to="/login">Login Agencia</router-link>
+                    <router-link to="/EventoEspecialView">Eventos Categoria</router-link>
                     <Button icon="pi pi-bars" class="botonMenu" text size="large" @click="visibleSidebar = true" />
                 </nav>
             </div>
@@ -64,6 +65,16 @@ export default {
                         label: 'Eventos Activos',
                         icon: 'pi pi-desktop',
                         route: '/evento'
+                    }
+                ]
+            },
+            {
+                label: 'EventosEspeciales',
+                items: [
+                    {
+                        label: 'Eventos Especiales',
+                        icon: 'pi pi-desktop',
+                        route: '/EventoEspecialView'
                     }
                 ]
             },

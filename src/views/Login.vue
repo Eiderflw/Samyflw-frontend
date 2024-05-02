@@ -236,7 +236,8 @@
                             <InputGroupAddon>
                                 <img src="/assets/img/login/user.png" alt="Usuario" class="img-input">
                             </InputGroupAddon>
-                            <InputText v-model="user" type="text" class="input" name="username" id="username" placeholder="USUARIO" />
+                            <InputText v-model="user" type="text" class="input" name="username" id="username"
+                                placeholder="USUARIO" />
                         </InputGroup>
                     </div>
                     <div class="input-group">
@@ -246,7 +247,8 @@
                             <InputGroupAddon>
                                 <img src="/assets/img/login/pass.png" alt="Contraseña" class="img-input">
                             </InputGroupAddon>
-                            <InputText v-model="password" class="input" type="password" name="password" id="password" placeholder="CONTRASEÑA" />
+                            <InputText v-model="password" class="input" type="password" name="password" id="password"
+                                placeholder="CONTRASEÑA" />
                         </InputGroup>
                     </div>
                     <div class="flex gap-2 w-full">
@@ -260,7 +262,8 @@
                     <div class="line2"></div>
                 </div>
                 <div class="social-icons">
-                    <a aria-label="Log in with Whatsapp" class="icon" href="https://api.whatsapp.com/send?phone=573176205370">
+                    <a aria-label="Log in with Whatsapp" class="icon"
+                        href="https://api.whatsapp.com/send?phone=573176205370">
                         <img src="/assets/img/login/wsp.png" alt="WhatsApp" width="42" height="34">
                     </a>
                     <a aria-label="Log in with Instagram" class="icon" href="https://www.instagram.com/samyflw1/">
@@ -297,7 +300,13 @@ export default {
             await axios.post(`${this.API}/auth/login`, USER).then(resp => {
                 if (resp.data) {
                     this.store.saveUser(resp.data);
-                    this.$router.push('/panel/bonus');
+                    if (this.store.evento.evento == null) {
+                        this.$router.push('/panel/bonus');
+                    } else {
+
+                        this.$router.push('panel/eventoEspecial')
+                    }
+
                 }
             }).catch(error => {
                 console.log(error);

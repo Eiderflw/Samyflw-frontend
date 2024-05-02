@@ -71,10 +71,15 @@
             </template>
         </Menubar>
         <dialogMiPerfil :mostrarMiPerfil="mostrarPerfil" @dialogPerfilOculto="mostrarPerfil = false" />
-        <dialogEditarPerfil :mostrarEditar="mostrarEditar" @dialogEditarOculto="mostrarEditar = false" @perfilActualizado="getNewDatos" />
-        <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias" @dialogOculto="mostrarInsignias = false">
+        <dialogEditarPerfil :mostrarEditar="mostrarEditar" @dialogEditarOculto="mostrarEditar = false"
+            @perfilActualizado="getNewDatos" />
+        <Insignias v-if="store.isAdmin()" :mostrarInsigniasProp="mostrarInsignias"
+            @dialogOculto="mostrarInsignias = false">
         </Insignias>
-        <Dialog v-model:visible="addCreador" maximizable :header="store.isAdmin() ? 'Credenciales backstage' : 'Agregar creador'" :style="{ width: store.isAdmin() ? '34rem' : '45rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+        <Dialog v-model:visible="addCreador" maximizable
+            :header="store.isAdmin() ? 'Credenciales backstage' : 'Agregar creador'"
+            :style="{ width: store.isAdmin() ? '34rem' : '45rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+            position="top" :modal="true" :draggable="false">
             <div v-if="store.isAdmin()">
                 <form ref="formAdd">
                     <div class="flex flex-column gap-1 mb-2">
@@ -95,21 +100,26 @@
                 </div>
                 <div class="flex flex-column gap-1">
                     <label for="contrasena" class="font-bold block">Contraseña</label>
-                    <InputText v-model="paquete.contrasena" disabled type="text" placeholder="Contraseña" id="contrasena" />
+                    <InputText v-model="paquete.contrasena" disabled type="text" placeholder="Contraseña"
+                        id="contrasena" />
                 </div>
                 <div class="mt-2 mb-3">
                     <h3 class="m-0">Guía</h3>
                     <video width="100%" autoplay="false" muted height="300px" controls>
-                        <source src="https://res.cloudinary.com/dq2sbqjgf/video/upload/v1711917204/tutoriales/byfp8ygyo7kdv1ueclwf.mp4" type="video/mp4">
+                        <source
+                            src="https://res.cloudinary.com/dq2sbqjgf/video/upload/v1711917204/tutoriales/byfp8ygyo7kdv1ueclwf.mp4"
+                            type="video/mp4">
                     </video>
                 </div>
                 <p>Inicia sesión con las credenciales y agrega al creador</p>
-                <iframe title="TikTok Backstage" height="800px" width="100%" src="https://live-backstage.tiktok.com/login/" frameborder="0"></iframe>
+                <iframe title="TikTok Backstage" height="800px" width="100%"
+                    src="https://live-backstage.tiktok.com/login/" frameborder="0"></iframe>
             </div>
             <template #footer>
                 <Button label="Cerrar" @click="addCreador = false" text severity="danger" />
                 <div class="flex gap-2" v-if="store.isAdmin()">
-                    <Button :label="paquete.estado == 'Activado' ? 'Desactivar' : 'Activar'" severity="warning" @click="cambiarEstadoBackstage" />
+                    <Button :label="paquete.estado == 'Activado' ? 'Desactivar' : 'Activar'" severity="warning"
+                        @click="cambiarEstadoBackstage" />
                     <Button label="Agregar" @click="modificarCredenciales" severity="success" />
                 </div>
             </template>
@@ -122,12 +132,14 @@ import axios from 'axios';
 import { useStoreEvento } from '../store';
 import dialogMiPerfil from './MiPerfil.vue';
 import dialogEditarPerfil from './EditarPerfil.vue';
+import EventoEspecial from './EventoEspecial.vue';
 import Insignias from './Insignias.vue';
 export default {
     components: {
         dialogMiPerfil,
         dialogEditarPerfil,
-        Insignias
+        Insignias,
+        EventoEspecial
     },
     data: () => ({
         API: import.meta.env.VITE_APP_API,
@@ -354,6 +366,11 @@ export default {
                             route: '/panel/evento',
                         },
                         {
+                            label: 'Eventos Especiales',
+                            icon: 'pi pi-flag-fill',
+                            route: '/panel/eventoEspecial',
+                        },
+                        {
                             label: 'Vista Previa',
                             icon: 'pi pi-desktop',
                             route: '/evento'
@@ -447,6 +464,11 @@ export default {
                         label: 'Evento',
                         icon: 'pi pi-calendar-plus',
                         route: '/evento'
+                    },
+                    {
+                        label: 'Eventos Especiales',
+                        icon: 'pi pi-flag-fill',
+                        route: '/panel/eventoEspecial',
                     },
                     {
                         label: 'Batallas',
