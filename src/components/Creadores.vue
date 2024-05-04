@@ -11,7 +11,8 @@
         </div>
       </div>
     </template>
-    <DataTable :value="creadores" sortField="diamantes_mes_actual" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+    <DataTable :value="creadores" sortField="diamantes_mes_actual" :sortOrder="-1" paginator :rows="5"
+      :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
       <Column field="usuario" header="Usuario" sortable></Column>
       <Column field="grupo" header="Grupo" sortable>
         <template #body="slotProps">
@@ -34,16 +35,26 @@
       </Column>
       <Column header="Estado" field="isConectado">
         <template #body="slotProps">
-          <Tag :severity="slotProps.data.isConectado ? 'success' : 'danger'" :value="`${slotProps.data.isConectado ? 'Conectado' : 'Sin conexión'} ${slotProps.data.ultimaConexion.length == 0 ? '' : (' | ' + slotProps.data.ultimaConexion.slice(0, 10) + ' ' + slotProps.data.ultimaConexion.slice(11, 19))}`" />
+          <Tag :severity="slotProps.data.isConectado ? 'success' : 'danger'"
+            :value="`${slotProps.data.isConectado ? 'Conectado' : 'Sin conexión'} ${slotProps.data.ultimaConexion.length == 0 ? '' : (' | ' + slotProps.data.ultimaConexion.slice(0, 10) + ' ' + slotProps.data.ultimaConexion.slice(11, 19))}`" />
+        </template>
+      </Column>
+      <Column header="Restablecer" field="_id">
+        <template #body="slotProps">
+          <Button icon="pi pi-sync" severity=""
+            @click=" ConfirmarCambiarContrasena(slotProps.data._id, slotProps.data.usuario)" />
         </template>
       </Column>
     </DataTable>
     <!-- Modal agregar evento -->
-    <Dialog v-model:visible="modalExcel" header="Subir excel" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalExcel" header="Subir excel" :style="{ width: '50rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <form ref="formExcel" enctype="multipart/form-data">
         <div class="flex flex-column gap-1 mb-2">
           <label for="excel" class="font-bold block">Excel</label>
-          <InputText type="file" id="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" @change="asignarExcel" required aria-describedby="excel-help" />
+          <InputText type="file" id="excel"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            @change="asignarExcel" required aria-describedby="excel-help" />
           <small id="excel-help">El archivo debe ser .xlsx, .xls.</small>
         </div>
       </form>
@@ -53,11 +64,13 @@
       </template>
     </Dialog>
     <!-- Modal de las insignias -->
-    <Dialog v-model:visible="modalInsignias" header="Subir Insignias" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalInsignias" header="Subir Insignias" :style="{ width: '50rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <form ref="formInsignias" enctype="multipart/form-data">
         <div class="flex flex-column gap-1 mb-2">
           <label for="excel" class="font-bold block">Insignias</label>
-          <InputText type="file" id="insignia" accept="image/*" @change="asignarInsignia" required aria-describedby="excel-help" />
+          <InputText type="file" id="insignia" accept="image/*" @change="asignarInsignia" required
+            aria-describedby="excel-help" />
           <small id="excel-help">El archivo debe ser .extensiones de imagenes</small>
           <label for="descripcion" class="font-bold block">Descripción</label>
           <InputText v-model="descripcionInsignia" type="text" id="descripcion" required />
@@ -68,14 +81,17 @@
         <Button label="Subir" @click="subirInsignia" :disabled="btnSubirInsignia" severity="success" />
       </template>
     </Dialog>
-    <Dialog v-model:visible="modalInsigniasUser" header="Actualizar Insignias" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalInsigniasUser" header="Actualizar Insignias" :style="{ width: '50rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <div class="flex gap-6 flex-wrap justify-content-center">
         <div style="width: 120px; height: 200px" v-for="insignia in insignias" :key="insignia.secure_url">
           <div class="relative flex justify-content-center" style="margin-bottom: 10px">
-            <img width="120px" height="120px" :src="insignia.secure_url" alt="Insignia" class="border-round imgInsignias" v-tooltip="insignia.descripcion" />
+            <img width="120px" height="120px" :src="insignia.secure_url" alt="Insignia"
+              class="border-round imgInsignias" v-tooltip="insignia.descripcion" />
           </div>
           <div class="flex justify-content-center align-items-center">
-            <Checkbox v-model="paqueteActualizarInsigniasUsuario.selectedInsignias" :inputId="insignia.secure_url" :value="insignia" />
+            <Checkbox v-model="paqueteActualizarInsigniasUsuario.selectedInsignias" :inputId="insignia.secure_url"
+              :value="insignia" />
           </div>
         </div>
       </div>
@@ -86,7 +102,8 @@
       </template>
     </Dialog>
 
-    <Dialog v-model:visible="modalMezclar" header="Mezclar grupos" :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <Dialog v-model:visible="modalMezclar" header="Mezclar grupos" :style="{ width: '30rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
       <form>
         <div class="flex flex-column gap-2">
           <div class="flex flex-wrap gap-3">
@@ -105,15 +122,18 @@
           </div>
           <div class="flex flex-wrap gap-3">
             <div class="flex align-items-center" v-if="mezcla.grupo1 != 'A'">
-              <RadioButton :disabled="mezcla.grupo1 == null" v-model="mezcla.grupo2" inputId="grupoA2" name="grupo1" value="A" />
+              <RadioButton :disabled="mezcla.grupo1 == null" v-model="mezcla.grupo2" inputId="grupoA2" name="grupo1"
+                value="A" />
               <label for="grupoA2" class="ml-2 cursor-pointer">A</label>
             </div>
             <div class="flex align-items-center" v-if="mezcla.grupo1 != 'B'">
-              <RadioButton :disabled="mezcla.grupo1 == null" v-model="mezcla.grupo2" inputId="grupoB2" name="grupo1" value="B" />
+              <RadioButton :disabled="mezcla.grupo1 == null" v-model="mezcla.grupo2" inputId="grupoB2" name="grupo1"
+                value="B" />
               <label for="grupoB2" class="ml-2 cursor-pointer">B</label>
             </div>
             <div class="flex align-items-center" v-if="mezcla.grupo1 != 'C'">
-              <RadioButton :disabled="mezcla.grupo1 == null" v-model="mezcla.grupo2" inputId="grupoC2" name="grupo1" value="C" />
+              <RadioButton :disabled="mezcla.grupo1 == null" v-model="mezcla.grupo2" inputId="grupoC2" name="grupo1"
+                value="C" />
               <label for="grupoC2" class="ml-2 cursor-pointer">C</label>
             </div>
           </div>
@@ -123,6 +143,18 @@
         <Button label="Cancelar" @click="modalMezclar = false" text severity="danger" autofocus />
         <Button label="Reiniciar" @click="reiniciarMezcla" severity="warning" />
         <Button label="Mezclar" @click="mezclar" severity="success" />
+      </template>
+    </Dialog>
+
+    <Dialog v-model:visible="abrirModalCambiarContrasena" header="Restablecer Contraseña" :style="{ width: '50rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+      <h3>
+        ¿Esta seguro de restablecer la contraseña del usuario {{ ConfirmanrContraserna.usuario }}?
+      </h3>
+      <p>La contraseña será el mismo nombre de usuario.</p>
+      <template #footer>
+        <Button label="No,Cancelar" @click="abrirModalCambiarContrasena = false" text severity="danger" autofocus />
+        <Button label="Si,Restablecer" @click="RestablecerContrasena()" severity="success" />
       </template>
     </Dialog>
   </Panel>
@@ -144,10 +176,15 @@ export default {
     },
     descripcionInsignia: null,
     modalInsignias: false,
+    abrirModalCambiarContrasena: false,
     modalInsigniasUser: false,
     btnSubirExcel: false,
     btnSubirInsignia: false,
     btnActualizarInsignia: false,
+    ConfirmanrContraserna: {
+      id: null,
+      usuario: null,
+    },
     creadores: [],
     paquete: {
       excel: null,
@@ -437,6 +474,38 @@ export default {
           this.insignias = resp.data;
         });
     },
+    ConfirmarCambiarContrasena(id, usuario) {
+      this.abrirModalCambiarContrasena = true;
+      this.ConfirmanrContraserna.id = id;
+      this.ConfirmanrContraserna.usuario = usuario;
+    },
+    async RestablecerContrasena() {
+      await axios
+        .put(`${this.API}/usuario/UpdatePassword`, this.ConfirmanrContraserna, {
+          headers: {
+            Authorization: `Bearer ${this.store.getToken()}`,
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+          this.abrirModalCambiarContrasena = false;
+          this.$toast.add({
+            severity: "success",
+            summary: "Cambio Exitoso",
+            detail: "Contraseña Cambiada",
+            life: 1500,
+          });
+
+        })
+        .catch((error) => {
+          this.$toast.add({
+            severity: "Error",
+            summary: "Error ",
+            detail: "Contraseña no se pudo cambiar",
+            life: 1500,
+          })
+        });
+    }
   },
   async created() {
     this.store = useStoreEvento();
