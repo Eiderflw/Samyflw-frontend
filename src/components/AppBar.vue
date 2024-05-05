@@ -232,6 +232,20 @@ export default {
                     separator: true
                 },
                 {
+                    label: 'Tienda',
+                    items: [
+                        {
+                            label: 'Insignias',
+                            icon: 'pi pi-star',
+                            action: 'insignia_abrir',
+                            route: '#action'
+                        },
+                    ]
+                },
+                {
+                    separator: true
+                },
+                {
                     label: 'Administración',
                     items: [
                         {
