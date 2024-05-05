@@ -7,7 +7,6 @@
                 <template #header>
                     <div class="flex items-center gap-2 flex-end w-full justify-content-center">
                         <img src="/assets/img/perfil/iconos/bonus.png" height="170px" alt="Bonus">
-                        <!-- <h1 class="m-0">Bonus</h1> -->
                     </div>
                 </template>
                 <TabView :scrollable="true" class="tabBonusUsuario">
@@ -964,6 +963,7 @@ export default {
                                     meta: null,
                                     ganancia: null,
                                     bonificacion: null,
+                                    exclusivo:false,
                                 };
                             }
                             this.$toast.add({ severity: resp.data.creado ? 'success' : 'error', summary: 'Nuevo Bonus', detail: resp.data.message, life: 1640 });
@@ -993,6 +993,7 @@ export default {
                                     meta: null,
                                     ganancia: null,
                                     bonificacion: null,
+                                    exclusivo:false,
                                 };
                                 this.idEditarBonusCategoria = null;
                                 this.modalBonusCategoria = false;
@@ -1146,11 +1147,17 @@ export default {
                 this.configBonus.msgGen = resp.data.bonus_generales == true ? 'Desactivar' : 'Activar';
             });
         },
+        async getTotalPagar() {
+            await axios.get(`${this.API}/usuario/bonus/total`).then(resp => {
+                this.totalPagar = resp.data;
+            });
+        },
         async cambiarConfigGenerales() {
             //Si es true, mandamos a desactivar
             if (this.configBonus.bonus_generales) {
                 await axios.put(`${this.API}/bonus/desactivar-bonus-generales`, {}, this.token).then(resp => {
                     if (resp.data.cambio) {
+                        this.getTotalPagar();
                         this.getConfigBonus();
                     }
                     this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
@@ -1170,6 +1177,7 @@ export default {
             } else {
                 await axios.put(`${this.API}/bonus/activar-bonus-generales`, {}, this.token).then(resp => {
                     if (resp.data.cambio) {
+                        this.getTotalPagar();
                         this.getConfigBonus();
                     }
                     this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
@@ -1193,6 +1201,7 @@ export default {
             if (this.configBonus.bonus_categoria) {
                 await axios.put(`${this.API}/bonus/desactivar-bonus-categorias`, {}, this.token).then(resp => {
                     if (resp.data.cambio) {
+                        this.getTotalPagar();
                         this.getConfigBonus();
                     }
                     this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
@@ -1212,6 +1221,7 @@ export default {
             } else {
                 await axios.put(`${this.API}/bonus/activar-bonus-categorias`, {}, this.token).then(resp => {
                     if (resp.data.cambio) {
+                        this.getTotalPagar();
                         this.getConfigBonus();
                     }
                     this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
@@ -1325,6 +1335,7 @@ export default {
             this.estadisticas.diamantes = parseInt(this.usuario.diamantes_mes_actual);
             //axios.get(`${this.API}/bonus/definirBonus`);
         } else {
+            await this.getTotalPagar();
             await this.getBonusCategorias();
             await this.getMezclaCategorias();
             await this.getBonusMezclados();
@@ -1333,9 +1344,7 @@ export default {
         await this.getBonosAgrupadosCategoria();
         await this.obtenerBonus();
         await this.getMultiplicador();
-        await axios.get(`${this.API}/usuario/bonus/total`).then(resp => {
-            this.totalPagar = resp.data;
-        });
+
     }
 }
 </script>
