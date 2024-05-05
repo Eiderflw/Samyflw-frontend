@@ -14,10 +14,10 @@
             <Card v-else class="px-0">
                 <template #content>
                     <TabView class="font-gamers">
-                        <TabPanel v-for="evento in   eventos " :key="evento" :header="evento.titulo">
+                        <TabPanel v-for="evento in eventos " :key="evento" :header="evento.titulo">
                             <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                 <div class="descripcion">
-                                    <div class="container">
+                                    <div class="container py-1">
                                         <p class="m-0">{{ evento.descripcion }}</p>
                                     </div>
                                 </div>
@@ -37,21 +37,6 @@
                                         <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]" :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">{{ calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1] }}%</div>
                                     </div>
                                 </div>
-                                <!-- <Fieldset legend="Descripción" :toggleable="true">
-                                    <p class="m-0">
-                                        {{ evento.descripcion }}
-                                    </p>
-                                </Fieldset>
-                                <Fieldset legend="Reglas" :toggleable="true">
-                                    <p class="m-0">
-                                        {{ evento.reglas }}
-                                    </p>
-                                </Fieldset>
-                                <Fieldset :legend="`${evento.fecha_inicio} | ${evento.fecha_fin}`" :toggleable="true">
-                                    <ProgressBar style="min-width: 300px;"
-                                        :value="calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)">
-                                    </ProgressBar>
-                                </Fieldset> -->
                             </div>
                             <div class="flex justify-content-around flex-wrap mt-5" style="row-gap: 25px;">
                                 <div v-for="(premio, index) in Object.values(evento.premios)" :key="index" :class="`puesto${index + 1}`">
@@ -68,43 +53,7 @@
                                         <p class="m-0">{{ premio.descripcion }}</p>
                                     </div>
                                 </div>
-                                <!-- <div class="puesto2">
-                                    <div class="titulo">
-                                        <p class="m-0">Puesto 2</p>
-                                    </div>
-                                    <div class="imagen">
-                                        <img width="100%" :src="evento.premios.top2.imagen"
-                                            :alt="evento.premios.top2.descripcion" class="border-round imgPremio" />
-                                    </div>
-                                    <div class="descripcion">{{ Object.values(evento.premios) }}</div>
-                                </div>
-                                <div class="puesto3">
-                                    <div class="titulo">
-                                        <p class="m-0">Puesto 3</p>
-                                    </div>
-                                    <div class="imagen">
-                                        <img width="100%" :src="evento.premios.top3.imagen"
-                                            :alt="evento.premios.top3.descripcion" class="border-round imgPremio" />
-                                    </div>
-                                </div> -->
                             </div>
-                            <!-- <Carousel :value="Object.values(evento.premios)" :numVisible="3" :numScroll="3"
-                                :responsiveOptions="responsiveOptions">
-                                <template #item="slotProps">
-                                    <div class="border-1 surface-border border-round m-2  p-3">
-                                        <div class="mb-3">
-                                            <div class="relative mx-auto">
-                                                <img width="100%" :src="slotProps.data.imagen"
-                                                    :alt="slotProps.data.descripcion" class="border-round imgPremio" />
-                                                <Tag :value="'Puesto ' + (slotProps.index + 1)" class="absolute"
-                                                    style="left:5px; top: 5px" />
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 font-medium">{{ slotProps.data.descripcion }}</div>
-
-                                    </div>
-                                </template>
-</Carousel> -->
                         </TabPanel>
 
                     </TabView>
@@ -117,12 +66,6 @@
                                 <p class="m-0 text-inline-evento text-6xl color-blue" v-if="all != true">GRUPO {{ grupoMostrado }}</p>
                                 <p class="m-0 text-inline-evento text-6xl color-blue" v-else>TODOS</p>
                             </div>
-                            <!-- <InlineMessage v-if="all != true" class="text-inline-evento" icon="pi pi-vedied" severity="success">
-
-                                </InlineMessage>
-                                <InlineMessage v-else class="text-inline-evento" icon="pi pi-vedied" severity="success">
-                                    Todos
-                                </InlineMessage> -->
                             <div class="grupos mt-3 mb-5 uppercase font-gamers color-blue" style="z-index: 1;" v-if="gruposMezcla == null || gruposMezcla == ''">
                                 <span class="todos" @click="changeCreador('Todos')">Todos</span>
                                 <span class="A" @click="changeCreador('A')">A</span>
@@ -140,34 +83,11 @@
                                 <span v-if="gruposMezcla == 'C-B' || gruposMezcla == 'B-C'" class="A" @click="changeCreador('A')">A</span>
                                 <span v-if="gruposMezcla == 'C-B' || gruposMezcla == 'B-C'" class="B-C" @click="changeCreador('B-C')">B-C</span>
                             </div>
-                            <!-- <div class="flex gap-2">
-                                    <Button @click="changeCreador('Todos')" label="Todos" severity="warning" />
-                                    <div class="flex gap-2" v-if="gruposMezcla == 'A-B' || gruposMezcla == 'B-A'">
-                                        <Button @click="changeCreador('A-B')" label="A-B" severity="success" />
-                                        <Button @click="changeCreador('C')" label="C" severity="danger" />
-                                    </div>
-                                    <div class="flex gap-2" v-else-if="gruposMezcla == 'A-C' || gruposMezcla == 'C-A'">
-                                        <Button @click="changeCreador('A-C')" label="A-C" severity="success" />
-                                        <Button @click="changeCreador('B')" label="B" severity="info" />
-                                    </div>
-                                    <div class="flex gap-2" v-else-if="gruposMezcla == 'C-B' || gruposMezcla == 'B-C'">
-                                        <Button @click="changeCreador('A')" label="A" severity="success" />
-                                        <Button @click="changeCreador('B-C')" label="B-C" severity="info" />
-                                    </div>
-                                    <div class="flex gap-2" v-else>
-                                        <Button @click="changeCreador('A')" label="A" severity="success" />
-                                        <Button @click="changeCreador('B')" label="B" severity="info" />
-                                        <Button @click="changeCreador('C')" label="C" severity="danger" />
-                                    </div>
-                                </div> -->
-
                             <div class="containerC">
-                                <!-- <div class="video-container2"> -->
                                 <video autoplay muted loop class="tabla-fondo-header">
                                     <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
                                     Tu navegador no soporta esta funcionalidad video
                                 </video>
-                                <!--  </div> -->
                                 <Clasificacion :nombre="top3[1].usuario" top="2" tipo="Platino" :foto="top3[1].foto" />
                                 <Clasificacion top="1" tipo="Oro" :nombre="top3[0].usuario" :foto="top3[0].foto" />
                                 <Clasificacion :nombre="top3[2].usuario" top="3" tipo="Cobre" :foto="top3[2].foto" />
@@ -201,12 +121,6 @@
                         <Column field="grupo" class="font-gamers" header="Grupo">
                             <template #body="props">
                                 <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
-                                <!-- <Badge v-if="slotProps.data.grupo == 'A'" :value="slotProps.data.grupo" severity="success">
-                                </Badge>
-                                <Badge v-if="slotProps.data.grupo == 'B'" :value="slotProps.data.grupo" severity="info">
-                                </Badge>
-                                <Badge v-if="slotProps.data.grupo == 'C'" :value="slotProps.data.grupo" severity="danger">
-                                </Badge> -->
                             </template>
                         </Column>
                     </DataTable>
@@ -316,6 +230,7 @@ export default {
                 this.all = false;
             } else {
                 this.creadores = [...this.arrayCreadores[0].usuarios, ...this.arrayCreadores[1].usuarios, ...this.arrayCreadores[2].usuarios];
+                this.creadores.sort((a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual);
                 this.top3 = this.creadores.slice(0, 3);
                 this.all = true;
             }
@@ -339,6 +254,14 @@ export default {
     },
     async created() {
         this.storeMezcla = useStoreMezcla();
+        await axios
+            .get(
+                `${this.API}/bonus/gruposMezclados`
+            ).then(response => {
+                if (response.data != '' && response.data != null) {
+                    this.storeMezcla.saveMezcla(response.data.grupos);
+                }
+            });
         this.gruposMezcla = this.storeMezcla.getGrupo();
         this.gruposMezcla = this.gruposMezcla == '' ? null : this.gruposMezcla;
         await axios.get(`${this.API}/usuario/agrupados`).then((resp) => {
@@ -641,6 +564,10 @@ export default {
         position: relative;
         top: -255px;
     }
+
+    .grupos.grupos3>.B {
+        left: 1px !important;
+    }
 }
 </style>
 
@@ -707,7 +634,7 @@ video {
     overflow-x: auto;
     height: 100%;
     width: 100%;
-    display: flex;
+    /*  display: flex; */
     justify-content: center;
     flex-direction: column;
     text-align: center;
@@ -841,9 +768,11 @@ video {
     align-items: center;
     font-size: 25px;
 }
+
 .grupos.grupos3>.todos {
     padding-left: 25px;
 }
+
 .grupos>* {
     position: relative;
     cursor: pointer;
@@ -857,8 +786,20 @@ video {
     left: -9px;
 }
 
+.grupos.grupos3>.A {
+    left: 18px;
+}
+
+.grupos>.B-C {
+    left: 20px;
+}
+
 .grupos>.B {
     left: -2px;
+}
+
+.grupos.grupos3>.B {
+    left: 5px;
 }
 
 .imgPremio {
@@ -911,16 +852,30 @@ video {
     }
 
     .grupos>.todos {
-        padding-left: 0;
+        padding-left: 5px !important;
         padding-right: 0;
     }
 
-    .grupos>* {
-        left: 0 !important;
+    .grupos>.A {
+        left: -6px !important;
+    }
+
+    .grupos.grupos3>.A {
+        left: 11px !important;
+    }
+
+    .grupos>.B-C {
+        left: 15px !important;
+    }
+}
+
+@media (max-width:510px) {
+    .grupos>.B-C {
+        left: 20px !important;
     }
 
     .grupos>.A {
-        left: -3px !important;
+        left: -11px !important;
     }
 }
 
@@ -936,7 +891,7 @@ video {
     }
 
     .grupos>.todos {
-        padding-left: 0;
+        padding-left: 0 !important;
         padding-right: 0;
     }
 
@@ -946,12 +901,12 @@ video {
         padding-right: 20px;
     }
 
-    .grupos>* {
-        left: 0 !important;
+    .grupos>.B-C {
+        left: 11px !important;
     }
 
     .grupos>.A {
-        padding-left: 3px;
+        padding-left: 5px;
         padding-right: 5px;
     }
 }
@@ -972,6 +927,16 @@ video {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
+
+    .grupos>.A {
+        left: -5px !important;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .grupos.grupos3>.A {
+        left: 6px !important;
+    }
 }
 
 @media (max-width:365px) {
@@ -989,6 +954,20 @@ video {
         left: 0 !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
+    }
+
+    .grupos>.B-C {
+        left: 14px !important;
+    }
+}
+
+@media (max-width:325px) {
+    .grupos.grupos3>.todos {
+        left: -9px !important;
+    }
+
+    .grupos>.B-C {
+        left: 17px !important;
     }
 }
 
@@ -1009,7 +988,7 @@ video {
         background-size: contain !important;
         align-items: start !important;
         padding-right: 11px;
-        padding-top: 6px !important;
+        padding-top: 10px !important;
     }
 
     .grupos>* {
@@ -1017,96 +996,16 @@ video {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-}
 
-/* @media (max-width:550px) {
-    .grupos>.A {
-        left: -0.4rem;
+    .grupos.grupos3>.todos {
+        left: 2px !important;
+    }
+
+    .grupos>.B-C {
+        left: 8px !important;
     }
 }
 
-@media (max-width:510px) {
-    .grupos {
-        font-size: 1.2rem;
-    }
-
-    .grupos>.A {
-        left: 0;
-    }
-
-}
-
-@media (max-width:485px) {
-    .grupos>.todos {
-        padding-left: 8px;
-    }
-
-    .grupos>* {
-        padding-bottom: 1rem;
-    }
-
-    .grupos>.A {
-        left: -0.2rem;
-    }
-}
-
-@media (max-width:450px) {
-
-    .grupos>.A {
-        left: -0.4rem;
-    }
-}
-
-@media (max-width:410px) {
-
-    .grupos>.A {
-        left: -9px;
-    }
-}
-
-@media (max-width:400px) {
-
-    .grupos>.A {
-        left: -5px;
-    }
-
-    .grupos {
-        font-size: 1rem;
-    }
-}
-
-@media (max-width:380px) {
-
-    .grupos>.A {
-        left: -6px;
-    }
-
-    .grupos>* {
-        padding-bottom: 1.5rem;
-    }
-}
-
-@media (max-width:350px) {
-
-    .grupos>.todos {
-        padding-left: 5px;
-    }
-
-    .grupos>* {
-        padding-bottom: 1.6rem;
-    }
-}
-
-@media (max-width:310px) {
-
-    .grupos>.todos {
-        padding-left: 3px;
-    }
-
-    .grupos>.A {
-        left: -10px;
-    }
-} */
 
 @media (max-width:290px) {
     .grupos {

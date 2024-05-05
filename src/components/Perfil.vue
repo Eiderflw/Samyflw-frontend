@@ -1,7 +1,7 @@
 <template>
     <Panel class="perfil">
         <div
-            class="container-perfil flex gap-7 w-full sm:flex-wrap xs:flex-wrap xs:justify-content-center md:flex-wrap sm:justify-content-center">
+            class="container-perfil flex gap-2 w-full sm:flex-wrap xs:flex-wrap xs:justify-content-center md:flex-wrap sm:justify-content-center">
             <div class="flex align-items-center mt-4 flex-column gap-2" style="width: 490px;">
                 <div class="flex flex-column text-center items-center gap-2 flex-end w-full justify-content-between">
                     <h1 class="m-0 font-gamers uppercase text-6xl">MI PERFIL</h1>
@@ -55,38 +55,8 @@
                 <h2 class="mb-0 sm:text-center xs:text-center font-gamers">Actualización {{ fechaAct }}</h2>
                 <img src="/assets/img/eventos/divisor-titulo.png" class="w-full" alt="Divisor">
 
-                <div class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-wrap md:gap-7 xs:flex-wrap justify-content-center">
-
+                <div class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-wrap md:gap-4 xs:flex-wrap xs:justify-content-center md:justify-content-center lg:justify-content-center">
                     <div class="flex flex-column gap-4">
-                        <div class="live flex align-items-center decorador gap-2 p-2">
-                            <div class="icono">
-                                <img src="/assets/img/perfil/iconos/live.png" alt="Live">
-                            </div>
-                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
-                                <span class="w-full font-bold word-break text-xl color-blue">Duración LIVE en {{ meses[iActual] }}</span>
-                                <span class="font-bold text-2xl">{{
-                        formatHoras(store.getUsuario().last_live_duration_mes_actual) }}</span>
-
-                                <span class="text-sm font-bold">En {{ meses[iAnterior] }}: <span class="font-bold color-rojo text-2xl"> {{
-                        formatHoras(store.getUsuario().last_live_duration_mes_anterior) }}</span>
-                                    <span :class="'ml-2 text-sm font-bold text-2xl ' + porcentaje(store.getUsuario().porcentaje_achieved_2)">
-                                        {{ store.getUsuario().porcentaje_achieved_2 }}
-                                        <img :src="mayorTiempo(store.getUsuario().last_live_duration_mes_actual, store.getUsuario().last_live_duration_mes_anterior)" class="svg" />
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="diamante-anterior flex align-items-center decorador gap-2 p-2">
-                            <div class="icono">
-                                <img src="/assets/img/perfil/iconos/diamantes.png" alt="Diamantes">
-                            </div>
-                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
-                                <span class="w-full word-break text-xl color-blue">Diamantes en {{ meses[iAnterior] }}</span>
-                                <span class="font-bold text-2xl">
-                                    {{ parseInt(store.getUsuario().diamantes_mes_anterior).toLocaleString() }}
-                                </span>
-                            </div>
-                        </div>
                         <div class="seguidores flex align-items-center decorador gap-2 p-2">
                             <div class="icono">
                                 <img src="/assets/img/perfil/iconos/seguidores.png" alt="Seguidores">
@@ -98,51 +68,6 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="dias_habiles_anterior flex align-items-center decorador gap-2 p-2">
-                            <div class="icono">
-                                <img src="/assets/img/perfil/iconos/dias_habiles_anterior.png" alt="Días hábiles anterior">
-                            </div>
-                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
-                                <span class="w-full word-break text-xl color-blue">Días hábiles en {{ meses[iAnterior] }}</span>
-                                <span class="font-bold text-2xl">
-                                    {{ store.getUsuario().dias_validos_mes_anterior }} {{ parseInt(store.getUsuario().dias_validos_mes_anterior) == 1 ? 'día' : 'días' }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="incorporacion flex align-items-center decorador gap-2 p-2">
-                            <div class="icono">
-                                <img src="/assets/img/perfil/iconos/incorporacion.png" alt="Días incorporación">
-                            </div>
-                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
-                                <span class="w-full word-break text-xl color-blue">Días de incorporación</span>
-                                <span class="font-bold text-2xl">
-                                    {{ store.getUsuario().dias_since_joining_agency.slice(0,
-                        (store.getUsuario().dias_since_joining_agency.length) - 1) +
-                        (parseInt(store.getUsuario().dias_since_joining_agency.slice(0,
-                            (store.getUsuario().dias_since_joining_agency.length) - 1)) == 1 ? ' día' : ' días')
-                                    }}
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="flex flex-column gap-4">
-                        <div class="fans flex align-items-center decorador gap-2 p-2">
-                            <div class="icono">
-                                <img src="/assets/img/perfil/iconos/fans.png" alt="Fans">
-                            </div>
-                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
-                                <span class="w-full font-bold word-break text-xl color-blue">Fans nuevos {{ meses[iActual] }}</span>
-                                <span class="font-bold text-2xl">{{
-                        parseInt(store.getUsuario().new_fans_mes_actual).toLocaleString() }}</span>
-                                <span class="text-sm">En {{ meses[iAnterior] }}: <span :class="'ml-2 font-bold text-2xl ' + (parseInt(store.getUsuario().new_fans_mes_actual) > parseInt(store.getUsuario().new_fans_mes_anterior) ? 'text-shadow-green' : 'text-shadow-red')">{{
-                        parseInt(store.getUsuario().new_fans_mes_anterior).toLocaleString() }}</span>
-                                    <img :src="subioBajo(store.getUsuario().new_fans_mes_actual, store.getUsuario().new_fans_mes_anterior)"
-                                        class="svg" />
-                                </span>
-                            </div>
-                        </div>
-
                         <div class="diamante-actual flex align-items-center decorador gap-2 p-2">
                             <div class="icono">
                                 <img src="/assets/img/perfil/iconos/diamantes.png" alt="Diamantes">
@@ -159,19 +84,24 @@
                                 </span>
                             </div>
                         </div>
-
-                        <div class="last_live flex align-items-center decorador gap-2 p-2">
+                        <div class="live flex align-items-center decorador gap-2 p-2">
                             <div class="icono">
-                                <img src="/assets/img/perfil/iconos/live.png" alt="Last Live">
+                                <img src="/assets/img/perfil/iconos/live.png" alt="Live">
                             </div>
                             <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
-                                <span class="w-full word-break text-xl color-blue">Último LIVE</span>
-                                <span class="font-bold text-2xl">
-                                    {{ store.getUsuario().last_live.slice(0, 19) }}
+                                <span class="w-full font-bold word-break text-xl color-blue">Duración LIVE en {{ meses[iActual] }}</span>
+                                <span class="font-bold text-2xl">{{
+                                    formatHoras(store.getUsuario().last_live_duration_mes_actual) }}</span>
+
+                                <span class="text-sm font-bold">En {{ meses[iAnterior] }}: <span class="font-bold color-rojo text-2xl"> {{
+                                    formatHoras(store.getUsuario().last_live_duration_mes_anterior) }}</span>
+                                    <span :class="'ml-2 text-sm font-bold text-2xl ' + porcentaje(store.getUsuario().porcentaje_achieved_2)">
+                                        {{ store.getUsuario().porcentaje_achieved_2 }}
+                                        <img :src="mayorTiempo(store.getUsuario().last_live_duration_mes_actual, store.getUsuario().last_live_duration_mes_anterior)" class="svg" />
+                                    </span>
                                 </span>
                             </div>
                         </div>
-
                         <div class="dias_habiles_actual flex align-items-center decorador gap-2 p-2">
                             <div class="icono">
                                 <img src="/assets/img/perfil/iconos/dias_habiles_actual.png" alt="Días hábiles actual">
@@ -188,6 +118,71 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="incorporacion flex align-items-center decorador gap-2 p-2">
+                            <div class="icono">
+                                <img src="/assets/img/perfil/iconos/incorporacion.png" alt="Días incorporación">
+                            </div>
+                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
+                                <span class="w-full word-break text-xl color-blue">Días de incorporación</span>
+                                <span class="font-bold text-2xl">
+                                    {{ store.getUsuario().dias_since_joining_agency.slice(0,
+                                        (store.getUsuario().dias_since_joining_agency.length) - 1) +
+                                        (parseInt(store.getUsuario().dias_since_joining_agency.slice(0,
+                                            (store.getUsuario().dias_since_joining_agency.length) - 1)) == 1 ? ' día' : ' días')
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column gap-4">
+                        <div class="fans flex align-items-center decorador gap-2 p-2">
+                            <div class="icono">
+                                <img src="/assets/img/perfil/iconos/fans.png" alt="Fans">
+                            </div>
+                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
+                                <span class="w-full font-bold word-break text-xl color-blue">Fans nuevos {{ meses[iActual] }}</span>
+                                <span class="font-bold text-2xl">{{
+                                    parseInt(store.getUsuario().new_fans_mes_actual).toLocaleString() }}</span>
+                                <span class="text-sm">En {{ meses[iAnterior] }}: <span :class="'ml-2 font-bold text-2xl ' + (parseInt(store.getUsuario().new_fans_mes_actual) > parseInt(store.getUsuario().new_fans_mes_anterior) ? 'text-shadow-green' : 'text-shadow-red')">{{
+                                    parseInt(store.getUsuario().new_fans_mes_anterior).toLocaleString() }}</span>
+                                    <img :src="subioBajo(store.getUsuario().new_fans_mes_actual, store.getUsuario().new_fans_mes_anterior)"
+                                        class="svg" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="diamante-anterior flex align-items-center decorador gap-2 p-2">
+                            <div class="icono">
+                                <img src="/assets/img/perfil/iconos/diamantes.png" alt="Diamantes">
+                            </div>
+                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
+                                <span class="w-full word-break text-xl color-blue">Diamantes en {{ meses[iAnterior] }}</span>
+                                <span class="font-bold text-2xl">
+                                    {{ parseInt(store.getUsuario().diamantes_mes_anterior).toLocaleString() }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="last_live flex align-items-center decorador gap-2 p-2">
+                            <div class="icono">
+                                <img src="/assets/img/perfil/iconos/live.png" alt="Last Live">
+                            </div>
+                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
+                                <span class="w-full word-break text-xl color-blue">Último LIVE</span>
+                                <span class="font-bold text-2xl">
+                                    {{ store.getUsuario().last_live.slice(0, 19) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dias_habiles_anterior flex align-items-center decorador gap-2 p-2">
+                            <div class="icono">
+                                <img src="/assets/img/perfil/iconos/dias_habiles_anterior.png" alt="Días hábiles anterior">
+                            </div>
+                            <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
+                                <span class="w-full word-break text-xl color-blue">Días hábiles en {{ meses[iAnterior] }}</span>
+                                <span class="font-bold text-2xl">
+                                    {{ store.getUsuario().dias_validos_mes_anterior }} {{ parseInt(store.getUsuario().dias_validos_mes_anterior) == 1 ? 'día' : 'días' }}
+                                </span>
+                            </div>
+                        </div>
                         <div class="fecha_incorporacion flex align-items-center decorador gap-2 p-2">
                             <div class="icono">
                                 <img src="/assets/img/perfil/iconos/fecha_incorporacion.png" alt="Fecha incorporación">
@@ -199,81 +194,7 @@
                                 </span>
                             </div>
                         </div>
-
                     </div>
-                    <!--<div class="flex flex-column">
-                        <div class="flex justify-content-between flex-wrap column-gap-3 row-gap-2">
-                            <div class="seguidores flex flex-column">
-                                <span class="w-full word-break">Seguidores</span>
-                                <span class="font-bold text-lg">{{ parseInt(store.getUsuario().seguidores).toLocaleString()
-                                    }}</span>
-                            </div>
-                            <div class="fans flex flex-column">
-                                <span class="w-full word-break">Fans nuevos {{ meses[iActual] }}</span>
-                                <span
-                                    :class="'font-bold text-lg ' + (parseInt(store.getUsuario().new_fans_mes_actual) > parseInt(store.getUsuario().new_fans_mes_anterior) ? 'text-green-500' : 'text-red-500')">{{
-                                parseInt(store.getUsuario().new_fans_mes_actual).toLocaleString() }}</span>
-                                <span class="text-sm">En {{ meses[iAnterior] }}: <span class="font-bold text-sm">{{
-                        parseInt(store.getUsuario().new_fans_mes_anterior).toLocaleString() }}</span>
-                                    <img :src="subioBajo(store.getUsuario().new_fans_mes_actual, store.getUsuario().new_fans_mes_anterior)"
-                                        class="svg" />
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex justify-content-between column-gap-3 row-gap-2 mt-4 flex-wrap">
-                            <div class="diamante-actual flex flex-column">
-                                <span class="w-full word-break">Diamantes en {{ meses[iActual] }} 💎</span>
-                                <span class="font-bold text-lg">{{
-                        parseInt(store.getUsuario().diamantes_mes_actual).toLocaleString() }}
-                                    <span :class="'ml-1 text-sm ' + porcentaje(store.getUsuario().porcentaje_achieved)">{{
-                        store.getUsuario().porcentaje_achieved }}
-                                        <img :src="subioBajo(store.getUsuario().diamantes_mes_actual, store.getUsuario().diamantes_mes_anterior)"
-                                            class="svg" />
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="diamante-anterior flex flex-column">
-                                <span class="w-full word-break">Diamantes en {{ meses[iAnterior] }} 💎</span>
-                                <span class="font-bold text-lg">{{
-                        parseInt(store.getUsuario().diamantes_mes_anterior).toLocaleString() }}</span>
-                            </div>
-                        </div>
-                        <div class="flex justify-content-between column-gap-3 row-gap-2 mt-3 flex-wrap">
-
-                            <div class="last_live flex flex-column">
-                                <span class="w-full word-break flex gap-2 align-items-center">Último LIVE <img
-                                        src="../assets/img/last_hour.svg" srcset="../assets/img/last_hour.svg"></span>
-                                <span class="font-bold text-lg">{{ store.getUsuario().last_live.slice(0, 19) }}</span>
-                            </div>
-                        </div>
-                        <div class="flex justify-content-between column-gap-3 row-gap-2 mt-4 flex-wrap">
-                            <div class="dias_habiles_actual flex flex-column">
-                                <span class="w-full word-break">Días hábiles en {{ meses[iActual] }}</span>
-                                <span class="font-bold text-lg">{{ store.getUsuario().dias_validos_mes_actual }} {{ parseInt(store.getUsuario().dias_validos_mes_actual) == 1 ? 'día' : 'días' }}
-                                    <span :class="'ml-1 text-sm ' + porcentaje(store.getUsuario().porcentaje_achieved_3)">{{
-                        store.getUsuario().porcentaje_achieved_3 }}
-                                        <img :src="subioBajo(store.getUsuario().dias_validos_mes_actual, store.getUsuario().dias_validos_mes_anterior)"
-                                            class="svg" />
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="dias_habiles_anterior flex flex-column">
-                                <span class="w-full word-break">Días hábiles en {{ meses[iAnterior] }}</span>
-                                <span class="font-bold text-lg">{{ store.getUsuario().dias_validos_mes_anterior }} {{ parseInt(store.getUsuario().dias_validos_mes_anterior) == 1 ? 'día' : 'días' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row flex align-items-center flex-column  gap-3 flex-wrap">
-                        <div class="incorporacion flex flex-column">
-                            <span class="w-full word-break">Días de incorporación</span>
-                            <span class="font-bold text-lg"></span>
-                        </div>
-                        <div class="fecha_incorporacion flex flex-column md:mt-2 xl:mt-5">
-                            <span class="w-full word-break">Fecha de incorporación</span>
-                            <span class="font-bold text-lg"></span>
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -504,30 +425,6 @@ export default {
     .clasificacion,
     .top {
         height: 270px !important;
-    }
-
-    .xs\:flex-column {
-        flex-direction: column !important;
-    }
-
-    .xs\:w-full {
-        width: 100% !important;
-    }
-
-    .xs\:flex-wrap {
-        flex-wrap: wrap !important;
-    }
-
-    .xs\:text-center {
-        text-align: center !important;
-    }
-
-    .xs\:justify-content-center {
-        justify-content: center !important;
-    }
-
-    .xs\:gap-3 {
-        gap: 3rem !important;
     }
 }
 </style>

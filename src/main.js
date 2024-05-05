@@ -16,6 +16,7 @@ import Clasificacion from './components/Clasificacion.vue';
 import Footer from './components/Footer.vue';
 import Phone from './components/Phone.vue';
 import Insignias from './components/Insignias.vue';
+import CajaSorpresa from './components/CajaSorpresa.vue';
 
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';
@@ -149,7 +150,7 @@ app.component('Clasificacion', Clasificacion);
 app.component('Footer', Footer);
 app.component('Phone', Phone);
 app.component('Insignias', Insignias);
-
+app.component('CajaSorpresa', CajaSorpresa);
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);
