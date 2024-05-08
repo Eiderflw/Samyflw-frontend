@@ -55,7 +55,7 @@
                         </div>
                         <div class="flex flex-column gap-1 mb-2">
                             <label class="font-bold block">$ Pagar</label>
-                            <InputText type="number" id="saldo" disabled v-model="paquetePromocion.pagar" />
+                            <Message :closable="false">{{paquetePromocion.pagar}}</Message> 
                             <small id="saldo">Advertencia: Revise bien el saldo, se descontará de tu saldo</small>
                         </div>
                     </div>

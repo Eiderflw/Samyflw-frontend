@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import EventoView from '../views/Evento.vue';
 import LoginEvento from '../views/Login.vue'
@@ -9,16 +9,17 @@ import Creadores from '../components/Creadores.vue'
 import Bonus from '../components/Bonus.vue'
 import Promocion from '../components/Promocion.vue'
 import Promouser from '../components/Promouser.vue'
-import PremioAleatorio from "../components/PremioAleatorio.vue"
+import PremioAleatorio from '../components/PremioAleatorio.vue'
 import Game from '../views/game/Game.vue'
 import Logingame from '../views/game/Login.vue'
 import Admingame from '../views/game/Admin.vue'
 import PremiosUsuario from '../components/PremiosUsuario.vue'
 import AsignarPremios from '../components/AsignarPremios.vue'
-import Batalla from "../components/Batalla.vue";
-import EventoEspecial from "../components/EventoEspecial.vue"
+import Batalla from '../components/Batalla.vue';
+import EventoEspecial from '../components/EventoEspecial.vue'
 import { useStoreEvento } from '../store'
-import EventoEspecialView from "../views/EventoEspecial.vue";
+import EventoEspecialView from '../views/EventoEspecial.vue';
+import Deseos from '../components/Deseos.vue';
 
 
 
@@ -33,7 +34,8 @@ const routes = [
         path: '/panel',
         name: 'Panel',
         component: Panel,
-        children: [{
+        children: [
+            {
                 path: '/panel/evento',
                 name: 'Evento',
                 component: Evento,
@@ -133,7 +135,16 @@ const routes = [
                     const store = useStoreEvento();
                     return store.isActive() ? next() : next('/login');
                 }
-            }
+            },
+            {
+                path: '/panel/deseos',
+                name: 'Deseos',
+                component: Deseos,
+                beforeEnter: (to, from, next) => {
+                    const store = useStoreEvento();
+                    return store.isActive() ? next() : next('/login');
+                }
+            },
         ]
     },
     { path: '/duckracer', name: 'Game', component: Game },

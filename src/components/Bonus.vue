@@ -7,11 +7,10 @@
                 <template #header>
                     <div class="flex items-center gap-2 flex-end w-full justify-content-center">
                         <img src="/assets/img/perfil/iconos/bonus.png" height="170px" alt="Bonus">
-                        <!-- <h1 class="m-0">Bonus</h1> -->
                     </div>
                 </template>
                 <TabView :scrollable="true" class="tabBonusUsuario">
-                    <TabPanel>
+                    <TabPanel v-if="configBonus.bonus_generales == true" :headerClass="'tab-primero'">
                         <template #header>
                             <div class="flex align-items-center gap-2">
                                 <Avatar icon="pi pi-filter-slash" shape="circle" size="32px" />
@@ -61,7 +60,7 @@
 
                         </DataTable>
                     </TabPanel>
-                    <TabPanel v-if="store.getUsuario().creator_type == 'Rookie'">
+                    <TabPanel v-if="store.getUsuario().creator_type == 'Rookie' && configBonus.bonus_categoria == true">
                         <template #header>
                             <div class="flex align-items-center gap-2">
                                 <Avatar image="/assets/img/categorias/rookie.png" class="categoria" />
@@ -69,6 +68,11 @@
                             </div>
                         </template>
                         <DataTable class="bonus-usuario" :value="bonusByCategoria('Rookie')" tableStyle="min-width: 100%">
+                            <Column field="exclusivo" header="Exclusivo" class="font-gamers">
+                                <template #body="props">
+                                    {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                                </template>
+                            </Column>
                             <Column field="dias" header="Dias" class="font-gamers">
                                 <template #body="slotProps">
                                     <Knob :valueColor="validarCompletoColor(estadisticas.dias, slotProps.data.dias)"
@@ -106,7 +110,7 @@
 
                         </DataTable>
                     </TabPanel>
-                    <TabPanel v-else-if="store.getUsuario().creator_type == 'Veteran'">
+                    <TabPanel v-else-if="store.getUsuario().creator_type == 'Veteran' && configBonus.bonus_categoria == true">
                         <template #header>
                             <div class="flex align-items-center gap-2">
                                 <Avatar image="/assets/img/categorias/veterano.png" class="categoria" />
@@ -114,6 +118,11 @@
                             </div>
                         </template>
                         <DataTable class="bonus-usuario" :value="bonusByCategoria('Veteran')" tableStyle="min-width: 100%">
+                            <Column field="exclusivo" header="Exclusivo" class="font-gamers">
+                                <template #body="props">
+                                    {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                                </template>
+                            </Column>
                             <Column field="dias" header="Dias" class="font-gamers">
                                 <template #body="slotProps">
                                     <Knob :valueColor="validarCompletoColor(estadisticas.dias, slotProps.data.dias)"
@@ -151,7 +160,7 @@
 
                         </DataTable>
                     </TabPanel>
-                    <TabPanel v-else-if="store.getUsuario().creator_type == 'Pro'">
+                    <TabPanel v-else-if="store.getUsuario().creator_type == 'Pro' && configBonus.bonus_categoria == true">
                         <template #header>
                             <div class="flex align-items-center gap-2">
                                 <Avatar image="/assets/img/categorias/pro.png" class="categoria" />
@@ -159,6 +168,11 @@
                             </div>
                         </template>
                         <DataTable class="bonus-usuario" :value="bonusByCategoria('Pro')" tableStyle="min-width: 100%">
+                            <Column field="exclusivo" header="Exclusivo" class="font-gamers">
+                                <template #body="props">
+                                    {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                                </template>
+                            </Column>
                             <Column field="dias" header="Dias" class="font-gamers">
                                 <template #body="slotProps">
                                     <Knob :valueColor="validarCompletoColor(estadisticas.dias, slotProps.data.dias)"
@@ -196,7 +210,7 @@
 
                         </DataTable>
                     </TabPanel>
-                    <TabPanel v-else-if="store.getUsuario().creator_type == 'Pro+'">
+                    <TabPanel v-else-if="store.getUsuario().creator_type == 'Pro+' && configBonus.bonus_categoria == true">
                         <template #header>
                             <div class="flex align-items-center gap-2">
                                 <Avatar image="/assets/img/categorias/pro-plus.png" class="categoria" />
@@ -204,6 +218,11 @@
                             </div>
                         </template>
                         <DataTable class="bonus-usuario" :value="bonusByCategoria('Pro+')" tableStyle="min-width: 100%">
+                            <Column field="exclusivo" header="Exclusivo" class="font-gamers">
+                                <template #body="props">
+                                    {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                                </template>
+                            </Column>
                             <Column field="dias" header="Dias" class="font-gamers">
                                 <template #body="slotProps">
                                     <Knob :valueColor="validarCompletoColor(estadisticas.dias, slotProps.data.dias)"
@@ -246,18 +265,21 @@
         </div>
         <Panel class="Bonus" v-else>
             <template #header>
-                <div class="flex items-center gap-2 flex-wrap flex-end w-full justify-content-between">
+                <div class="flex align-items-center gap-2 flex-wrap flex-end w-full justify-content-between">
                     <h1 class="m-0">Bonus</h1>
-                    <div class="flex gap-4">
+                    <h3 class="m-0 p-0 text-white">Total pagar: ${{ totalPagar }}</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <Button v-tooltip.top="configBonus.msgGen" :icon="configBonus.bonus_generales == true ? 'pi pi-unlock' : 'pi pi-lock-open'" label="Generales" @click="cambiarConfigGenerales" :severity="configBonus.bonus_generales == true ? 'success' : 'danger'" />
+                        <Button v-tooltip.top="configBonus.msgCat" :icon="configBonus.bonus_categoria == true ? 'pi pi-unlock' : 'pi pi-lock-open'" label="Categorías" @click="cambiarConfigCategoria" :severity="configBonus.bonus_categoria == true ? 'success' : 'danger'" />
                         <Button icon="pi pi-percentage" :label="'Multiplicador x' + multiplicador"
                             @click="modalMultiplicador = true" />
-                        <Button icon="pi pi-plus" severity="warning" label="Por categoría" @click="modalBonusCategoria = true" />
-                        <Button icon="pi pi-plus" label="Añadir" @click="modalBonus = true"></Button>
+                        <Button icon="pi pi-plus" v-if="configBonus.bonus_categoria" severity="warning" label="Por categoría" @click="modalBonusCategoria = true" />
+                        <Button icon="pi pi-plus" v-if="configBonus.bonus_generales" label="Añadir" @click="modalBonus = true"></Button>
                     </div>
                 </div>
             </template>
-            <TabView :scrollable="true" class="tabBonus" v-model:activeIndex="activePanel" ref="tabBonus">
-                <TabPanel>
+            <TabView :scrollable="true" class="tabBonus" v-model:activeIndex="activePanel">
+                <TabPanel v-if="configBonus.bonus_generales == true" :headerClass="'tab-primero'">
                     <template #header>
                         <div class="flex align-items-center gap-2">
                             <Avatar icon="pi pi-filter-slash" shape="circle" size="32px" />
@@ -293,14 +315,19 @@
                         </Column>
                     </DataTable>
                 </TabPanel>
-                <TabPanel v-if="!categoriasMezcladas.includes('Rookie')">
+                <TabPanel v-if="!categoriasMezcladas.includes('Rookie') && configBonus.bonus_categoria == true">
                     <template #header>
                         <div class="flex align-items-center gap-2">
                             <Avatar image="/assets/img/categorias/rookie.png" class="categoria" />
                             <span class="font-bold white-space-nowrap">Rookie</span>
                         </div>
                     </template>
-                    <DataTable :value="bonusByCategoria('Rookie')" tableStyle="min-width: 100%">
+                    <DataTable :value="bonusByCategoria('Rookie')" tableStyle="min-width: 100%" sortField="exclusivo" :sortOrder="1">
+                        <Column field="exclusivo" header="Exclusivo">
+                            <template #body="props">
+                                {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                            </template>
+                        </Column>
                         <Column field="dias" header="Días" />
                         <Column field="horas" header="Horas" />
                         <Column field="meta" header="Diamantes">
@@ -324,7 +351,7 @@
                         </Column>
                     </DataTable>
                 </TabPanel>
-                <TabPanel v-if="!categoriasMezcladas.includes('Veteran')">
+                <TabPanel v-if="!categoriasMezcladas.includes('Veteran') && configBonus.bonus_categoria == true">
                     <template #header>
                         <div class="flex align-items-center gap-2">
                             <Avatar image="/assets/img/categorias/veterano.png" class="categoria" />
@@ -332,6 +359,11 @@
                         </div>
                     </template>
                     <DataTable :value="bonusByCategoria('Veteran')" tableStyle="min-width: 100%">
+                        <Column field="exclusivo" header="Exclusivo">
+                            <template #body="props">
+                                {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                            </template>
+                        </Column>
                         <Column field="dias" header="Días" />
                         <Column field="horas" header="Horas" />
                         <Column field="meta" header="Diamantes">
@@ -355,7 +387,7 @@
                         </Column>
                     </DataTable>
                 </TabPanel>
-                <TabPanel v-if="!categoriasMezcladas.includes('Pro')">
+                <TabPanel v-if="!categoriasMezcladas.includes('Pro') && configBonus.bonus_categoria == true">
                     <template #header>
                         <div class="flex align-items-center gap-2">
                             <Avatar image="/assets/img/categorias/pro.png" class="categoria" />
@@ -363,6 +395,11 @@
                         </div>
                     </template>
                     <DataTable :value="bonusByCategoria('Pro')" tableStyle="min-width: 100%">
+                        <Column field="exclusivo" header="Exclusivo">
+                            <template #body="props">
+                                {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                            </template>
+                        </Column>
                         <Column field="dias" header="Días" />
                         <Column field="horas" header="Horas" />
                         <Column field="meta" header="Diamantes">
@@ -386,7 +423,7 @@
                         </Column>
                     </DataTable>
                 </TabPanel>
-                <TabPanel v-if="!categoriasMezcladas.includes('Pro+')">
+                <TabPanel v-if="!categoriasMezcladas.includes('Pro+') && configBonus.bonus_categoria == true">
                     <template #header>
                         <div class="flex align-items-center gap-2">
                             <Avatar image="/assets/img/categorias/pro-plus.png" class="categoria" />
@@ -394,6 +431,11 @@
                         </div>
                     </template>
                     <DataTable :value="bonusByCategoria('Pro+')" tableStyle="min-width: 100%">
+                        <Column field="exclusivo" header="Exclusivo">
+                            <template #body="props">
+                                {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                            </template>
+                        </Column>
                         <Column field="dias" header="Días" />
                         <Column field="horas" header="Horas" />
                         <Column field="meta" header="Diamantes">
@@ -417,15 +459,16 @@
                         </Column>
                     </DataTable>
                 </TabPanel>
-                <TabPanel>
+                <TabPanel v-if="configBonus.bonus_categoria == true" :headerClass="'tab-ultimo'">
                     <template #header>
                         <div class="flex align-items-center gap-2">
                             <Avatar icon="pi pi-sync" shape="circle" />
-                            <span class="font-bold white-space-nowrap">Mezclar</span>
+                            <a class="custom-link"><span class="font-bold white-space-nowrap">Mezclar</span>
+                            </a>
                         </div>
                     </template>
                     <div class="flex flex-wrap flex-column gap-3 align-items-center justify-content-center">
-                        <form ref="formMezcla" class="col-5">
+                        <form ref="formMezcla" class="md:col-5 xs:col-11 sm:col-10">
                             <h2>Categorías mezcladas</h2>
                             <div class="flex flex-column gap-1 mb-2">
                                 <label for="categorias" class="font-bold block">Categorías</label>
@@ -436,8 +479,13 @@
                                 <Button label="Mezclar" @click="mezclarCategorias" :disabled="btnBonus" severity="success" />
                             </div>
                         </form>
-                        <div class="col-11">
+                        <div class="col-11 xs:col-12">
                             <DataTable :value="bonusMezclados" tableStyle="min-width: 100%">
+                                <Column field="exclusivo" header="Exclusivo">
+                                    <template #body="props">
+                                        {{ props.data.exclusivo ? 'Sí' : 'No' }}
+                                    </template>
+                                </Column>
                                 <Column field="dias" header="Días" />
                                 <Column field="horas" header="Horas" />
                                 <Column field="meta" header="Diamantes">
@@ -508,6 +556,10 @@
         </Dialog>
         <Dialog v-model:visible="modalBonusCategoria" header="Crear Bonus" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
             <form ref="formBonusCategoria">
+                <div class="flex gap-1 mb-2">
+                    <Checkbox v-model="paqueteBonusCategoria.exclusivo" inputId="exclusivo" name="exclusivo" value="exclusivo" :binary="true" />
+                    <label for="exclusivo">Exclusivo</label>
+                </div>
                 <div class="flex flex-column gap-1 mb-2">
                     <label for="dias" class="font-bold block">Categorías</label>
                     <MultiSelect v-model="paqueteBonusCategoria.categorias" placeholder="Selecciona las categorías" :options="categorias" />
@@ -595,6 +647,13 @@ export default {
             store: null,
             token: null,
             activePanel: 0,
+            configBonus: {
+                bonus_generales: true,
+                bonus_categoria: false,
+                msgGen: 'Desactivar',
+                msgCat: 'Activar'
+            },
+            totalPagar: 0,
             multiplicador: 1,
             btnMultiplicador: false,
             modalMultiplicador: false,
@@ -617,6 +676,7 @@ export default {
                 meta: null,
                 ganancia: null,
                 bonificacion: null,
+                exclusivo: false
             },
             paqueteMezclar: {
                 categorias: []
@@ -728,7 +788,6 @@ export default {
                     value: { style: { background: '#f97316' } }
                 }
             }
-
             return {};
 
         },
@@ -904,6 +963,7 @@ export default {
                                     meta: null,
                                     ganancia: null,
                                     bonificacion: null,
+                                    exclusivo:false,
                                 };
                             }
                             this.$toast.add({ severity: resp.data.creado ? 'success' : 'error', summary: 'Nuevo Bonus', detail: resp.data.message, life: 1640 });
@@ -933,6 +993,7 @@ export default {
                                     meta: null,
                                     ganancia: null,
                                     bonificacion: null,
+                                    exclusivo:false,
                                 };
                                 this.idEditarBonusCategoria = null;
                                 this.modalBonusCategoria = false;
@@ -1078,6 +1139,107 @@ export default {
                 }
             });
         },
+        async getConfigBonus() {
+            await axios.get(`${this.API}/bonus/config-bonus`).then(resp => {
+                this.configBonus.bonus_categoria = resp.data.bonus_categoria;
+                this.configBonus.bonus_generales = resp.data.bonus_generales;
+                this.configBonus.msgCat = resp.data.bonus_categoria == true ? 'Desactivar' : 'Activar';
+                this.configBonus.msgGen = resp.data.bonus_generales == true ? 'Desactivar' : 'Activar';
+            });
+        },
+        async getTotalPagar() {
+            await axios.get(`${this.API}/usuario/bonus/total`).then(resp => {
+                this.totalPagar = resp.data;
+            });
+        },
+        async cambiarConfigGenerales() {
+            //Si es true, mandamos a desactivar
+            if (this.configBonus.bonus_generales) {
+                await axios.put(`${this.API}/bonus/desactivar-bonus-generales`, {}, this.token).then(resp => {
+                    if (resp.data.cambio) {
+                        this.getTotalPagar();
+                        this.getConfigBonus();
+                    }
+                    this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
+                }).catch(error => {
+                    switch (error.response.data.statusCode) {
+                        case 401:
+                            //Se le termino la sesión
+                            this.store.clearUser();
+                            this.$router.push('/login');
+                            break;
+                        default:
+                            this.$toast.add({ severity: 'error', summary: 'Cambiar estado', detail: 'Ocurrió un problema', life: 1600 });
+                            console.log('Error: ', error);
+                            break;
+                    }
+                });
+            } else {
+                await axios.put(`${this.API}/bonus/activar-bonus-generales`, {}, this.token).then(resp => {
+                    if (resp.data.cambio) {
+                        this.getTotalPagar();
+                        this.getConfigBonus();
+                    }
+                    this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
+                }).catch(error => {
+                    switch (error.response.data.statusCode) {
+                        case 401:
+                            //Se le termino la sesión
+                            this.store.clearUser();
+                            this.$router.push('/login');
+                            break;
+                        default:
+                            this.$toast.add({ severity: 'error', summary: 'Cambiar estado', detail: 'Ocurrió un problema', life: 1600 });
+                            console.log('Error: ', error);
+                            break;
+                    }
+                });
+            }
+        },
+        async cambiarConfigCategoria() {
+            //Si es true, mandamos a desactivar
+            if (this.configBonus.bonus_categoria) {
+                await axios.put(`${this.API}/bonus/desactivar-bonus-categorias`, {}, this.token).then(resp => {
+                    if (resp.data.cambio) {
+                        this.getTotalPagar();
+                        this.getConfigBonus();
+                    }
+                    this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
+                }).catch(error => {
+                    switch (error.response.data.statusCode) {
+                        case 401:
+                            //Se le termino la sesión
+                            this.store.clearUser();
+                            this.$router.push('/login');
+                            break;
+                        default:
+                            this.$toast.add({ severity: 'error', summary: 'Cambiar estado', detail: 'Ocurrió un problema', life: 1600 });
+                            console.log('Error: ', error);
+                            break;
+                    }
+                });
+            } else {
+                await axios.put(`${this.API}/bonus/activar-bonus-categorias`, {}, this.token).then(resp => {
+                    if (resp.data.cambio) {
+                        this.getTotalPagar();
+                        this.getConfigBonus();
+                    }
+                    this.$toast.add({ severity: resp.data.cambio ? 'success' : 'error', summary: 'Cambiar estado', detail: resp.data.message, life: 1600 });
+                }).catch(error => {
+                    switch (error.response.data.statusCode) {
+                        case 401:
+                            //Se le termino la sesión
+                            this.store.clearUser();
+                            this.$router.push('/login');
+                            break;
+                        default:
+                            this.$toast.add({ severity: 'error', summary: 'Cambiar estado', detail: 'Ocurrió un problema', life: 1600 });
+                            console.log('Error: ', error);
+                            break;
+                    }
+                });
+            }
+        },
         comfirmDelete(id, nivel = null) {
             //Si nivel es null es porque es un bono por categorias
             if (nivel != null) {
@@ -1173,13 +1335,16 @@ export default {
             this.estadisticas.diamantes = parseInt(this.usuario.diamantes_mes_actual);
             //axios.get(`${this.API}/bonus/definirBonus`);
         } else {
+            await this.getTotalPagar();
             await this.getBonusCategorias();
             await this.getMezclaCategorias();
             await this.getBonusMezclados();
         }
+        await this.getConfigBonus();
         await this.getBonosAgrupadosCategoria();
         await this.obtenerBonus();
         await this.getMultiplicador();
+
     }
 }
 </script>
@@ -1197,9 +1362,9 @@ export default {
     align-items: center !important;
 }
 
-.tabBonus>.p-tabview-nav-container>.p-tabview-nav-content>.p-tabview-nav>li.p-tabview-header:first-child>a,
-.tabBonusUsuario>.p-tabview-nav-container>.p-tabview-nav-content>.p-tabview-nav>li.p-tabview-header:first-child>a,
-.tabBonus>.p-tabview-nav-container>.p-tabview-nav-content>.p-tabview-nav>li.p-tabview-header:nth-last-child(2)>a {
+.tabBonus>.p-tabview-nav-container>.p-tabview-nav-content>.p-tabview-nav>li.p-tabview-header.tab-primero>a,
+.tabBonusUsuario>.p-tabview-nav-container>.p-tabview-nav-content>.p-tabview-nav>li.p-tabview-header.tab-primero>a,
+.tabBonus>.p-tabview-nav-container>.p-tabview-nav-content>.p-tabview-nav>li.p-tabview-header.tab-ultimo>a {
     padding-top: 2.5rem !important;
     padding-bottom: 2.5rem !important;
 }

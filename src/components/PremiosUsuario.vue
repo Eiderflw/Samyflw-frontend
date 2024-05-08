@@ -43,7 +43,7 @@
                 <template #body="slotProps">
                     <Button v-if="slotProps.data.estado == 'Sin reclamar'" icon="pi pi-send" @click="() => {
                         Reclamar(slotProps.data.tipo_premio, slotProps.data.id_concurso, slotProps.data.estado, slotProps.data.premio, slotProps.data.descripcion);
-                    }"></Button>
+                    }" />
                     <Image v-tooltip.top="'Comprobante de entrega'" v-if="slotProps.data.estado == 'Entregado' && slotProps.data.tipo_premio != 'SaldoApi'"
                         :src="slotProps.data.transferencia.comprobante" alt="Imagen del premio" width="50" preview />
                 </template>
@@ -482,6 +482,8 @@ export default {
                 return "warning";
             } else if (estado == "En proceso") {
                 return "info";
+            } else if (estado == "Expirado") {
+                return "danger";
             } else {
                 return "success";
             }

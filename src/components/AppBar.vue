@@ -385,6 +385,19 @@ export default {
                     separator: true
                 },
                 {
+                    label: 'Tienda',
+                    items: [
+                    {
+                    label: 'Deseos',
+                    icon: 'pi pi-gift',
+                    route: '/panel/deseos'
+                },
+                    ]
+                },
+                {
+                    separator: true
+                },
+                {
                     label: 'Administración',
                     items: [
                         {
@@ -438,132 +451,85 @@ export default {
             ];
         }
         else {
-            //Verificamos el estado del backstage
+          //Verificamos el estado del backstage
+            this.itemsMenu = [
+                {
+                    separator: true
+                },
+                {
+                    label: 'Principal',
+                    icon: 'pi pi-user',
+                    route: '/panel/bonus',
+                },
+                {
+                    label: 'Promoción',
+                    icon: 'pi pi-thumbs-up-fill',
+                    route: '/panel/promouser'
+                },
+                {
+                    label: 'Deseos',
+                    icon: 'pi pi-gift',
+                    route: '/panel/deseos   '
+                },
+                {
+                    label: 'Evento',
+                    icon: 'pi pi-calendar-plus',
+                    route: '/evento'
+                },
+                {
+                    label: 'Eventos Especiales',
+                    icon: 'pi pi-flag-fill',
+                    route: '/panel/eventoEspecial',
+                }, {
+                    label: 'Batallas',
+                    icon: 'pi pi-calendar-plus',
+                    route: '/panel/batalla'
+                },
+                {
+                    label: 'DuckRacer',
+                    icon: 'pi pi-dollar',
+                    route: '/duckracer'
+                },
+                {
+                    separator: true
+                },
+                {
+                    label: 'Administración',
+                    items: [
+                        {
+                            label: 'Mi perfil',
+                            icon: 'pi pi-user',
+                            route: '/panel/bonus'
+                        },
+                        {
+                            label: 'Mis premios',
+                            icon: 'pi pi-gift',
+                            route: '/panel/premio'
+                        },
+                        {
+                            label: 'Editar perfil',
+                            icon: 'pi pi-user-edit',
+                            action: 'editar_perfil',
+                            route: '#action'
+                        }, {
+                            label: 'Cerrar sesión',
+                            icon: 'pi pi-sign-out',
+                            action: 'cerrar_sesión',
+                            route: '#action'
+                        }
+                    ]
+                }
+            ];
+
             if (this.paquete.estado == 'Activado') {
-                this.itemsMenu = [
-                    {
-                        separator: true
-                    },
-                    {
-                        label: 'Principal',
-                        icon: 'pi pi-user',
-                        route: '/panel/bonus',
-                    },
-                    {
-                        label: 'Agregar creadores',
-                        icon: 'pi pi-user-plus',
-                        action: 'add_creador',
-                        route: '#action'
-                    },
-                    {
-                        label: 'Promoción',
-                        icon: 'pi pi-thumbs-up-fill ',
-                        route: '/panel/promouser'
-                    },
-                    {
-                        label: 'Evento',
-                        icon: 'pi pi-calendar-plus',
-                        route: '/evento'
-                    },
-                    {
-                        label: 'Eventos Especiales',
-                        icon: 'pi pi-flag-fill',
-                        route: '/panel/eventoEspecial',
-                    },
-                    {
-                        label: 'Batallas',
-                        icon: 'pi pi-calendar-plus',
-                        route: '/panel/batalla'
-                    },
-                    {
-                        label: 'DuckRacer',
-                        icon: 'pi pi-dollar',
-                        route: '/duckracer'
-                    },
-                    {
-                        separator: true
-                    },
-                    {
-                        label: 'Administración',
-                        items: [
-                            {
-                                label: 'Mi perfil',
-                                icon: 'pi pi-user',
-                                route: '/panel/bonus'
-                            },
-                            {
-                                label: 'Mis premios',
-                                icon: 'pi pi-gift',
-                                route: '/panel/premio'
-                            },
-                            {
-                                label: 'Editar perfil',
-                                icon: 'pi pi-user-edit',
-                                action: 'editar_perfil',
-                                route: '#action'
-                            }, {
-                                label: 'Cerrar sesión',
-                                icon: 'pi pi-sign-out',
-                                action: 'cerrar_sesión',
-                                route: '#action'
-                            }]
-                    }
-                ];
-            } else {
-                this.itemsMenu = [
-                    {
-                        separator: true
-                    },
-                    {
-                        label: 'Principal',
-                        icon: 'pi pi-user',
-                        route: '/panel/bonus',
-                    },
-                    {
-                        label: 'Promoción',
-                        icon: 'pi pi-thumbs-up-fill ',
-                        route: '/panel/promouser'
-                    },
-                    {
-                        label: 'Evento',
-                        icon: 'pi pi-calendar-plus',
-                        route: '/evento'
-                    },
-                    {
-                        label: 'DuckRacer',
-                        icon: 'pi pi-dollar',
-                        route: '/duckracer'
-                    },
-                    {
-                        separator: true
-                    },
-                    {
-                        label: 'Administración',
-                        items: [
-                            {
-                                label: 'Mi perfil',
-                                icon: 'pi pi-user',
-                                route: '/panel/bonus'
-                            },
-                            {
-                                label: 'Mis premios',
-                                icon: 'pi pi-gift',
-                                route: '/panel/premio'
-                            },
-                            {
-                                label: 'Editar perfil',
-                                icon: 'pi pi-user-edit',
-                                action: 'editar_perfil',
-                                route: '#action'
-                            }, {
-                                label: 'Cerrar sesión',
-                                icon: 'pi pi-sign-out',
-                                action: 'cerrar_sesión',
-                                route: '#action'
-                            }]
-                    }
-                ];
+                this.itemsMenu.splice(2, 0, {
+                    label: 'Agregar creadores',
+                    icon: 'pi pi-user-plus',
+                    action: 'add_creador',
+                    route: '#action'
+                });
             }
+
 
             this.itemsUsuario = [
                 {
