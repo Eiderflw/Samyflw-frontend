@@ -14,7 +14,7 @@
             </div>
             <Card class="px-0" v-else>
                 <template #content>
-                    <TabView class="font-gamers" style="height: 100vh;">
+                    <TabView class="font-gamers">
                         <TabPanel header="Rookie">
                             <Accordion :activeIndex="0" v-if="eventoRookie.length > 0" class="font-gamers">
                                 <AccordionTab v-for="(evento, index) in eventoRookie" :key="index" class="font-gamers">
@@ -394,6 +394,63 @@
                             <p class="text-center" v-else>Sin eventos</p>
                         </TabPanel>
                     </TabView>
+                    <DataTable :value="creadores" class="tablaCreadoresEvento" tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
+                        <template #header>
+                            <span class="text-xl text-900 font-bold font-gamers text-center" style="z-index: 1;">CREADORES DE CONTENIDO</span>
+                            <img src="/assets/img/eventos/divisor-titulo.png" alt="Divisor" class="w-full mb-3" style="z-index: 1;">
+                            <div class="text-center uppercase font-gamers" style="z-index: 1;">
+                                <p class="m-0 text-inline-evento text-6xl color-blue" v-if="all != true">CATEGORÍA {{ grupoMostrado }}</p>
+                                <p class="m-0 text-inline-evento text-6xl color-blue" v-else>TODOS</p>
+                            </div>
+                            <div class="grupos mt-3 mb-5 uppercase font-gamers color-blue" style="z-index: 1;">
+                                <span class="todos" @click="changeCreador('Todos')">Todos</span>
+                                <span class="rookie" @click="changeCreador('Rookie')">Rookie</span>
+                                <span class="veteran" @click="changeCreador('Veteran')">Veteran</span>
+                                <span class="pro" @click="changeCreador('Pro')">Pro</span>
+                                <span class="pro+" @click="changeCreador('Pro+')">Pro+</span>
+                            </div>
+                            <div class="containerC">
+                                <video autoplay muted loop class="tabla-fondo-header">
+                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
+                                    Tu navegador no soporta esta funcionalidad video
+                                </video>
+                                <Clasificacion :nombre="top3[1].usuario" top="2" tipo="Platino" :foto="top3[1].foto" />
+                                <Clasificacion top="1" tipo="Oro" :nombre="top3[0].usuario" :foto="top3[0].foto" />
+                                <Clasificacion :nombre="top3[2].usuario" top="3" tipo="Cobre" :foto="top3[2].foto" />
+                            </div>
+                        </template>
+                        <Column header="#" class="font-gamers" headerStyle="width:3rem">
+                            <template #body="slotProps">
+                                {{ slotProps.index + 1 }}
+                            </template>
+                        </Column>
+                        <Column field="usuario" header="Creador" class="font-gamers">
+                            <template #body="slotProps">
+                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star" severity="warn">
+                                    {{ slotProps.data.usuario }}
+                                </InlineMessage>
+                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star" severity="error">
+                                    {{ slotProps.data.usuario }}
+                                </InlineMessage>
+                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star" severity="info">
+                                    {{ slotProps.data.usuario }}
+                                </InlineMessage>
+                                <p v-else> {{ slotProps.data.usuario }}</p>
+                            </template>
+                        </Column>
+                        <Column field="creator_type" header="Categoría" class="font-gamers" />
+                        <Column field="diamantes_mes_actual" class="font-gamers" header="Puntos">
+                            <template #body="slotProps">
+                                {{ slotProps.data.diamantes_mes_actual * multiplicador }}
+                            </template>
+                        </Column>
+                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior"></Column>
+                        <Column field="grupo" class="font-gamers" header="Grupo">
+                            <template #body="props">
+                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
+                            </template>
+                        </Column>
+                    </DataTable>
                 </template>
             </Card>
         </div>
@@ -497,6 +554,7 @@ export default {
             },
         ],
         all: false,
+        grupoMostrado: 'Rookie',
     }),
     methods: {
         VerEvento(data) {
@@ -619,59 +677,20 @@ export default {
         },
         changeCreador(grupo) {
             if (grupo != "Todos") {
-                if (grupo.length == 1) {
-                    for (let i = 0; i < this.arrayCreadores.length; i++) {
-                        if (this.arrayCreadores[i]._id === grupo) {
-                            this.grupoMostrado = grupo;
-                            this.creadores = [];
-                            this.creadores = this.arrayCreadores[i].usuarios;
-                        }
-                    }
-                    for (let i = 0; i < this.arrayTop3.length; i++) {
-                        if (this.arrayTop3[i].grupo === grupo) {
-                            this.top3 = [];
-                            this.top3 = this.arrayTop3[i].usuarios;
-                        }
-                    }
-                } else {
-                    const mezcla = this.gruposMezcla.split("-");
-                    const index1 = this.arrayCreadores.findIndex(
-                        (creador) => creador._id == mezcla[0]
-                    );
-                    const index2 = this.arrayCreadores.findIndex(
-                        (creador) => creador._id == mezcla[1]
-                    );
-                    if (index1 != -1 && index2 != -1) {
-                        this.grupoMostrado = this.gruposMezcla;
-                        this.creadores = [
-                            ...this.arrayCreadores[index1].usuarios,
-                            ...this.arrayCreadores[index2].usuarios,
-                        ];
-                    }
-                    const index3 = this.arrayTop3.findIndex(
-                        (top) => top.grupo == mezcla[0]
-                    );
-                    const index4 = this.arrayTop3.findIndex(
-                        (top) => top.grupo == mezcla[1]
-                    );
-                    if (index3 != -1 && index4 != -1) {
-                        const mezclaTops = [
-                            ...this.arrayTop3[index3].usuarios,
-                            ...this.arrayTop3[index4].usuarios,
-                        ];
-                        mezclaTops.sort(
-                            (a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual
-                        );
-                        this.top3 = mezclaTops.slice(0, 3);
+                for (let i = 0; i < this.arrayCreadores.length; i++) {
+                    if (this.arrayCreadores[i]._id === grupo) {
+                        this.grupoMostrado = grupo;
+                        this.creadores = [];
+                        this.creadores = this.arrayCreadores[i].usuarios;
                     }
                 }
+                this.top3 = this.creadores.slice(0, 3);
                 this.all = false;
             } else {
-                this.creadores = [
-                    ...this.arrayCreadores[0].usuarios,
-                    ...this.arrayCreadores[1].usuarios,
-                    ...this.arrayCreadores[2].usuarios,
-                ];
+                this.creadores = [];
+                for (const creador of this.arrayCreadores) {
+                    this.creadores = this.creadores.concat(creador.usuarios);
+                }
                 this.creadores.sort(
                     (a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual
                 );
@@ -707,79 +726,16 @@ export default {
     async created() {
         this.getEvento();
         this.storeMezcla = useStoreMezcla();
-        await axios.get(`${this.API}/bonus/gruposMezclados`).then((response) => {
-            if (response.data != "" && response.data != null) {
-                this.storeMezcla.saveMezcla(response.data.grupos);
-            }
-        });
-        this.gruposMezcla = this.storeMezcla.getGrupo();
-        this.gruposMezcla = this.gruposMezcla == "" ? null : this.gruposMezcla;
-        await axios.get(`${this.API}/usuario/agrupados`).then((resp) => {
+        await axios.get(`${this.API}/usuario/agrupados/categoria`).then((resp) => {
             this.arrayCreadores = resp.data;
-            if (this.gruposMezcla == null) {
-                for (let i = 0; i < this.arrayCreadores.length; i++) {
-                    if (this.arrayCreadores[i]._id === "A") {
-                        this.creadores = [];
-                        this.creadores = this.arrayCreadores[i].usuarios;
-                    }
+            for (let i = 0; i < this.arrayCreadores.length; i++) {
+                if (this.arrayCreadores[i]._id === "Rookie") {
+                    this.creadores = [];
+                    this.creadores = this.arrayCreadores[i].usuarios;
                 }
-            } else {
-                const mezcla = this.gruposMezcla.split("-");
-                const index1 = this.arrayCreadores.findIndex(
-                    (creador) => creador._id == mezcla[0]
-                );
-                const index2 = this.arrayCreadores.findIndex(
-                    (creador) => creador._id == mezcla[1]
-                );
-                if (index1 != -1 && index2 != -1) {
-                    this.grupoMostrado = this.gruposMezcla;
-                    this.creadores = [
-                        ...this.arrayCreadores[index1].usuarios,
-                        ...this.arrayCreadores[index2].usuarios,
-                    ];
-                }
+
             }
-        });
-        await axios.get(`${this.API}/usuario/top`).then((resp) => {
-            this.arrayTop3 = resp.data;
-            if (this.gruposMezcla == null) {
-                for (let i = 0; i < this.arrayTop3.length; i++) {
-                    if (this.arrayTop3[i].grupo === "A") {
-                        this.top3 = [];
-                        this.top3 = this.arrayTop3[i].usuarios;
-                    }
-                }
-            } else {
-                const mezcla = this.gruposMezcla.split("-");
-                const index1 = this.arrayTop3.findIndex(
-                    (top) => top.grupo == mezcla[0]
-                );
-                const index2 = this.arrayTop3.findIndex(
-                    (top) => top.grupo == mezcla[1]
-                );
-                if (index1 != -1 && index2 != -1) {
-                    const mezclaTops = [
-                        ...this.arrayTop3[index1].usuarios,
-                        ...this.arrayTop3[index2].usuarios,
-                    ];
-                    mezclaTops.sort(
-                        (a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual
-                    );
-                    this.top3 = mezclaTops.slice(0, 3);
-                }
-            }
-        });
-        await axios.get(`${this.API}/evento/activo`).then((resp) => {
-            this.eventos = resp.data;
-            resp.data.forEach((evento) => {
-                this.eventosLabel.push({
-                    label: evento.titulo,
-                    icon: "pi pi-calendar-times",
-                });
-            });
-        });
-        await axios.get(`${this.API}/bonus/multiplicador`).then((resp) => {
-            this.multiplicador = resp.data.multiplicador;
+            this.top3 = this.creadores.slice(0, 3);
         });
         this.store = useStoreEvento();
 
