@@ -304,7 +304,7 @@ export default {
                         this.$router.push('/panel/bonus');
                     } else {
 
-                        this.$router.push('panel/eventoEspecial')
+                        this.$router.push('EventoEspecialView')
                     }
 
                 }

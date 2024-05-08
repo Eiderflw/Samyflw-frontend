@@ -151,10 +151,10 @@
                         <template #footer>
                             <div class="py-2 px-3">
                                 <b>{{ paquete.criterio_ganador ? paquete.criterio_ganador.length : 0 }}</b> criterio {{
-        ((paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) > 1 ||
-            (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 0) ? 's' : '' }} {{
-        (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 1 ? 'seleccionado.'
-            : 'seleccionados.' }}
+                                    ((paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) > 1 ||
+                                        (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 0) ? 's' : '' }} {{
+                                    (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 1 ? 'seleccionado.'
+                                        : 'seleccionados.' }}
                             </div>
                         </template>
                     </MultiSelect>
