@@ -1,201 +1,186 @@
 <template>
-    <Panel v-if="admin == false" class="EventoEspecial">
-        <Toast />
-        <template #header>
-            <div class="flex items-center gap-2 flex-end w-full justify-content-between">
-                <h1 class="m-0">Eventos</h1>
-            </div>
-        </template>
-
-        <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 100%">
-            <Column header="Categoria" field="categoria" sortable>
-
-            </Column>
-            <Column header="Fecha Inicio" field="fecha_inicio" sortable>
-                <template #body="slotProps">
-                    {{ slotProps.data.fecha_inicio != null ? slotProps.data.fecha_inicio.slice(0, 10) : '' }}
-
-                </template>
-            </Column>
-            <Column header="Fecha Final" field="fecha_fin" sortable>
-                <template #body="slotProps">
-                    {{ slotProps.data.fecha_fin != null ? slotProps.data.fecha_fin.slice(0, 10) : '' }}
-
-                </template>
-            </Column>
-            <Column header="Aplicar">
-                <template #body="slotProps">
-                    <Button icon="pi pi-check-circle"
-                        @click="aplicar(slotProps.data._id, slotProps.data.categoria)"></Button>
-
-                </template>
-            </Column>
-        </DataTable>
-    </Panel>
-    <Panel v-if="admin == true" class="EventoEspecial">
-        <Toast />
-        <template #header>
-            <div class="flex items-center gap-2 flex-end w-full justify-content-between flex-wrap">
-                <h1 class="m-0">Eventos</h1>
-                <Button label="Evento" icon="pi pi-plus" @click="modalEvento = true" />
-            </div>
-        </template>
-
-        <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 100%">
-            <Column header="Categoria" field="categoria" sortable>
-            </Column>
-            <Column header="Participantes" field="participantes" sortable>
-                <template #body="slotProps">
-                    {{ slotProps.data.participantes.length }}
-
-                </template>
-            </Column>
-            <Column header="Ganador" field="ganador">
-            </Column>
-            <Column header="Fecha Inicio" field="fecha_inicio" sortable>
-                <template #body="slotProps">
-                    {{ slotProps.data.fecha_inicio != null ? slotProps.data.fecha_inicio.slice(0, 10) : '' }}
-
-                </template>
-            </Column>
-            <Column header="Fecha Final" field="fecha_fin" sortable>
-                <template #body="slotProps">
-                    {{ slotProps.data.fecha_fin != null ? slotProps.data.fecha_fin.slice(0, 10) : '' }}
-
-                </template>
-            </Column>
-            <Column header="Estado" field="estado" sortable>
-                <template #body="slotProps">
-                    <Tag :severity="ponerEstado(slotProps.data.estado)" :value="slotProps.data.estado" />
-
-                </template>
-            </Column>
-            <Column header="Acciones" field="_id">
-                <template #body="slotProps">
-                    <div>
-                        <Button class="m-1" icon="pi pi-trash" outlined rounded severity="danger"
-                            @click="verificacion(slotProps.data._id,)"></Button>
-                    </div>
-
-                </template>
-            </Column>
-        </DataTable>
-
-        <Dialog v-model:visible="modalEvento" :style="{ width: '47rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+    <div>
+        <Panel v-if="admin == false" class="EventoEspecial">
+            <Toast />
             <template #header>
-                <h3>Nuevo evento</h3>
+                <div class="flex items-center gap-2 flex-end w-full justify-content-between">
+                    <h1 class="m-0">Eventos</h1>
+                </div>
             </template>
-            <form ref="formPremio" class="formPremio">
 
-                <label class="font-bold block">Categoria de participantes</label>
-                <div class="card flex justify-content-center">
-                    <SelectButton v-model="paquete.categoria" :options="Rangos" aria-labelledby="basic" />
+            <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+                <Column header="Categoria" field="categoria" sortable>
+
+                </Column>
+                <Column header="Fecha Inicio" field="fecha_inicio" sortable>
+                    <template #body="slotProps">
+                        {{ slotProps.data.fecha_inicio != null ? slotProps.data.fecha_inicio.slice(0, 10) : '' }}
+
+                    </template>
+                </Column>
+                <Column header="Fecha Final" field="fecha_fin" sortable>
+                    <template #body="slotProps">
+                        {{ slotProps.data.fecha_fin != null ? slotProps.data.fecha_fin.slice(0, 10) : '' }}
+
+                    </template>
+                </Column>
+                <Column header="Aplicar">
+                    <template #body="slotProps">
+                        <Button icon="pi pi-check-circle"
+                            @click="aplicar(slotProps.data._id, slotProps.data.categoria)"></Button>
+
+                    </template>
+                </Column>
+            </DataTable>
+        </Panel>
+        <Panel v-if="admin == true" class="EventoEspecial">
+            <Toast />
+            <template #header>
+                <div class="flex items-center gap-2 flex-end w-full justify-content-between flex-wrap">
+                    <h1 class="m-0">Eventos</h1>
+                    <Button label="Evento" icon="pi pi-plus" @click="modalEvento = true" />
                 </div>
-                <div class="flex flex-column gap-1">
-                    <label class="font-bold block">Tipo premio</label>
-                    <div class="flex flex-wrap gap-3">
-                        <div class="flex align-items-center">
-                            <RadioButton v-model="paquete.tipo_premio" inputId="premio1" name="premio"
-                                value="Efectivo" />
-                            <label for="premio1" class="ml-2 cursor-pointer">Efectivo</label>
+            </template>
+
+            <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+                <Column header="Categoria" field="categoria" sortable>
+                </Column>
+                <Column header="Participantes" field="participantes" sortable>
+                    <template #body="slotProps">
+                        {{ slotProps.data.participantes.length }}
+
+                    </template>
+                </Column>
+                <Column header="Ganador" field="ganador">
+                </Column>
+                <Column header="Fecha Inicio" field="fecha_inicio" sortable>
+                    <template #body="slotProps">
+                        {{ slotProps.data.fecha_inicio != null ? slotProps.data.fecha_inicio.slice(0, 10) : '' }}
+
+                    </template>
+                </Column>
+                <Column header="Fecha Final" field="fecha_fin" sortable>
+                    <template #body="slotProps">
+                        {{ slotProps.data.fecha_fin != null ? slotProps.data.fecha_fin.slice(0, 10) : '' }}
+
+                    </template>
+                </Column>
+                <Column header="Estado" field="estado" sortable>
+                    <template #body="slotProps">
+                        <Tag :severity="ponerEstado(slotProps.data.estado)" :value="slotProps.data.estado" />
+
+                    </template>
+                </Column>
+                <Column header="Acciones" field="_id">
+                    <template #body="slotProps">
+                        <div>
+                            <Button class="m-1" icon="pi pi-trash" outlined rounded severity="danger"
+                                @click="verificacion(slotProps.data._id,)"></Button>
                         </div>
-                        <div class="flex align-items-center">
-                            <RadioButton v-model="paquete.tipo_premio" inputId="premio2" name="premio"
-                                value="SaldoApi" />
-                            <label for="premio2" class="ml-2 cursor-pointer">Saldo API</label>
-                        </div>
-                        <div class="flex align-items-center">
-                            <RadioButton v-model="paquete.tipo_premio" inputId="premio3" name="premio" value="Objeto" />
-                            <label for="premio3" class="ml-2 cursor-pointer">Objeto</label>
-                        </div>
+
+                    </template>
+                </Column>
+            </DataTable>
+
+            <Dialog v-model:visible="modalEvento" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+                <template #header>
+                    <h3>Nuevo evento</h3>
+                </template>
+                <form ref="formPremio" class="formPremio">
+
+                    <label class="font-bold block">Categoria de participantes</label>
+                    <div class="card flex justify-content-center">
+                        <SelectButton v-model="paquete.categoria" :options="Rangos" aria-labelledby="basic" />
                     </div>
-                </div>
-                <div class="flex flex-column gap-1 mt-2" v-if="paquete.tipo_premio != 'Objeto'">
-                    <label for="premio" class="font-bold block">Premio</label>
-                    <InputText id="premio" v-model="paquete.premios" placeholder="Monto" />
-                    <small v-if="paquete.tipo_premio == 'Efectivo'">Ingresar monto y tipo de moneda, Ej: 10USD</small>
-                    <small v-else>Ingresar monto en USD</small>
-                </div>
-                <div class="flex flex-column gap-1 mt-2">
-                    <label for="premio" class="font-bold block">Bono carulla</label>
-                    <InputText id="premioCarulla" v-model="paquete.bonoCarrulla" placeholder="Monto" />
-                    <small>Ingresar monto Ej: 1000</small>
-                </div>
-                <div class="flex flex-column gap-1 mt-2">
-                    <label for="cant" class="font-bold block">Cantidad de ganadores</label>
-                    <InputText type="number" id="cant" v-model="paquete.cantidad_ganadores" min="1" />
-                </div>
-
-
-                <div class="disponibilidad flex flex-column gap-1 mt-1">
-                    <label for="fecha_fin" class="font-bold block">Fecha sorteo</label>
-                    <Calendar id="fecha_fin" v-model="fecha_rango" selectionMode="range" :minDate="new Date()"
-                        :manualInput="false" dateFormat="yy-mm-dd" />
-                    <small>Selecionar inicio y fin del evento</small>
-                </div>
-                <div class="flex flex-column gap-1 w-full mt-2">
-                    <label for="cant" class="font-bold block">Criterio ganador</label>
-                    <MultiSelect :maxSelectedLabels="3" v-model="paquete.criterio_ganador" :options="criterios"
-                        optionLabel="criterio" placeholder="Selecciona criterio para decidir los ganadores"
-                        display="chip" class="w-full">
-
-                        <template #option="slotProps">
+                    <div class="flex flex-column gap-1">
+                        <label class="font-bold block">Tipo premio</label>
+                        <div class="flex flex-wrap gap-3">
                             <div class="flex align-items-center">
-                                <div>{{ slotProps.option.criterio }}</div>
+                                <RadioButton v-model="paquete.tipo_premio" inputId="premio1" name="premio" value="Efectivo" />
+                                <label for="premio1" class="ml-2 cursor-pointer">Efectivo</label>
                             </div>
-                        </template>
+                            <div class="flex align-items-center">
+                                <RadioButton v-model="paquete.tipo_premio" inputId="premio2" name="premio" value="SaldoApi" />
+                                <label for="premio2" class="ml-2 cursor-pointer">Saldo API</label>
+                            </div>
+                            <div class="flex align-items-center">
+                                <RadioButton v-model="paquete.tipo_premio" inputId="premio3" name="premio" value="Objeto" />
+                                <label for="premio3" class="ml-2 cursor-pointer">Objeto</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column gap-1 mt-2" v-if="paquete.tipo_premio != 'Objeto'">
+                        <label for="premio" class="font-bold block">Premio</label>
+                        <InputText id="premio" v-model="paquete.premios" placeholder="Monto" />
+                        <small v-if="paquete.tipo_premio == 'Efectivo'">Ingresar monto y tipo de moneda, Ej: 10USD</small>
+                        <small v-else>Ingresar monto en USD</small>
+                    </div>
+                    <div class="flex flex-column gap-1 mt-2">
+                        <label for="cant" class="font-bold block">Cantidad de ganadores</label>
+                        <InputText type="number" id="cant" v-model="paquete.cantidad_ganadores" min="1" />
+                    </div>
+                    <div class="disponibilidad flex flex-column gap-1 mt-1">
+                        <label for="fecha_fin" class="font-bold block">Fecha sorteo</label>
+                        <Calendar id="fecha_fin" v-model="fecha_rango" selectionMode="range" :minDate="new Date()" :manualInput="false" dateFormat="yy-mm-dd" />
+                        <small>Selecionar inicio y fin del evento</small>
+                    </div>
+                    <div class="flex flex-column gap-1 w-full mt-2">
+                        <label for="cant" class="font-bold block">Criterio ganador</label>
+                        <MultiSelect :maxSelectedLabels="3" v-model="paquete.criterio_ganador" :options="criterios" optionLabel="criterio" placeholder="Selecciona criterio para decidir los ganadores" display="chip" class="w-full">
 
-                        <template #footer>
-                            <div class="py-2 px-3">
-                                <b>{{ paquete.criterio_ganador ? paquete.criterio_ganador.length : 0 }}</b> criterio {{
-                                    ((paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) > 1 ||
-                                        (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 0) ? 's' : '' }} {{
-                                    (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 1 ? 'seleccionado.'
-                                        : 'seleccionados.' }}
-                            </div>
-                        </template>
-                    </MultiSelect>
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                    <div>{{ slotProps.option.criterio }}</div>
+                                </div>
+                            </template>
+
+                            <template #footer>
+                                <div class="py-2 px-3">
+                                    <b>{{ paquete.criterio_ganador ? paquete.criterio_ganador.length : 0 }}</b> criterio {{
+                                        ((paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) > 1 ||
+                                            (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 0) ? 's' : '' }} {{
+                                        (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 1 ? 'seleccionado.'
+                                            : 'seleccionados.' }}
+                                </div>
+                            </template>
+                        </MultiSelect>
+                    </div>
+                </form>
+
+                <template #footer>
+                    <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
+                    <Button label="Crear" @click="crearEvento" severity="success" />
+                </template>
+            </Dialog>
+
+            <Dialog v-model:visible="modalEliminar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+                <template #header>
+                </template>
+                <div class="card flex justify-content-center">
+                    <h2>¿Esta seguro de eliminar el evento?</h2>
                 </div>
-            </form>
 
-            <template #footer>
-                <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
-                <Button label="Crear" @click="crearEvento" severity="success" />
-            </template>
-        </Dialog>
+                <template #footer>
+                    <Button label="No,cancelar" @click="modalEliminar = false" text severity="danger" />
+                    <Button label="Si,Eliminar" @click="Eliminar()" severity="success" autofocus />
+                </template>
+            </Dialog>
 
-        <Dialog v-model:visible="modalEliminar" :style="{ width: '47rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
-            <template #header>
-            </template>
-            <div class="card flex justify-content-center">
-                <h2>¿Esta seguro de eliminar el evento?</h2>
-            </div>
+            <Dialog v-model:visible="modalAplicar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+                <template #header>
+                </template>
+                <div class="card flex justify-content-center">
+                    <h2>¿Quieres participar en este evento?</h2>
+                </div>
 
-            <template #footer>
-                <Button label="No,cancelar" @click="modalEliminar = false" text severity="danger" />
-                <Button label="Si,Eliminar" @click="Eliminar()" severity="success" autofocus />
-            </template>
-        </Dialog>
-
-        <Dialog v-model:visible="modalAplicar" :style="{ width: '47rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
-            <template #header>
-            </template>
-            <div class="card flex justify-content-center">
-                <h2>confirmar Evento</h2>
-            </div>
-
-            <template #footer>
-                <Button label="Cancelar" @click="(modalAplicar = false), 
-            (verificacionEliminar = null)" text severity="danger" />
-                <Button label="Comfirmar" @click="agregarParticipante()" severity="success" autofocus />
-            </template>
-        </Dialog>
-    </Panel>
+                <template #footer>
+                    <Button label="No quiero" @click="(modalAplicar = false),
+                        (verificacionEliminar = null)" text severity="danger" />
+                    <Button label="Sí quiero" @click="agregarParticipante()" severity="success" autofocus />
+                </template>
+            </Dialog>
+        </Panel>
+    </div>
 </template>
 <script>
 import axios from "axios";
@@ -223,7 +208,6 @@ export default {
         paquete: {
             categoria: null,
             premios: null,
-            bonoCarrulla: null,
             tipo_premio: null,
             criterio_ganador: [],
             participantes: [],
