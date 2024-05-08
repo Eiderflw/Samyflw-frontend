@@ -28,8 +28,8 @@
                     <a></a>
                     <a href="#footer">Redes Sociales</a>
                     <router-link to="/evento">Eventos</router-link>
-                    <router-link to="/login">Login Agencia</router-link>
-                    <router-link to="/EventoEspecialView">Eventos Categoria</router-link>
+                    <router-link to="/EventoEspecialView">Eventos Categoría</router-link>
+                    <router-link to="/login">Login</router-link>
                     <Button icon="pi pi-bars" class="botonMenu" text size="large" @click="visibleSidebar = true" />
                 </nav>
             </div>
