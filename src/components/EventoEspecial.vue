@@ -5,7 +5,7 @@
             <Toast />
             <template #header>
                 <div class="flex items-center gap-2 flex-end w-full justify-content-between flex-wrap">
-                    <h1 class="m-0">Eventos</h1>
+                    <h1 class="m-0">Eventos Especiales</h1>
                     <Button label="Evento" icon="pi pi-plus" @click="modalEvento = true" />
                 </div>
             </template>
@@ -13,13 +13,11 @@
             <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
                 <Column header="Categoria" field="categoria" sortable>
                 </Column>
-                <Column header="Participantes" field="participantes" sortable>
-                    <template #body="slotProps">
-                        {{ slotProps.data.participantes.length }}
-
-                    </template>
+                <Column header="Titulo" field="titulo">
                 </Column>
-                <Column header="Ganador" field="ganador">
+                <Column header="Descripcion" field="descripcion">
+                </Column>
+                <Column header="Reglas" field="reglas">
                 </Column>
                 <Column header="Fecha Inicio" field="fecha_inicio" sortable>
                     <template #body="slotProps">
@@ -32,6 +30,14 @@
                         {{ slotProps.data.fecha_fin != null ? slotProps.data.fecha_fin.slice(0, 10) : '' }}
 
                     </template>
+                </Column>
+                <Column header="Top 1" field="premios.top1.descripcion" >
+                </Column>
+                
+                <Column header="Top 2" field="premios.top2.descripcion" >
+                </Column>
+                
+                <Column header="Top 3" field="premios.top3.descripcion" >
                 </Column>
                 <Column header="Estado" field="estado" sortable>
                     <template #body="slotProps">
@@ -252,6 +258,7 @@ export default {
         },
         paquete: {
             categoria: null,
+            estado: "En preparacion",
             titulo: null,
             descripcion: null,
             reglas: null,
@@ -426,6 +433,7 @@ export default {
             }).then(response => {
                 console.log(response);
                 this.modalEliminar = false;
+                        this.getEventos();
             }).catch(error => {
                 switch (error.response.data.statusCode) {
                     case 401:
