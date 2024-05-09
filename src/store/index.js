@@ -34,17 +34,26 @@ export const useSessionStore = defineStore('session', {
 export const useStoreEvento = defineStore('evento', {
     state: () => ({
         user: null,
-        evento: {},
+        evento: {
+            evento : null,
+            categoria : null,
+            premio : null
+        },
     }),
 
     actions: {
 
-            eventoID(id,categoria){
+            eventoID(id,categoria,premio){
                 this.evento.evento= id;
                 this.evento.categoria= categoria;
+                this.evento.premio = premio;
             },
             eventoDelete(){
-                this.evento = {};
+                this.evento ={
+                    evento : null,
+                    categoria : null,  
+                    premio : null
+                };
             },
 
         isActive() {

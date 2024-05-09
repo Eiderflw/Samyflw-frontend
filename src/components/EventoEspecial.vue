@@ -1,38 +1,6 @@
 <template>
     <div>
-        <Panel v-if="admin == false" class="EventoEspecial">
-            <Toast />
-            <template #header>
-                <div class="flex items-center gap-2 flex-end w-full justify-content-between">
-                    <h1 class="m-0">Eventos</h1>
-                </div>
-            </template>
-
-            <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
-                <Column header="Categoria" field="categoria" sortable>
-
-                </Column>
-                <Column header="Fecha Inicio" field="fecha_inicio" sortable>
-                    <template #body="slotProps">
-                        {{ slotProps.data.fecha_inicio != null ? slotProps.data.fecha_inicio.slice(0, 10) : '' }}
-
-                    </template>
-                </Column>
-                <Column header="Fecha Final" field="fecha_fin" sortable>
-                    <template #body="slotProps">
-                        {{ slotProps.data.fecha_fin != null ? slotProps.data.fecha_fin.slice(0, 10) : '' }}
-
-                    </template>
-                </Column>
-                <Column header="Aplicar">
-                    <template #body="slotProps">
-                        <Button icon="pi pi-check-circle"
-                            @click="aplicar(slotProps.data._id, slotProps.data.categoria)"></Button>
-
-                    </template>
-                </Column>
-            </DataTable>
-        </Panel>
+      
         <Panel v-if="admin == true" class="EventoEspecial">
             <Toast />
             <template #header>
@@ -82,7 +50,7 @@
                 </Column>
             </DataTable>
 
-            <Dialog v-model:visible="modalEvento" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+      <!--       <Dialog v-model:visible="modalEvento" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
                 <template #header>
                     <h3>Nuevo evento</h3>
                 </template>
@@ -151,7 +119,84 @@
                     <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
                     <Button label="Crear" @click="crearEvento" severity="success" />
                 </template>
-            </Dialog>
+            </Dialog> -->
+
+            <Dialog v-model:visible="modalEvento" header="Nuevo evento especial" :style="{ width: '40rem' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+            <form ref="formEvento" class="formEvento">
+                <label class="font-bold block">Categoria de participantes</label>
+                    <div class="card flex justify-content-center m-3">
+                        <SelectButton v-model="paquete.categoria" :options="Rangos" aria-labelledby="basic" />
+                    </div>
+                <div class="flex gap-1">
+                    <div class="titulo sm:w-full md:w-6">
+                        <label for="titulo" class="font-bold block">Título</label>
+                        <InputText type="text" id="titulo" v-model="paquete.titulo" />
+                    </div>
+                    <div class="descripcion sm:w-full md:w-6">
+                        <label for="descripcion" class="font-bold block">Descripción</label>
+                        <Textarea id="descripcion" v-model="paquete.descripcion" rows="1" cols="25" />
+                    </div>
+                </div>
+
+                <div class="flex gap-1">
+                    <div class="reglas sm:w-6">
+                        <label for="reglas" class="font-bold block">Reglas</label>
+                        <Textarea id="reglas" v-model="paquete.reglas" rows="1" cols="20" />
+                    </div>
+                    <div class="disponibilidad sm:w-6">
+                        <label for="fecha_inicio" class="font-bold block">Disponibilidad</label>
+                        <Calendar id="fecha_inicio" selectionMode="range" :numberOfMonths="2" v-model="paquete.fecha_fin" :minDate="new Date()" :manualInput="false"
+                            dateFormat="yy-mm-dd" />
+                    </div>
+                </div>
+                <Divider class="m-1" />
+                <h4 class="m-0">Premios</h4>
+                <div class="flex flex-column gap-1">
+                    <h5 class="m-0">Top 1</h5>
+                    <div class="top1 flex gap-1">
+                        <div class="flex flex-column sm:w-6">
+                            <label for="descripcion_top1">Descripción</label>
+                            <InputText type="text" id="descripcion_top1" v-model="paquete.premios.top1.descripcion" />
+                        </div>
+                        <div class="flex flex-column sm:w-6">
+                            <label for="imagen_top1">Imagen</label>
+                            <InputText type="file" id="imagen_top1" accept="image/*" @change="asignarImagen($event, 'top1')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-column gap-1">
+                    <h5 class="m-0">Top 2</h5>
+                    <div class="top2 flex gap-1">
+                        <div class="flex flex-column sm:w-6">
+                            <label for="descripcion_top2">Descripción</label>
+                            <InputText type="text" id="descripcion_top2" v-model="paquete.premios.top2.descripcion" />
+                        </div>
+                        <div class="flex flex-column sm:w-6">
+                            <label for="imagen_top2">Imagen</label>
+                            <InputText type="file" id="imagen_top2" accept="image/*" @change="asignarImagen($event, 'top2')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-column gap-1">
+                    <h5 class="m-0">Top 3</h5>
+                    <div class="top3 flex gap-1">
+                        <div class="flex flex-column sm:w-6">
+                            <label for="descripcion_top3">Descripción</label>
+                            <InputText type="text" id="descripcion_top3" v-model="paquete.premios.top3.descripcion" />
+                        </div>
+                        <div class="flex flex-column sm:w-6">
+                            <label for="imagen_top3">Imagen</label>
+                            <InputText type="file" id="imagen_top1" accept="image/*" @change="asignarImagen($event, 'top3')" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <template #footer>
+                <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
+                <Button label="Crear" @click="crearEvento" :disabled="btnEvento" severity="success" />
+            </template>
+        </Dialog>
 
             <Dialog v-model:visible="modalEliminar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
                 <template #header>
@@ -207,14 +252,28 @@ export default {
         },
         paquete: {
             categoria: null,
-            premios: null,
-            tipo_premio: null,
-            criterio_ganador: [],
-            participantes: [],
-            cantidad_ganadores: 1,
-            fecha_inicio: null,
+            titulo: null,
+            descripcion: null,
+            reglas: null,
+            fecha_inicio: new Date(),
             fecha_fin: null,
-
+            premios: {
+                top1: {
+                    descripcion: null,
+                    imagen: ''
+                },
+                top2: {
+                    descripcion: null,
+                    imagen: ''
+                },
+                top3: {
+                    descripcion: null,
+                    imagen: ''
+                }
+            },
+            imagen_top1: null,
+            imagen_top2: null,
+            imagen_top3: null
         },
         Evento: [],
         criterios: [
@@ -233,6 +292,22 @@ export default {
 
     }),
     methods: {
+
+        asignarImagen(event, top) {
+            switch (top) {
+                case 'top1':
+                    this.paquete.imagen_top1 = event.target.files[0]
+                    break;
+
+                case 'top2':
+                    this.paquete.imagen_top2 = event.target.files[0]
+                    break;
+
+                case 'top3':
+                    this.paquete.imagen_top3 = event.target.files[0]
+                    break;
+            }
+        },
         ponerEstado(estado) {
             if (estado == "Finalizado") {
                 return "warning";
@@ -261,73 +336,67 @@ export default {
         },
 
         async crearEvento() {
-            const regex = /^\d+[a-zA-Z]+$/; //Números seguido de letras
-            if (this.paquete.tipo_premio == 'Objeto') {
-                this.paquete.premios = '';
-            }
-            if (this.fecha_rango == null) {
-                this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'Debe colocar fecha de inicio y fecha fin', life: 1500 });
-                return;
-            }
-            if (this.paquete.tipo_premio !== null) {
-                if (this.paquete.categoria === null) {
-                    this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'Debe seleccionar una categoria', life: 1500 });
-                    return;
-                }
-                if (this.paquete.tipo_premio == 'Efectivo') {
-                    if (!regex.test(this.paquete.premios)) {
-                        this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'Formato del premio incorrecto', life: 1500 });
-                        return;
+            const validF = await this.formValid();
+            if (validF) {
+                this.btnEvento = true;
+                this.paquete.fecha_inicio = this.paquete.fecha_fin[0];
+                this.paquete.fecha_fin = this.paquete.fecha_fin[1];
+                await axios.post(`${this.API}/sorpresa/eventoEspecial/crear`, this.paquete, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${this.store.getToken()}`
                     }
-                } else if (this.paquete.tipo_premio == 'SaldoApi') {
-                    if (isNaN(this.paquete.premios)) {
-                        this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'El premio solo debe contener números', life: 1500 });
-                        return;
+                }).then(response => {
+                    if (response.data.creado) {
+                        this.getEventos();
+                        this.modalEvento = false;
+                        this.$refs.formEvento.reset();
+                        this.$toast.add({ severity: 'success', summary: 'Nuevo evento', detail: 'Evento especial creado correctamente', life: 1500 });
+                    } else {
+                        this.$toast.add({ severity: 'error', summary: 'Nuevo evento', detail: 'No se pudo crear el evento especial', life: 1500 });
                     }
-                }
-            } else {
-                this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'Debe seleccionar una categoria', life: 1500 });
-                return;
+                }).catch(error => {
+                    switch (error.response.data.statusCode) {
+                        case 401:
+                            //Se le termino la sesión
+                            this.store.clearUser();
+                            this.$router.push('/login');
+                            break;
+                        default:
+                            this.$toast.add({ severity: 'error', summary: 'Nuevo evento', detail: 'Sucedió un error, no se pudo crear el evento especial', life: 1500 });
+                            console.log('Error: ', error);
+                            break;
+                    }
+                });
+                this.btnEvento = false;
             }
+        },
 
-            if (this.paquete.cantidad_ganadores == 0) {
-                this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'Debe seleccionar al menos un ganador', life: 1500 });
-                return;
-            }
-            if (this.paquete.criterio_ganador.length == 0) {
-                this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: 'Debe seleccionar al menos un criterio de ganador', life: 1500 });
-                return;
-            }
-            const p = { ...this.paquete };
-            p.cantidad_ganadores = parseInt(p.cantidad_ganadores);
-            p.fecha_inicio = this.fecha_rango[0];
-            p.fecha_fin = this.fecha_rango[1];
-            p.criterio_ganador = this.paquete.criterio_ganador.map(criterio => criterio.key);
-
-            await axios.post(`${this.API}/sorpresa/eventoEspecial/crear`, p, {
-                headers: {
-                    Authorization: `Bearer ${this.store.getToken()}`
-                }
-            }).then(response => {
-                if (response.data.creado) {
-                    this.getEvento();
-                    this.modalEvento = false;
-                }
-                this.$toast.add({ severity: response.data.creado ? 'success' : 'error', summary: 'Nuevo evento especial', detail: response.data.message, life: 1500 });
-            }).catch(error => {
-                switch (error.response.data.statusCode) {
-                    case 401:
-                        //Se le termino la sesión
-                        this.store.clearUser();
-                        this.$router.push('/login');
+        async formValid() {
+            const key = Object.keys(this.paquete);
+            let valid = false;
+            for (const k of key) {
+                valid = true;
+                if (k == "premio") {
+                    if (this.paquete[k].top1.descripcion == null || !/^(?!\s*$).+/.test(this.paquete[k].top1.descripcion) || !/^(?!\s*$).+/.test(this.paquete[k].top2.descripcion) || this.paquete[k].top2.descripcion != null || !/^(?!\s*$).+/.test(this.paquete[k].top3.descripcion) || this.paquete[k].top3.descripcion == null) {
+                        valid = false;
                         break;
-                    default:
-                        this.$toast.add({ severity: 'error', summary: 'Nuevo evento especial', detail: error.response.data.message, life: 1500 });
-                        console.log('Error: ', error);
-                        break;
+                    }
+                } else if (this.paquete[k] == null) {
+                    valid = false;
+                    break;
+                } else if (!/^(?!\s*$).+/.test(this.paquete[k])) {
+                    valid = false;
+                    break;
+                } else if (this.paquete.categoria == null){
+                    valid = false;
+                    break
                 }
-            });
-
+            }
+            if (!valid) {
+                this.$toast.add({ severity: 'error', summary: 'Nuevo evento', detail: 'Debes llenar todos los campos', life: 1600 });
+            }
+            return valid;
         },
         async getEvento() {
             await axios.get(`${this.API}/sorpresa/evento`, {
@@ -349,40 +418,6 @@ export default {
             });
         },
 
-        async agregarParticipante() {
-            let creador = this.store.getUsuario();
-            this.paqueteParticipante.evento = this.verificacionAplicar;
-            this.paqueteParticipante.participante = this.store.getId();
-            this.paqueteParticipante.categoria = this.categoriaEvento;
-            this.paqueteParticipante.categoriaParticipante = creador.creator_type;
-            console.log(this.paqueteParticipante);
-            await axios.put(`${this.API}/sorpresa/agreagarParticipante`, this.paqueteParticipante, {
-                headers: {
-                    Authorization: `Bearer ${this.store.getToken()}`
-                }
-            }).then(response => {
-                console.log(response);
-                this.getEvento();
-                this.modalAplicar = false;
-                if (response.data == "Participante Inscrito") {
-                    this.$toast.add({ severity: 'success', summary: 'Éxito', detail: response.data, life: 1500 });
-                } else {
-                    this.$toast.add({ severity: 'error', summary: 'Éxito', detail: response.data, life: 1500 });
-                }
-            }).catch(error => {
-                switch (error.response.data.statusCode) {
-                    case 401:
-                        //Se le termino la sesión
-                        this.store.clearUser();
-                        this.$router.push('/login');
-                        break;
-                    default:
-                        console.log('Error: ', error);
-                        break;
-                }
-
-            });
-        },
         async Eliminar() {
             await axios.delete(`${this.API}/sorpresa/evento/${this.verificacionEliminar}`, {
                 headers: {

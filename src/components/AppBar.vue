@@ -469,7 +469,7 @@ export default {
                 {
                     label: 'Deseos',
                     icon: 'pi pi-gift',
-                    route: '/panel/deseos   '
+                    route: '/panel/deseos'
                 },
                 {
                     label: 'Evento',
@@ -479,7 +479,7 @@ export default {
                 {
                     label: 'Eventos Especiales',
                     icon: 'pi pi-flag-fill',
-                    route: '/panel/eventoEspecial',
+                    route: '/EventoEspecialView',
                 }, {
                     label: 'Batallas',
                     icon: 'pi pi-calendar-plus',

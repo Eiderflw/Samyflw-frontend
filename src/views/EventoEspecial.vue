@@ -20,14 +20,14 @@
                                 <AccordionTab v-for="(evento, index) in eventoRookie" :key="index" class="font-gamers">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.tipo_premio }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria)">Participar</div>
+                                            <p>Evento - {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
-                                                <p class="m-0">Premio: {{ evento.tipo_premio }}</p>
+                                                <p class="m-0">{{ evento.descripcion }}</p>
                                             </div>
                                         </div>
                                         <div class="reglas">
@@ -35,13 +35,8 @@
                                             <div class="container">
                                                 <div class="flex gap-2">
                                                     <div class="item-regla" />
-                                                    <p class="m-0">Cantidad de ganadores: {{
-                                                        evento.cantidad_ganadores }}</p>
-                                                </div>
-                                                <div class="flex gap-2">
-                                                    <div class="item-regla" />
-                                                    <p class="m-0">Criterio para ganar: {{
-                                                        evento.criterio_ganador.join(", ") }}</p>
+                                                    <p class="m-0"> {{
+                                                        evento.reglas }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -108,14 +103,14 @@
                                 <AccordionTab v-for="(evento, index) in eventoVeterano" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.tipo_premio }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria)">Participar</div>
+                                            <p>Evento - {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
-                                                <p class="m-0">Premio: {{ evento.tipo_premio }}</p>
+                                                <p class="m-0"> {{ evento.descripcion }}</p>
                                             </div>
                                         </div>
                                         <div class="reglas">
@@ -123,13 +118,8 @@
                                             <div class="container">
                                                 <div class="flex gap-2">
                                                     <div class="item-regla" />
-                                                    <p class="m-0">Cantidad de ganadores: {{
-                                                        evento.cantidad_ganadores }}</p>
-                                                </div>
-                                                <div class="flex gap-2">
-                                                    <div class="item-regla" />
-                                                    <p class="m-0">Criterio para ganar: {{
-                                                        evento.criterio_ganador.join(", ") }}</p>
+                                                    <p class="m-0"> {{
+                                                        evento.reglas }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -188,31 +178,7 @@
                                         </Column>
                                     </DataTable>
 
-                                    <!--  <DataTable :value="evento.participantes" class="tablaCreadoresEvento" tableStyle="min-width: 20rem">
-                                                <Column class="font-gamers" header="Fecha Inicio">
-                                                    <template #body="props">
-                                                        {{
-                                                           props.data
-                                                        }}
-                                                    </template>}}
-                                                </Column>
-                                                <Column class="font-gamers" header="Fecha Final" field="fecha_fin"
-                                                    sortable>
-                                                    <template #body="slotProps">
-                                                        {{
-                                                            slotProps.data.fecha_fin != null
-                                                                ? slotProps.data.fecha_fin.slice(0, 10)
-                                                                : ""
-                                                        }}
-                                                    </template>
-                                                </Column>
-                                                <Column class="font-gamers" header="Accion">
-                                                    <template #body="slotProps">
-                                                        <i class="aplica color-verde"
-                                                            @click="VerEvento(slotProps.data)">Ver</i>
-                                                    </template>
-                                                </Column>
-                                            </DataTable> -->
+                                   
                                 </AccordionTab>
                             </Accordion>
                             <p class="text-center" v-else>Sin eventos</p>
@@ -222,14 +188,14 @@
                                 <AccordionTab v-for="(evento, index) in eventoPro" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.tipo_premio }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria)">Participar</div>
+                                            <p>Evento - {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
-                                                <p class="m-0">Premio: {{ evento.tipo_premio }}</p>
+                                                <p class="m-0">{{ evento.descripcion }}</p>
                                             </div>
                                         </div>
                                         <div class="reglas">
@@ -237,13 +203,8 @@
                                             <div class="container">
                                                 <div class="flex gap-2">
                                                     <div class="item-regla" />
-                                                    <p class="m-0">Cantidad de ganadores: {{
-                                                        evento.cantidad_ganadores }}</p>
-                                                </div>
-                                                <div class="flex gap-2">
-                                                    <div class="item-regla" />
-                                                    <p class="m-0">Criterio para ganar: {{
-                                                        evento.criterio_ganador.join(", ") }}</p>
+                                                    <p class="m-0"> {{
+                                                        evento.reglas }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -310,14 +271,14 @@
                                 <AccordionTab v-for="(evento, index) in eventoPro2" :key="index" class="font-gamers">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.tipo_premio }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria)">Participar</div>
+                                            <p>Evento - {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
-                                                <p class="m-0">Premio: {{ evento.tipo_premio }}</p>
+                                                <p class="m-0">{{ evento.descripcion }}</p>
                                             </div>
                                         </div>
                                         <div class="reglas">
@@ -325,13 +286,8 @@
                                             <div class="container">
                                                 <div class="flex gap-2">
                                                     <div class="item-regla" />
-                                                    <p class="m-0">Cantidad de ganadores: {{
-                                                        evento.cantidad_ganadores }}</p>
-                                                </div>
-                                                <div class="flex gap-2">
-                                                    <div class="item-regla" />
-                                                    <p class="m-0">Criterio para ganar: {{
-                                                        evento.criterio_ganador.join(", ") }}</p>
+                                                    <p class="m-0">{{
+                                                        evento.reglas }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -458,7 +414,7 @@
         <Dialog v-model:visible="modalAplicar" header="Participar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
 
             <div class="card flex justify-content-center">
-                <h2>¿Quieres participar en este evento?</h2>
+                <h2>¿Quieres participar en este evento {{tituloEvento}} de categoria {{categoriaEvento}}?</h2>
             </div>
 
             <template #footer>
@@ -490,7 +446,9 @@ export default {
         modalAplicar: false,
         spiner: true,
         evento: null,
-        Participantes: [],
+        verificacionAplicar: null,
+        categoriaEvento: null,
+        tituloEvento: null,
         eventoRookie: [],
         eventoVeterano: [],
         eventoPro: [],
@@ -557,19 +515,16 @@ export default {
         grupoMostrado: 'Rookie',
     }),
     methods: {
-        VerEvento(data) {
-            this.Participantes = data.participantes;
-            this.evento = data
-        },
-        aplicar(id, categoria) {
+        aplicar(id, categoria, premio) {
             if (!this.store.isActive()) {
-                this.store.eventoID(id, categoria);
+                this.store.eventoID(id, categoria, premio);
                 this.$router.push("/login");
             } else {
                 if (!this.store.isAdmin()) {
                     this.modalAplicar = true;
                     this.verificacionAplicar = id;
                     this.categoriaEvento = categoria;
+                    this.tituloEvento = premio;
                 } else {
                     this.$toast.add({ severity: 'info', summary: 'Participar', detail: 'Debes iniciar sesión con tu cuenta de usuario', life: 1600 })
                 }
@@ -738,9 +693,11 @@ export default {
             this.top3 = this.creadores.slice(0, 3);
         });
         this.store = useStoreEvento();
-
-        if (this.store.evento.evento !== null) {
-            //  this.modalAplicar = true;
+        if ( this.store.evento.evento !== null) {
+            this.verificacionAplicar =  this.store.evento.evento,
+            this.categoriaEvento=  this.store.evento.categoria,
+            this.tituloEvento=  this.store.evento.premio,
+            this.modalAplicar = true;
             this.store.eventoDelete();
         }
         this.spiner = false;
