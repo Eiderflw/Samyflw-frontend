@@ -17,11 +17,11 @@
                     <TabView class="font-gamers">
                         <TabPanel header="Rookie">
                             <Accordion :activeIndex="0" v-if="eventoRookie.length > 0" class="font-gamers">
-                                <AccordionTab v-for="(evento, index) in eventoRookie" :key="index" class="font-gamers">
+                                <AccordionTab v-for="(evento, index) in eventoRookie" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
+                                            <p> {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
@@ -103,8 +103,8 @@
                                 <AccordionTab v-for="(evento, index) in eventoVeterano" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
+                                            <p> {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
@@ -178,7 +178,7 @@
                                         </Column>
                                     </DataTable>
 
-                                   
+
                                 </AccordionTab>
                             </Accordion>
                             <p class="text-center" v-else>Sin eventos</p>
@@ -188,8 +188,8 @@
                                 <AccordionTab v-for="(evento, index) in eventoPro" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
+                                            <p> {{ evento.titulo }}</p>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar</div>
                                         </div>
                                     </template>
                                     <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
@@ -268,10 +268,10 @@
                         </TabPanel>
                         <TabPanel header="Pro+">
                             <Accordion v-if="eventoPro2.length > 0" class="font-gamers">
-                                <AccordionTab v-for="(evento, index) in eventoPro2" :key="index" class="font-gamers">
+                                <AccordionTab v-for="(evento, index) in eventoPro2" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
+                                            <p> {{ evento.titulo }}</p>
                                             <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar</div>
                                         </div>
                                     </template>
@@ -414,7 +414,7 @@
         <Dialog v-model:visible="modalAplicar" header="Participar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
 
             <div class="card flex justify-content-center">
-                <h2>¿Quieres participar en este evento {{tituloEvento}} de categoria {{categoriaEvento}}?</h2>
+                <h2>¿Quieres participar en este evento {{ tituloEvento }} de categoria {{ categoriaEvento }}?</h2>
             </div>
 
             <template #footer>
@@ -693,11 +693,11 @@ export default {
             this.top3 = this.creadores.slice(0, 3);
         });
         this.store = useStoreEvento();
-        if ( this.store.evento.evento !== null) {
-            this.verificacionAplicar =  this.store.evento.evento,
-            this.categoriaEvento=  this.store.evento.categoria,
-            this.tituloEvento=  this.store.evento.premio,
-            this.modalAplicar = true;
+        if (this.store.evento.evento !== null) {
+            this.verificacionAplicar = this.store.evento.evento,
+                this.categoriaEvento = this.store.evento.categoria,
+                this.tituloEvento = this.store.evento.premio,
+                this.modalAplicar = true;
             this.store.eventoDelete();
         }
         this.spiner = false;
