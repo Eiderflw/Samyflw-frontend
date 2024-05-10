@@ -141,11 +141,6 @@
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar</div>
-                                                <p> {{ evento.titulo }}</p>
-                                                <div class="aplica color-verde"
-                                                    v-tooltip.top="'Participar en el evento'"
-                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
-                                                    Participar</div>
                                         </div>
                                     </template>
                                     <div
@@ -174,6 +169,23 @@
                                                     :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-content-around flex-wrap mt-5" style="row-gap: 25px;">
+                                        <div v-for="(premio, index) in Object.values(evento.premios)" :key="index"
+                                            :class="`puesto${index + 1}`">
+                                            <div class="titulo flex flex-column w-full">
+                                                <div class="fondo">
+                                                    <p class="m-0">Puesto {{ index + 1 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="imagen">
+                                                <img :src="premio.imagen" :alt="premio.descripcion"
+                                                    class="border-round imgPremio" />
+                                            </div>
+                                            <div class="descripcion-premio w-full text-center mt-5 p-3">
+                                                <p class="m-0">{{ premio.descripcion }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -231,8 +243,6 @@
                                             </template>
                                         </Column>
                                     </DataTable>
-
-
                                 </AccordionTab>
                             </Accordion>
                             <p class="text-center" v-else>Sin eventos</p>
@@ -243,11 +253,6 @@
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
                                             <p>{{ evento.titulo }}</p>
-                                                <div class="aplica color-verde"
-                                                    v-tooltip.top="'Participar en el evento'"
-                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
-                                                    Participar</div>
-                                                <p> {{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
@@ -280,6 +285,23 @@
                                                     :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-content-around flex-wrap mt-5" style="row-gap: 25px;">
+                                        <div v-for="(premio, index) in Object.values(evento.premios)" :key="index"
+                                            :class="`puesto${index + 1}`">
+                                            <div class="titulo flex flex-column w-full">
+                                                <div class="fondo">
+                                                    <p class="m-0">Puesto {{ index + 1 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="imagen">
+                                                <img :src="premio.imagen" :alt="premio.descripcion"
+                                                    class="border-round imgPremio" />
+                                            </div>
+                                            <div class="descripcion-premio w-full text-center mt-5 p-3">
+                                                <p class="m-0">{{ premio.descripcion }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -352,11 +374,6 @@
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar
                                                 </div>
-                                                <p> {{ evento.titulo }}</p>
-                                                <div class="aplica color-verde"
-                                                    v-tooltip.top="'Participar en el evento'"
-                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
-                                                    Participar</div>
                                         </div>
                                     </template>
                                     <div
@@ -385,6 +402,23 @@
                                                     :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-content-around flex-wrap mt-5" style="row-gap: 25px;">
+                                        <div v-for="(premio, index) in Object.values(evento.premios)" :key="index"
+                                            :class="`puesto${index + 1}`">
+                                            <div class="titulo flex flex-column w-full">
+                                                <div class="fondo">
+                                                    <p class="m-0">Puesto {{ index + 1 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="imagen">
+                                                <img :src="premio.imagen" :alt="premio.descripcion"
+                                                    class="border-round imgPremio" />
+                                            </div>
+                                            <div class="descripcion-premio w-full text-center mt-5 p-3">
+                                                <p class="m-0">{{ premio.descripcion }}</p>
                                             </div>
                                         </div>
                                     </div>

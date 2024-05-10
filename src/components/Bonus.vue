@@ -67,7 +67,7 @@
                                 <span class="font-bold white-space-nowrap">Rookie</span>
                             </div>
                         </template>
-                        <DataTable class="bonus-usuario" :value="bonusByCategoria('Rookie')" tableStyle="min-width: 100%">
+                        <DataTable class="bonus-usuario" sortField="exclusivo" :sortOrder="-1" :value="bonusByCategoria('Rookie')" tableStyle="min-width: 100%">
                             <Column field="exclusivo" header="Exclusivo" class="font-gamers">
                                 <template #body="props">
                                     {{ props.data.exclusivo ? 'Sí' : 'No' }}
@@ -117,7 +117,7 @@
                                 <span class="font-bold white-space-nowrap">Veteran</span>
                             </div>
                         </template>
-                        <DataTable class="bonus-usuario" :value="bonusByCategoria('Veteran')" tableStyle="min-width: 100%">
+                        <DataTable class="bonus-usuario" sortField="exclusivo" :sortOrder="-1" :value="bonusByCategoria('Veteran')" tableStyle="min-width: 100%">
                             <Column field="exclusivo" header="Exclusivo" class="font-gamers">
                                 <template #body="props">
                                     {{ props.data.exclusivo ? 'Sí' : 'No' }}
@@ -167,7 +167,7 @@
                                 <span class="font-bold white-space-nowrap">Pro</span>
                             </div>
                         </template>
-                        <DataTable class="bonus-usuario" :value="bonusByCategoria('Pro')" tableStyle="min-width: 100%">
+                        <DataTable class="bonus-usuario" sortField="exclusivo" :sortOrder="-1" :value="bonusByCategoria('Pro')" tableStyle="min-width: 100%">
                             <Column field="exclusivo" header="Exclusivo" class="font-gamers">
                                 <template #body="props">
                                     {{ props.data.exclusivo ? 'Sí' : 'No' }}
@@ -217,7 +217,7 @@
                                 <span class="font-bold white-space-nowrap">Pro+</span>
                             </div>
                         </template>
-                        <DataTable class="bonus-usuario" :value="bonusByCategoria('Pro+')" tableStyle="min-width: 100%">
+                        <DataTable class="bonus-usuario" sortField="exclusivo" :sortOrder="-1" :value="bonusByCategoria('Pro+')" tableStyle="min-width: 100%">
                             <Column field="exclusivo" header="Exclusivo" class="font-gamers">
                                 <template #body="props">
                                     {{ props.data.exclusivo ? 'Sí' : 'No' }}
@@ -1321,6 +1321,7 @@ export default {
             tablas.forEach(tabla => {
                 const body = tabla.querySelector('tbody');
                 const filas = body.querySelectorAll('tr');
+                let eventoAsignado = false;
                 filas.forEach(fila => {
                     const primerTd = fila.querySelector('td');
                     if (["Sí", "Exclusivo"].includes(primerTd.innerText)) {
@@ -1330,10 +1331,52 @@ export default {
                         divDespues.classList.add('resaltar-exclusivo');
                         body.insertBefore(divAntes, fila);
                         body.insertBefore(divDespues, fila.nextSibling);
+                        fila.classList.add('resaltado');
+                        if (!eventoAsignado) {
+                            tabla.parentElement.addEventListener('scroll', this.scrolling);
+                            eventoAsignado = true;
+                        }
                     }
                 });
 
             });
+        },
+        scrolling(event) {
+            let scrollTop = event.target.scrollTop;
+            let tabla = event.target.querySelector('table');
+            let heightExclusivos = (this.getHeightExclusivos(tabla)) - 10;
+            console.log(scrollTop, heightExclusivos);
+
+            const body = tabla.querySelector('tbody');
+            const filas = body.querySelectorAll('tr');
+            filas.forEach(fila => {
+                const primerTd = fila.querySelector('td');
+                if (["Sí", "Exclusivo"].includes(primerTd.innerText)) {
+                    let anterior = fila.previousElementSibling;
+                    let siguiente = fila.nextElementSibling;
+                    if (scrollTop > heightExclusivos) {
+                        anterior.classList.add('hidden');
+                        siguiente.classList.add('hidden');
+                    } else {
+                        if (anterior.classList.contains('hidden') && siguiente.classList.contains('hidden')) {
+                            anterior.classList.remove('hidden');
+                            siguiente.classList.remove('hidden');
+                        }
+                    }
+                }
+            });
+        },
+        getHeightExclusivos(tabla) {
+            let heightExclusivos = 0;
+            let body = tabla.querySelector('tbody');
+            let filas = body.querySelectorAll('tr');
+            filas.forEach(fila => {
+                let primerTd = fila.querySelector('td');
+                if (["Sí", "Exclusivo"].includes(primerTd.innerText)) {
+                    heightExclusivos += parseFloat(fila.offsetHeight);
+                }
+            });
+            return heightExclusivos;
         }
     },
     async created() {
@@ -1375,10 +1418,10 @@ export default {
     height: 4px;
     width: 100%;
     position: absolute;
-    background-image: url('/assets/img/eventos/fluido-verde.png') !important;
+    background-image: url('/assets/img/eventos/fluido-verde.png');
     background-size: 100% 4px !important;
-    background-repeat: repeat-x !important;
     background-color: transparent;
+    z-index: 1;
 }
 
 .p-avatar.p-avatar-image.categoria {
@@ -1427,10 +1470,14 @@ export default {
     border: none;
 }
 
-.bonus-usuario>.p-datatable-wrapper>.p-datatable-table>.p-datatable-tbody>tr:not(.resaltar-exclusivo) {
+.bonus-usuario>.p-datatable-wrapper>.p-datatable-table>.p-datatable-tbody>tr:not(.resaltado) {
     background-image: url('/assets/img/eventos/divisor-fila.png') !important;
     background-repeat: repeat-x !important;
     background-size: contain !important;
+    background-color: transparent;
+}
+
+.resaltado {
     background-color: transparent;
 }
 
