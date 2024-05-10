@@ -21,7 +21,7 @@
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
 
-                                            <p>Evento - {{ evento.titulo }}</p>
+                                            <p>{{ evento.titulo }}</p>
                                             <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
                                                 @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                 Participar</div>
@@ -136,18 +136,16 @@
                                 <AccordionTab v-for="(evento, index) in eventoVeterano" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <<<<<<< HEAD <p>Evento - {{ evento.titulo }}</p>
+                                            <p>Evento - {{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar</div>
-                                                =======
                                                 <p> {{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar</div>
-                                                >>>>>>> 70d7067609bfdf8f526bc6f380dd4c5543979eb1
                                         </div>
                                     </template>
                                     <div
@@ -244,18 +242,16 @@
                                 <AccordionTab v-for="(evento, index) in eventoPro" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <<<<<<< HEAD <p>Evento - {{ evento.titulo }}</p>
+                                            <p>{{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar</div>
-                                                =======
                                                 <p> {{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar</div>
-                                                >>>>>>> 70d7067609bfdf8f526bc6f380dd4c5543979eb1
                                         </div>
                                     </template>
                                     <div
@@ -350,19 +346,17 @@
                                 <AccordionTab v-for="(evento, index) in eventoPro2" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <<<<<<< HEAD <p>Evento - {{ evento.titulo }}</p>
+                                            <p>{{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar
                                                 </div>
-                                                =======
                                                 <p> {{ evento.titulo }}</p>
                                                 <div class="aplica color-verde"
                                                     v-tooltip.top="'Participar en el evento'"
                                                     @click="aplicar(evento._id, evento.categoria, evento.titulo)">
                                                     Participar</div>
-                                                >>>>>>> 70d7067609bfdf8f526bc6f380dd4c5543979eb1
                                         </div>
                                     </template>
                                     <div
@@ -546,11 +540,6 @@ import { useStoreEvento } from "../store";
 export default {
     name: "EventoView",
     data: () => ({
-        tabs: [
-            { title: "Title 1", content: "Content 1" },
-            { title: "Title 2", content: "Content 2" },
-            { title: "Title 3", content: "Content 3" },
-        ],
         img: null,
         multiplicador: 1,
         API: import.meta.env.VITE_APP_API,

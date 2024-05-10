@@ -1324,7 +1324,12 @@ export default {
                 filas.forEach(fila => {
                     const primerTd = fila.querySelector('td');
                     if (["Sí", "Exclusivo"].includes(primerTd.innerText)) {
-                        fila.classList.add('resaltar-exclusivo');
+                        const divAntes = document.createElement('div');
+                        divAntes.classList.add('resaltar-exclusivo');
+                        const divDespues = document.createElement('div');
+                        divDespues.classList.add('resaltar-exclusivo');
+                        body.insertBefore(divAntes, fila);
+                        body.insertBefore(divDespues, fila.nextSibling);
                     }
                 });
 
@@ -1367,8 +1372,13 @@ export default {
 </script>
 <style>
 .resaltar-exclusivo {
-    background: hsl(88, 100%, 67%);
-    background-color: hsl(88, 60%, 60%) !important;
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    background-image: url('/assets/img/eventos/fluido-verde.png') !important;
+    background-size: 100% 4px !important;
+    background-repeat: repeat-x !important;
+    background-color: transparent;
 }
 
 .p-avatar.p-avatar-image.categoria {
@@ -1417,7 +1427,7 @@ export default {
     border: none;
 }
 
-.bonus-usuario>.p-datatable-wrapper>.p-datatable-table>.p-datatable-tbody>tr {
+.bonus-usuario>.p-datatable-wrapper>.p-datatable-table>.p-datatable-tbody>tr:not(.resaltar-exclusivo) {
     background-image: url('/assets/img/eventos/divisor-fila.png') !important;
     background-repeat: repeat-x !important;
     background-size: contain !important;
