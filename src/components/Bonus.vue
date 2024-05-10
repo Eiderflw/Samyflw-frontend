@@ -1414,9 +1414,18 @@ export default {
 }
 </script>
 <style>
-.resaltar-exclusivo {
+.resaltar-exclusivo{
     height: 4px;
     width: 100%;
+    position: absolute;
+    background-image: url('/assets/img/eventos/fluido-verde.png');
+    background-size: 100% 4px !important;
+    background-color: transparent;
+    z-index: 1;
+}
+.bonus-usuario>.p-datatable-wrapper>.p-datatable-table>.p-datatable-tbody>.resaltar-exclusivo {
+    height: 4px;
+    width: calc(100% - 14px);
     position: absolute;
     background-image: url('/assets/img/eventos/fluido-verde.png');
     background-size: 100% 4px !important;
