@@ -17,9 +17,10 @@
                     <TabView class="font-gamers">
                         <TabPanel header="Rookie">
                             <Accordion :activeIndex="0" v-if="eventoRookie.length > 0" class="font-gamers">
-                                <AccordionTab v-for="(evento, index) in eventoRookie" :key="index" class="font-gamers">
+                                <AccordionTab v-for="(evento, index) in eventoRookie" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
+
                                             <p>Evento - {{ evento.titulo }}</p>
                                             <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
                                                 @click="aplicar(evento._id, evento.categoria, evento.titulo)">
@@ -135,10 +136,18 @@
                                 <AccordionTab v-for="(evento, index) in eventoVeterano" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
-                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">
-                                                Participar</div>
+                                            <<<<<<< HEAD <p>Evento - {{ evento.titulo }}</p>
+                                                <div class="aplica color-verde"
+                                                    v-tooltip.top="'Participar en el evento'"
+                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                    Participar</div>
+                                                =======
+                                                <p> {{ evento.titulo }}</p>
+                                                <div class="aplica color-verde"
+                                                    v-tooltip.top="'Participar en el evento'"
+                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                    Participar</div>
+                                                >>>>>>> 70d7067609bfdf8f526bc6f380dd4c5543979eb1
                                         </div>
                                     </template>
                                     <div
@@ -235,10 +244,18 @@
                                 <AccordionTab v-for="(evento, index) in eventoPro" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
-                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">
-                                                Participar</div>
+                                            <<<<<<< HEAD <p>Evento - {{ evento.titulo }}</p>
+                                                <div class="aplica color-verde"
+                                                    v-tooltip.top="'Participar en el evento'"
+                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                    Participar</div>
+                                                =======
+                                                <p> {{ evento.titulo }}</p>
+                                                <div class="aplica color-verde"
+                                                    v-tooltip.top="'Participar en el evento'"
+                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                    Participar</div>
+                                                >>>>>>> 70d7067609bfdf8f526bc6f380dd4c5543979eb1
                                         </div>
                                     </template>
                                     <div
@@ -330,13 +347,22 @@
                         </TabPanel>
                         <TabPanel header="Pro+">
                             <Accordion v-if="eventoPro2.length > 0" class="font-gamers">
-                                <AccordionTab v-for="(evento, index) in eventoPro2" :key="index" class="font-gamers">
+                                <AccordionTab v-for="(evento, index) in eventoPro2" :key="index">
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
-                                            <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
-                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar
-                                            </div>
+                                            <<<<<<< HEAD <p>Evento - {{ evento.titulo }}</p>
+                                                <div class="aplica color-verde"
+                                                    v-tooltip.top="'Participar en el evento'"
+                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                    Participar
+                                                </div>
+                                                =======
+                                                <p> {{ evento.titulo }}</p>
+                                                <div class="aplica color-verde"
+                                                    v-tooltip.top="'Participar en el evento'"
+                                                    @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                    Participar</div>
+                                                >>>>>>> 70d7067609bfdf8f526bc6f380dd4c5543979eb1
                                         </div>
                                     </template>
                                     <div

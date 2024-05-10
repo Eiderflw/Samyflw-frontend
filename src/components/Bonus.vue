@@ -267,7 +267,7 @@
             <template #header>
                 <div class="flex align-items-center gap-2 flex-wrap flex-end w-full justify-content-between">
                     <h1 class="m-0">Bonus</h1>
-                    <h3 class="m-0 p-0 text-white">Total pagar: ${{ totalPagar }}</h3>
+                    <h3 class="m-0 p-0 text-white">Total: ${{ totalPagar }}</h3>
                     <div class="flex flex-wrap gap-2">
                         <Button v-tooltip.top="configBonus.msgGen" :icon="configBonus.bonus_generales == true ? 'pi pi-unlock' : 'pi pi-lock-open'" label="Generales" @click="cambiarConfigGenerales" :severity="configBonus.bonus_generales == true ? 'success' : 'danger'" />
                         <Button v-tooltip.top="configBonus.msgCat" :icon="configBonus.bonus_categoria == true ? 'pi pi-unlock' : 'pi pi-lock-open'" label="Categorías" @click="cambiarConfigCategoria" :severity="configBonus.bonus_categoria == true ? 'success' : 'danger'" />
@@ -963,7 +963,7 @@ export default {
                                     meta: null,
                                     ganancia: null,
                                     bonificacion: null,
-                                    exclusivo:false,
+                                    exclusivo: false,
                                 };
                             }
                             this.$toast.add({ severity: resp.data.creado ? 'success' : 'error', summary: 'Nuevo Bonus', detail: resp.data.message, life: 1640 });
@@ -993,7 +993,7 @@ export default {
                                     meta: null,
                                     ganancia: null,
                                     bonificacion: null,
-                                    exclusivo:false,
+                                    exclusivo: false,
                                 };
                                 this.idEditarBonusCategoria = null;
                                 this.modalBonusCategoria = false;
@@ -1315,6 +1315,20 @@ export default {
             });
 
             return format;
+        },
+        resaltarBonusExclusivo() {
+            const tablas = document.querySelectorAll('table');
+            tablas.forEach(tabla => {
+                const body = tabla.querySelector('tbody');
+                const filas = body.querySelectorAll('tr');
+                filas.forEach(fila => {
+                    const primerTd = fila.querySelector('td');
+                    if (["Sí", "Exclusivo"].includes(primerTd.innerText)) {
+                        fila.classList.add('resaltar-exclusivo');
+                    }
+                });
+
+            });
         }
     },
     async created() {
@@ -1344,11 +1358,19 @@ export default {
         await this.getBonosAgrupadosCategoria();
         await this.obtenerBonus();
         await this.getMultiplicador();
+        setTimeout(() => {
+            this.resaltarBonusExclusivo();
+        }, 1200);
 
     }
 }
 </script>
 <style>
+.resaltar-exclusivo {
+    background: hsl(88, 100%, 67%);
+    background-color: hsl(88, 60%, 60%) !important;
+}
+
 .p-avatar.p-avatar-image.categoria {
     width: 52px !important;
     height: 75px !important;
@@ -1399,7 +1421,7 @@ export default {
     background-image: url('/assets/img/eventos/divisor-fila.png') !important;
     background-repeat: repeat-x !important;
     background-size: contain !important;
-    background-color: transparent !important;
+    background-color: transparent;
 }
 
 .usuario>.Bonus>.p-toggleable-content>.p-panel-content>.bonus-usuario {

@@ -183,6 +183,7 @@ export default {
         admin: false,
         modalEvento: false,
         Rangos: ['Rookie', 'Veteran', 'Pro', 'Pro+'],
+        btnEvento:false,
         fecha_rango: null,
         verificacionEliminar: null,
         verificacionAplicar: null,
@@ -344,7 +345,7 @@ export default {
             }
             return valid;
         },
-        async getEvento() {
+        async getEventos() {
             await axios.get(`${this.API}/sorpresa/evento`, {
             }).then(response => {
                 this.Evento = response.data;
@@ -401,7 +402,7 @@ export default {
             this.categoriaEvento = this.store.evento.categoria;
             this.store.eventoDelete();
         }
-        await this.getEvento();
+        await this.getEventos();
     }
 
 }
