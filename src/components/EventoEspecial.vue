@@ -1,6 +1,6 @@
 <template>
     <div>
-      
+
         <Panel v-if="admin == true" class="EventoEspecial">
             <Toast />
             <template #header>
@@ -10,7 +10,8 @@
                 </div>
             </template>
 
-            <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 100%">
+            <DataTable :value="Evento" :sortOrder="-1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
+                tableStyle="min-width: 100%">
                 <Column header="Categoria" field="categoria" sortable>
                 </Column>
                 <Column header="Titulo" field="titulo">
@@ -31,13 +32,13 @@
 
                     </template>
                 </Column>
-                <Column header="Top 1" field="premios.top1.descripcion" >
+                <Column header="Top 1" field="premios.top1.descripcion">
                 </Column>
-                
-                <Column header="Top 2" field="premios.top2.descripcion" >
+
+                <Column header="Top 2" field="premios.top2.descripcion">
                 </Column>
-                
-                <Column header="Top 3" field="premios.top3.descripcion" >
+
+                <Column header="Top 3" field="premios.top3.descripcion">
                 </Column>
                 <Column header="Estado" field="estado" sortable>
                     <template #body="slotProps">
@@ -56,155 +57,92 @@
                 </Column>
             </DataTable>
 
-      <!--       <Dialog v-model:visible="modalEvento" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
-                <template #header>
-                    <h3>Nuevo evento</h3>
-                </template>
-                <form ref="formPremio" class="formPremio">
-
-                    <label class="font-bold block">Categoria de participantes</label>
-                    <div class="card flex justify-content-center">
-                        <SelectButton v-model="paquete.categoria" :options="Rangos" aria-labelledby="basic" />
-                    </div>
-                    <div class="flex flex-column gap-1">
-                        <label class="font-bold block">Tipo premio</label>
-                        <div class="flex flex-wrap gap-3">
-                            <div class="flex align-items-center">
-                                <RadioButton v-model="paquete.tipo_premio" inputId="premio1" name="premio" value="Efectivo" />
-                                <label for="premio1" class="ml-2 cursor-pointer">Efectivo</label>
-                            </div>
-                            <div class="flex align-items-center">
-                                <RadioButton v-model="paquete.tipo_premio" inputId="premio2" name="premio" value="SaldoApi" />
-                                <label for="premio2" class="ml-2 cursor-pointer">Saldo API</label>
-                            </div>
-                            <div class="flex align-items-center">
-                                <RadioButton v-model="paquete.tipo_premio" inputId="premio3" name="premio" value="Objeto" />
-                                <label for="premio3" class="ml-2 cursor-pointer">Objeto</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-column gap-1 mt-2" v-if="paquete.tipo_premio != 'Objeto'">
-                        <label for="premio" class="font-bold block">Premio</label>
-                        <InputText id="premio" v-model="paquete.premios" placeholder="Monto" />
-                        <small v-if="paquete.tipo_premio == 'Efectivo'">Ingresar monto y tipo de moneda, Ej: 10USD</small>
-                        <small v-else>Ingresar monto en USD</small>
-                    </div>
-                    <div class="flex flex-column gap-1 mt-2">
-                        <label for="cant" class="font-bold block">Cantidad de ganadores</label>
-                        <InputText type="number" id="cant" v-model="paquete.cantidad_ganadores" min="1" />
-                    </div>
-                    <div class="disponibilidad flex flex-column gap-1 mt-1">
-                        <label for="fecha_fin" class="font-bold block">Fecha sorteo</label>
-                        <Calendar id="fecha_fin" v-model="fecha_rango" selectionMode="range" :minDate="new Date()" :manualInput="false" dateFormat="yy-mm-dd" />
-                        <small>Selecionar inicio y fin del evento</small>
-                    </div>
-                    <div class="flex flex-column gap-1 w-full mt-2">
-                        <label for="cant" class="font-bold block">Criterio ganador</label>
-                        <MultiSelect :maxSelectedLabels="3" v-model="paquete.criterio_ganador" :options="criterios" optionLabel="criterio" placeholder="Selecciona criterio para decidir los ganadores" display="chip" class="w-full">
-
-                            <template #option="slotProps">
-                                <div class="flex align-items-center">
-                                    <div>{{ slotProps.option.criterio }}</div>
-                                </div>
-                            </template>
-
-                            <template #footer>
-                                <div class="py-2 px-3">
-                                    <b>{{ paquete.criterio_ganador ? paquete.criterio_ganador.length : 0 }}</b> criterio {{
-                                        ((paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) > 1 ||
-                                            (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 0) ? 's' : '' }} {{
-                                        (paquete.criterio_ganador ? paquete.criterio_ganador.length : 0) == 1 ? 'seleccionado.'
-                                            : 'seleccionados.' }}
-                                </div>
-                            </template>
-                        </MultiSelect>
-                    </div>
-                </form>
-
-                <template #footer>
-                    <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
-                    <Button label="Crear" @click="crearEvento" severity="success" />
-                </template>
-            </Dialog> -->
-
             <Dialog v-model:visible="modalEvento" header="Nuevo evento especial" :style="{ width: '40rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
-            <form ref="formEvento" class="formEvento">
-                <label class="font-bold block">Categoria de participantes</label>
+                :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+                <form ref="formEvento" class="formEvento">
+                    <label class="font-bold block">Categoria de participantes</label>
                     <div class="card flex justify-content-center m-3">
                         <SelectButton v-model="paquete.categoria" :options="Rangos" aria-labelledby="basic" />
                     </div>
-                <div class="flex gap-1">
-                    <div class="titulo sm:w-full md:w-6">
-                        <label for="titulo" class="font-bold block">Título</label>
-                        <InputText type="text" id="titulo" v-model="paquete.titulo" />
+                    <div class="flex gap-1">
+                        <div class="titulo sm:w-full md:w-6">
+                            <label for="titulo" class="font-bold block">Título</label>
+                            <InputText type="text" id="titulo" v-model="paquete.titulo" />
+                        </div>
+                        <div class="descripcion sm:w-full md:w-6">
+                            <label for="descripcion" class="font-bold block">Descripción</label>
+                            <Textarea id="descripcion" v-model="paquete.descripcion" rows="1" cols="25" />
+                        </div>
                     </div>
-                    <div class="descripcion sm:w-full md:w-6">
-                        <label for="descripcion" class="font-bold block">Descripción</label>
-                        <Textarea id="descripcion" v-model="paquete.descripcion" rows="1" cols="25" />
-                    </div>
-                </div>
 
-                <div class="flex gap-1">
-                    <div class="reglas sm:w-6">
-                        <label for="reglas" class="font-bold block">Reglas</label>
-                        <Textarea id="reglas" v-model="paquete.reglas" rows="1" cols="20" />
-                    </div>
-                    <div class="disponibilidad sm:w-6">
-                        <label for="fecha_inicio" class="font-bold block">Disponibilidad</label>
-                        <Calendar id="fecha_inicio" selectionMode="range" :numberOfMonths="2" v-model="paquete.fecha_fin" :minDate="new Date()" :manualInput="false"
-                            dateFormat="yy-mm-dd" />
-                    </div>
-                </div>
-                <Divider class="m-1" />
-                <h4 class="m-0">Premios</h4>
-                <div class="flex flex-column gap-1">
-                    <h5 class="m-0">Top 1</h5>
-                    <div class="top1 flex gap-1">
-                        <div class="flex flex-column sm:w-6">
-                            <label for="descripcion_top1">Descripción</label>
-                            <InputText type="text" id="descripcion_top1" v-model="paquete.premios.top1.descripcion" />
+                    <div class="flex gap-1">
+                        <div class="reglas sm:w-6">
+                            <label for="reglas" class="font-bold block">Reglas</label>
+                            <Textarea id="reglas" v-model="paquete.reglas" rows="1" cols="20" />
                         </div>
-                        <div class="flex flex-column sm:w-6">
-                            <label for="imagen_top1">Imagen</label>
-                            <InputText type="file" id="imagen_top1" accept="image/*" @change="asignarImagen($event, 'top1')" />
+                        <div class="disponibilidad sm:w-6">
+                            <label for="fecha_inicio" class="font-bold block">Disponibilidad</label>
+                            <Calendar id="fecha_inicio" selectionMode="range" :numberOfMonths="2"
+                                v-model="paquete.fecha_fin" :minDate="new Date()" :manualInput="false"
+                                dateFormat="yy-mm-dd" />
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-column gap-1">
-                    <h5 class="m-0">Top 2</h5>
-                    <div class="top2 flex gap-1">
-                        <div class="flex flex-column sm:w-6">
-                            <label for="descripcion_top2">Descripción</label>
-                            <InputText type="text" id="descripcion_top2" v-model="paquete.premios.top2.descripcion" />
-                        </div>
-                        <div class="flex flex-column sm:w-6">
-                            <label for="imagen_top2">Imagen</label>
-                            <InputText type="file" id="imagen_top2" accept="image/*" @change="asignarImagen($event, 'top2')" />
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-column gap-1">
-                    <h5 class="m-0">Top 3</h5>
-                    <div class="top3 flex gap-1">
-                        <div class="flex flex-column sm:w-6">
-                            <label for="descripcion_top3">Descripción</label>
-                            <InputText type="text" id="descripcion_top3" v-model="paquete.premios.top3.descripcion" />
-                        </div>
-                        <div class="flex flex-column sm:w-6">
-                            <label for="imagen_top3">Imagen</label>
-                            <InputText type="file" id="imagen_top1" accept="image/*" @change="asignarImagen($event, 'top3')" />
+                    <Divider class="m-1" />
+                    <h4 class="m-0">Premios</h4>
+                    <div class="flex flex-column gap-1">
+                        <h5 class="m-0">Top 1</h5>
+                        <div class="top1 flex gap-1">
+                            <div class="flex flex-column sm:w-6">
+                                <label for="descripcion_top1">Descripción</label>
+                                <InputText type="text" id="descripcion_top1"
+                                    v-model="paquete.premios.top1.descripcion" />
+                            </div>
+                            <div class="flex flex-column sm:w-6">
+                                <label for="imagen_top1">Imagen</label>
+                                <InputText type="file" id="imagen_top1" accept="image/*"
+                                    @change="asignarImagen($event, 'top1')" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
-            <template #footer>
-                <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
-                <Button label="Crear" @click="crearEvento" :disabled="btnEvento" severity="success" />
-            </template>
-        </Dialog>
+                    <div class="flex flex-column gap-1">
+                        <h5 class="m-0">Top 2</h5>
+                        <div class="top2 flex gap-1">
+                            <div class="flex flex-column sm:w-6">
+                                <label for="descripcion_top2">Descripción</label>
+                                <InputText type="text" id="descripcion_top2"
+                                    v-model="paquete.premios.top2.descripcion" />
+                            </div>
+                            <div class="flex flex-column sm:w-6">
+                                <label for="imagen_top2">Imagen</label>
+                                <InputText type="file" id="imagen_top2" accept="image/*"
+                                    @change="asignarImagen($event, 'top2')" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column gap-1">
+                        <h5 class="m-0">Top 3</h5>
+                        <div class="top3 flex gap-1">
+                            <div class="flex flex-column sm:w-6">
+                                <label for="descripcion_top3">Descripción</label>
+                                <InputText type="text" id="descripcion_top3"
+                                    v-model="paquete.premios.top3.descripcion" />
+                            </div>
+                            <div class="flex flex-column sm:w-6">
+                                <label for="imagen_top3">Imagen</label>
+                                <InputText type="file" id="imagen_top1" accept="image/*"
+                                    @change="asignarImagen($event, 'top3')" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <template #footer>
+                    <Button label="Cancelar" @click="modalEvento = false" text severity="danger" autofocus />
+                    <Button label="Crear" @click="crearEvento" :disabled="btnEvento" severity="success" />
+                </template>
+            </Dialog>
 
-            <Dialog v-model:visible="modalEliminar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+            <Dialog v-model:visible="modalEliminar" :style="{ width: '47rem' }"
+                :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
                 <template #header>
                 </template>
                 <div class="card flex justify-content-center">
@@ -217,7 +155,8 @@
                 </template>
             </Dialog>
 
-            <Dialog v-model:visible="modalAplicar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+            <Dialog v-model:visible="modalAplicar" :style="{ width: '47rem' }"
+                :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
                 <template #header>
                 </template>
                 <div class="card flex justify-content-center">
@@ -395,7 +334,7 @@ export default {
                 } else if (!/^(?!\s*$).+/.test(this.paquete[k])) {
                     valid = false;
                     break;
-                } else if (this.paquete.categoria == null){
+                } else if (this.paquete.categoria == null) {
                     valid = false;
                     break
                 }
@@ -433,7 +372,7 @@ export default {
             }).then(response => {
                 console.log(response);
                 this.modalEliminar = false;
-                        this.getEventos();
+                this.getEventos();
             }).catch(error => {
                 switch (error.response.data.statusCode) {
                     case 401:

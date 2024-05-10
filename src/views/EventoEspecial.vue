@@ -21,10 +21,13 @@
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
                                             <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
+                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                Participar</div>
                                         </div>
                                     </template>
-                                    <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
+                                    <div
+                                        class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
                                                 <p class="m-0">{{ evento.descripcion }}</p>
@@ -45,22 +48,46 @@
                                             <div class="container flex flex-column gap-2">
                                                 <p class="fechas m-0">{{ evento.fecha_inicio.slice(0, 10) }} | {{
                                                     evento.fecha_fin.slice(0, 10) }}</p>
-                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]" :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
+                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]"
+                                                    :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial" tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
+                                    <div class="flex justify-content-around flex-wrap mt-5" style="row-gap: 25px;">
+                                        <div v-for="(premio, index) in Object.values(evento.premios)" :key="index"
+                                            :class="`puesto${index + 1}`">
+                                            <div class="titulo flex flex-column w-full">
+                                                <div class="fondo">
+                                                    <p class="m-0">Puesto {{ index + 1 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="imagen">
+                                                <img :src="premio.imagen" :alt="premio.descripcion"
+                                                    class="border-round imgPremio" />
+                                            </div>
+                                            <div class="descripcion-premio w-full text-center mt-5 p-3">
+                                                <p class="m-0">{{ premio.descripcion }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial"
+                                        tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
                                         <template #header>
                                             <div class="containerC" v-if="evento.participantes.length > 0">
                                                 <video autoplay muted loop class="tabla-fondo-header">
-                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
+                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4"
+                                                        type="video/mp4">
                                                     Tu navegador no soporta esta funcionalidad video
                                                 </video>
-                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2" tipo="Platino" :foto="evento.participantes[1].foto" />
-                                                <Clasificacion top="1" tipo="Oro" :nombre="evento.participantes[0].usuario" :foto="evento.participantes[0].foto" />
-                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3" tipo="Cobre" :foto="evento.participantes[2].foto" />
+                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2"
+                                                    tipo="Platino" :foto="evento.participantes[1].foto" />
+                                                <Clasificacion top="1" tipo="Oro"
+                                                    :nombre="evento.participantes[0].usuario"
+                                                    :foto="evento.participantes[0].foto" />
+                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3"
+                                                    tipo="Cobre" :foto="evento.participantes[2].foto" />
                                             </div>
                                         </template>
                                         <Column header="#" class="font-gamers" headerStyle="width:3rem">
@@ -70,13 +97,16 @@
                                         </Column>
                                         <Column field="usuario" header="Creador" class="font-gamers">
                                             <template #body="slotProps">
-                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star" severity="warn">
+                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers"
+                                                    icon="pi pi-star" severity="warn">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star" severity="error">
+                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers"
+                                                    icon="pi pi-star" severity="error">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star" severity="info">
+                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers"
+                                                    icon="pi pi-star" severity="info">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
                                                 <p v-else> {{ slotProps.data.usuario }}</p>
@@ -87,10 +117,12 @@
                                                 {{ slotProps.data.diamantes_mes_actual * multiplicador }}
                                             </template>
                                         </Column>
-                                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior"></Column>
+                                        <Column field="diamantes_mes_anterior" class="font-gamers"
+                                            header="Puntos Mes Anterior"></Column>
                                         <Column field="grupo" class="font-gamers" header="Grupo">
                                             <template #body="props">
-                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
+                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`"
+                                                    :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
                                             </template>
                                         </Column>
                                     </DataTable>
@@ -104,10 +136,13 @@
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
                                             <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
+                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                Participar</div>
                                         </div>
                                     </template>
-                                    <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
+                                    <div
+                                        class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
                                                 <p class="m-0"> {{ evento.descripcion }}</p>
@@ -128,22 +163,29 @@
                                             <div class="container flex flex-column gap-2">
                                                 <p class="fechas m-0">{{ evento.fecha_inicio.slice(0, 10) }} | {{
                                                     evento.fecha_fin.slice(0, 10) }}</p>
-                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]" :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
+                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]"
+                                                    :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial" tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
+                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial"
+                                        tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
                                         <template #header>
                                             <div class="containerC" v-if="evento.participantes.length > 0">
                                                 <video autoplay muted loop class="tabla-fondo-header">
-                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
+                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4"
+                                                        type="video/mp4">
                                                     Tu navegador no soporta esta funcionalidad video
                                                 </video>
-                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2" tipo="Platino" :foto="evento.participantes[1].foto" />
-                                                <Clasificacion top="1" tipo="Oro" :nombre="evento.participantes[0].usuario" :foto="evento.participantes[0].foto" />
-                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3" tipo="Cobre" :foto="evento.participantes[2].foto" />
+                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2"
+                                                    tipo="Platino" :foto="evento.participantes[1].foto" />
+                                                <Clasificacion top="1" tipo="Oro"
+                                                    :nombre="evento.participantes[0].usuario"
+                                                    :foto="evento.participantes[0].foto" />
+                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3"
+                                                    tipo="Cobre" :foto="evento.participantes[2].foto" />
                                             </div>
                                         </template>
                                         <Column header="#" class="font-gamers" headerStyle="width:3rem">
@@ -153,13 +195,16 @@
                                         </Column>
                                         <Column field="usuario" header="Creador" class="font-gamers">
                                             <template #body="slotProps">
-                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star" severity="warn">
+                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers"
+                                                    icon="pi pi-star" severity="warn">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star" severity="error">
+                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers"
+                                                    icon="pi pi-star" severity="error">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star" severity="info">
+                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers"
+                                                    icon="pi pi-star" severity="info">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
                                                 <p v-else> {{ slotProps.data.usuario }}</p>
@@ -170,15 +215,17 @@
                                                 {{ slotProps.data.diamantes_mes_actual * multiplicador }}
                                             </template>
                                         </Column>
-                                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior"></Column>
+                                        <Column field="diamantes_mes_anterior" class="font-gamers"
+                                            header="Puntos Mes Anterior"></Column>
                                         <Column field="grupo" class="font-gamers" header="Grupo">
                                             <template #body="props">
-                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
+                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`"
+                                                    :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
                                             </template>
                                         </Column>
                                     </DataTable>
 
-                                   
+
                                 </AccordionTab>
                             </Accordion>
                             <p class="text-center" v-else>Sin eventos</p>
@@ -189,10 +236,13 @@
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
                                             <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria,  evento.titulo)">Participar</div>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
+                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">
+                                                Participar</div>
                                         </div>
                                     </template>
-                                    <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
+                                    <div
+                                        class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
                                                 <p class="m-0">{{ evento.descripcion }}</p>
@@ -213,22 +263,29 @@
                                             <div class="container flex flex-column gap-2">
                                                 <p class="fechas m-0">{{ evento.fecha_inicio.slice(0, 10) }} | {{
                                                     evento.fecha_fin.slice(0, 10) }}</p>
-                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]" :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
+                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]"
+                                                    :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial" tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
+                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial"
+                                        tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
                                         <template #header>
                                             <div class="containerC" v-if="evento.participantes.length > 0">
                                                 <video autoplay muted loop class="tabla-fondo-header">
-                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
+                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4"
+                                                        type="video/mp4">
                                                     Tu navegador no soporta esta funcionalidad video
                                                 </video>
-                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2" tipo="Platino" :foto="evento.participantes[1].foto" />
-                                                <Clasificacion top="1" tipo="Oro" :nombre="evento.participantes[0].usuario" :foto="evento.participantes[0].foto" />
-                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3" tipo="Cobre" :foto="evento.participantes[2].foto" />
+                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2"
+                                                    tipo="Platino" :foto="evento.participantes[1].foto" />
+                                                <Clasificacion top="1" tipo="Oro"
+                                                    :nombre="evento.participantes[0].usuario"
+                                                    :foto="evento.participantes[0].foto" />
+                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3"
+                                                    tipo="Cobre" :foto="evento.participantes[2].foto" />
                                             </div>
                                         </template>
                                         <Column header="#" class="font-gamers" headerStyle="width:3rem">
@@ -238,13 +295,16 @@
                                         </Column>
                                         <Column field="usuario" header="Creador" class="font-gamers">
                                             <template #body="slotProps">
-                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star" severity="warn">
+                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers"
+                                                    icon="pi pi-star" severity="warn">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star" severity="error">
+                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers"
+                                                    icon="pi pi-star" severity="error">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star" severity="info">
+                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers"
+                                                    icon="pi pi-star" severity="info">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
                                                 <p v-else> {{ slotProps.data.usuario }}</p>
@@ -255,10 +315,12 @@
                                                 {{ slotProps.data.diamantes_mes_actual * multiplicador }}
                                             </template>
                                         </Column>
-                                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior"></Column>
+                                        <Column field="diamantes_mes_anterior" class="font-gamers"
+                                            header="Puntos Mes Anterior"></Column>
                                         <Column field="grupo" class="font-gamers" header="Grupo">
                                             <template #body="props">
-                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
+                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`"
+                                                    :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
                                             </template>
                                         </Column>
                                     </DataTable>
@@ -272,10 +334,13 @@
                                     <template #header>
                                         <div class="w-full flex justify-content-between">
                                             <p>Evento - {{ evento.titulo }}</p>
-                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'" @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar</div>
+                                            <div class="aplica color-verde" v-tooltip.top="'Participar en el evento'"
+                                                @click="aplicar(evento._id, evento.categoria, evento.titulo)">Participar
+                                            </div>
                                         </div>
                                     </template>
-                                    <div class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
+                                    <div
+                                        class="flex justify-content-between md:justify-content-center sm:justify-content-center flex-wrap gap-4">
                                         <div class="descripcion">
                                             <div class="container py-1">
                                                 <p class="m-0">{{ evento.descripcion }}</p>
@@ -296,22 +361,29 @@
                                             <div class="container flex flex-column gap-2">
                                                 <p class="fechas m-0">{{ evento.fecha_inicio.slice(0, 10) }} | {{
                                                     evento.fecha_fin.slice(0, 10) }}</p>
-                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]" :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
+                                                <div :class="'barra-progreso barra-' + calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[0]"
+                                                    :style="`width: ${(calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]) > 100 ? 100 : calcularPromdioTranscurrido(evento.fecha_inicio, evento.fecha_fin)[1]}%`">
                                                     {{ calcularPromdioTranscurrido(evento.fecha_inicio,
                                                         evento.fecha_fin)[1] }}%</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial" tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
+                                    <DataTable :value="evento.participantes" class="tablaCreadoresEvento especial"
+                                        tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
                                         <template #header>
                                             <div class="containerC" v-if="evento.participantes.length > 0">
                                                 <video autoplay muted loop class="tabla-fondo-header">
-                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4" type="video/mp4">
+                                                    <source src="/assets/video/eventos/tabla-fondo-header.mp4"
+                                                        type="video/mp4">
                                                     Tu navegador no soporta esta funcionalidad video
                                                 </video>
-                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2" tipo="Platino" :foto="evento.participantes[1].foto" />
-                                                <Clasificacion top="1" tipo="Oro" :nombre="evento.participantes[0].usuario" :foto="evento.participantes[0].foto" />
-                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3" tipo="Cobre" :foto="evento.participantes[2].foto" />
+                                                <Clasificacion :nombre="evento.participantes[1].usuario" top="2"
+                                                    tipo="Platino" :foto="evento.participantes[1].foto" />
+                                                <Clasificacion top="1" tipo="Oro"
+                                                    :nombre="evento.participantes[0].usuario"
+                                                    :foto="evento.participantes[0].foto" />
+                                                <Clasificacion :nombre="evento.participantes[2].usuario" top="3"
+                                                    tipo="Cobre" :foto="evento.participantes[2].foto" />
                                             </div>
                                         </template>
                                         <Column header="#" class="font-gamers" headerStyle="width:3rem">
@@ -321,13 +393,16 @@
                                         </Column>
                                         <Column field="usuario" header="Creador" class="font-gamers">
                                             <template #body="slotProps">
-                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star" severity="warn">
+                                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers"
+                                                    icon="pi pi-star" severity="warn">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star" severity="error">
+                                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers"
+                                                    icon="pi pi-star" severity="error">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
-                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star" severity="info">
+                                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers"
+                                                    icon="pi pi-star" severity="info">
                                                     {{ slotProps.data.usuario }}
                                                 </InlineMessage>
                                                 <p v-else> {{ slotProps.data.usuario }}</p>
@@ -338,10 +413,12 @@
                                                 {{ slotProps.data.diamantes_mes_actual * multiplicador }}
                                             </template>
                                         </Column>
-                                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior"></Column>
+                                        <Column field="diamantes_mes_anterior" class="font-gamers"
+                                            header="Puntos Mes Anterior"></Column>
                                         <Column field="grupo" class="font-gamers" header="Grupo">
                                             <template #body="props">
-                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
+                                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`"
+                                                    :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
                                             </template>
                                         </Column>
                                     </DataTable>
@@ -350,12 +427,16 @@
                             <p class="text-center" v-else>Sin eventos</p>
                         </TabPanel>
                     </TabView>
-                    <DataTable :value="creadores" class="tablaCreadoresEvento" tableStyle="min-width: 8rem" sortField="diamantes_mes_actual" :sortOrder="-1">
+                    <DataTable :value="creadores" class="tablaCreadoresEvento" tableStyle="min-width: 8rem"
+                        sortField="diamantes_mes_actual" :sortOrder="-1">
                         <template #header>
-                            <span class="text-xl text-900 font-bold font-gamers text-center" style="z-index: 1;">CREADORES DE CONTENIDO</span>
-                            <img src="/assets/img/eventos/divisor-titulo.png" alt="Divisor" class="w-full mb-3" style="z-index: 1;">
+                            <span class="text-xl text-900 font-bold font-gamers text-center"
+                                style="z-index: 1;">CREADORES DE CONTENIDO</span>
+                            <img src="/assets/img/eventos/divisor-titulo.png" alt="Divisor" class="w-full mb-3"
+                                style="z-index: 1;">
                             <div class="text-center uppercase font-gamers" style="z-index: 1;">
-                                <p class="m-0 text-inline-evento text-6xl color-blue" v-if="all != true">CATEGORÍA {{ grupoMostrado }}</p>
+                                <p class="m-0 text-inline-evento text-6xl color-blue" v-if="all != true">CATEGORÍA {{
+                                    grupoMostrado }}</p>
                                 <p class="m-0 text-inline-evento text-6xl color-blue" v-else>TODOS</p>
                             </div>
                             <div class="grupos mt-3 mb-5 uppercase font-gamers color-blue" style="z-index: 1;">
@@ -382,13 +463,16 @@
                         </Column>
                         <Column field="usuario" header="Creador" class="font-gamers">
                             <template #body="slotProps">
-                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star" severity="warn">
+                                <InlineMessage v-if="slotProps.index == 0" class="font-gamers" icon="pi pi-star"
+                                    severity="warn">
                                     {{ slotProps.data.usuario }}
                                 </InlineMessage>
-                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star" severity="error">
+                                <InlineMessage v-else-if="slotProps.index == 1" class="font-gamers" icon="pi pi-star"
+                                    severity="error">
                                     {{ slotProps.data.usuario }}
                                 </InlineMessage>
-                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star" severity="info">
+                                <InlineMessage v-else-if="slotProps.index == 2" class="font-gamers" icon="pi pi-star"
+                                    severity="info">
                                     {{ slotProps.data.usuario }}
                                 </InlineMessage>
                                 <p v-else> {{ slotProps.data.usuario }}</p>
@@ -400,10 +484,12 @@
                                 {{ slotProps.data.diamantes_mes_actual * multiplicador }}
                             </template>
                         </Column>
-                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior"></Column>
+                        <Column field="diamantes_mes_anterior" class="font-gamers" header="Puntos Mes Anterior">
+                        </Column>
                         <Column field="grupo" class="font-gamers" header="Grupo">
                             <template #body="props">
-                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`" :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
+                                <img :src="`/assets/img/grupos/${props.data.grupo}.png`"
+                                    :alt="`Grupo ${props.data.grupo}`" class="img-grupo">
                             </template>
                         </Column>
                     </DataTable>
@@ -411,10 +497,11 @@
             </Card>
         </div>
 
-        <Dialog v-model:visible="modalAplicar" header="Participar" :style="{ width: '47rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
+        <Dialog v-model:visible="modalAplicar" header="Participar" :style="{ width: '47rem' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" position="top" :modal="true" :draggable="false">
 
             <div class="card flex justify-content-center">
-                <h2>¿Quieres participar en este evento {{tituloEvento}} de categoria {{categoriaEvento}}?</h2>
+                <h2>¿Quieres participar en este evento {{ tituloEvento }} de categoria {{ categoriaEvento }}?</h2>
             </div>
 
             <template #footer>
@@ -693,11 +780,11 @@ export default {
             this.top3 = this.creadores.slice(0, 3);
         });
         this.store = useStoreEvento();
-        if ( this.store.evento.evento !== null) {
-            this.verificacionAplicar =  this.store.evento.evento,
-            this.categoriaEvento=  this.store.evento.categoria,
-            this.tituloEvento=  this.store.evento.premio,
-            this.modalAplicar = true;
+        if (this.store.evento.evento !== null) {
+            this.verificacionAplicar = this.store.evento.evento,
+                this.categoriaEvento = this.store.evento.categoria,
+                this.tituloEvento = this.store.evento.premio,
+                this.modalAplicar = true;
             this.store.eventoDelete();
         }
         this.spiner = false;
