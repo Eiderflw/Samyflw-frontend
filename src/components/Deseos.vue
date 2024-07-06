@@ -100,7 +100,7 @@
 		:draggable="false"
 	>
 		<form ref="formAliexpress">
-			<iframe src="https://es.aliexpress.com" width="100%" height="600px"></iframe>
+			<iframe ref="myIframe" src="https://es.aliexpress.com" @load="attachClickEventListener" width="100%" height="600px"></iframe>
 		</form>
 		<template #footer>
 			<Button label="Cancelar" @click="modalDeseoAliexpress = false" autofocus text severity="danger" />
@@ -319,6 +319,20 @@ export default {
 					}
 				});
 		},
+		attachClickEventListener() {
+			const iframe = this.$refs.myIframe;
+			if (iframe && iframe.contentWindow) {
+				iframe.contentWindow.document.addEventListener("click", this.handleIframeClick);
+			}
+		},
+		handleIframeClick(event) {
+			const target = event.target;
+			if (target.tagName === "A" && target.href) {
+				event.preventDefault();
+				const url = target.href;
+				alert("URL capturada:", url);
+			}
+		},
 		async pedirDeseoAliexpress() {
 			if (this.paqueteDeseoAliexpress.link === null || !this.paqueteDeseoAliexpress.link.includes("aliexpress.com")) {
 				this.$toast.add({
@@ -409,6 +423,12 @@ export default {
 							break;
 					}
 				});
+		},
+		beforeDestroy() {
+			const iframe = this.$refs.myIframe;
+			if (iframe && iframe.contentWindow) {
+				iframe.contentWindow.document.removeEventListener("click", this.handleIframeClick);
+			}
 		},
 	},
 	created() {
