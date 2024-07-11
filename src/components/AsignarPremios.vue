@@ -55,7 +55,41 @@
 			</Column>
 			<Column header="Acciones">
 				<template #body="slotProps">
-					<Button v-if="slotProps.data.estado === 'En proceso'" icon="pi pi-send" @click="Preparar(slotProps.data)"></Button>
+					<div class="flex gap-2 flex-row">
+						<Button
+							v-if="slotProps.data.estado === 'En proceso'"
+							icon="pi pi-send"
+							v-tooltip.top="'Enviar premio'"
+							@click="Preparar(slotProps.data)"
+						></Button>
+						<Button
+							v-if="slotProps.data.estado != 'Entregado' && slotProps.data.estado != 'Expirado'"
+							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'Expirado', slotProps.data.fecha_unica)"
+							v-tooltip.top="'Expirar premio'"
+							icon="pi pi-stopwatch"
+							outlined
+							rounded
+							severity="danger"
+						/>
+						<Button
+							v-if="slotProps.data.estado == 'Expirado'"
+							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'En proceso', slotProps.data.fecha_unica)"
+							v-tooltip.top="'Habilitar premio'"
+							icon="pi pi-replay"
+							severity="info"
+							outlined
+							rounded
+						/>
+						<Button
+							v-tooltip.top="'Eliminar premio'"
+							v-if="slotProps.data.estado != 'Entregado'"
+							icon="pi pi-trash"
+							severity="danger"
+							outlined
+							rounded
+							@click="confirmarEliminar(slotProps.data.usuario, slotProps.data.id_concurso, slotProps.data.fecha_unica)"
+						/>
+					</div>
 					<Image
 						v-tooltip.top="'Comprobante de entrega'"
 						v-if="slotProps.data.estado == 'Entregado' && slotProps.data.tipo_premio != 'SaldoApi'"
@@ -161,6 +195,7 @@
 				<Button label="Entregar premio" @click="EnviarPremio"></Button>
 			</template>
 		</Dialog>
+		<ConfirmDialog />
 	</Panel>
 </template>
 <script>
@@ -204,28 +239,31 @@ export default {
 				const response = await axios.get(`${this.API}/usuario`, this.token);
 				if (response && response.data) {
 					this.premios = response.data.reduce((acc, user) => {
-						user.premios.forEach((premio) => {
-							if (premio.fecha_obtenido) {
-								let fecha;
-								if (premio.estado == "Entregado") {
-									fecha =
-										premio.transferencia && premio.transferencia.fecha_reclamado ? premio.transferencia.fecha_reclamado.slice(0, 10) : "";
-								} else {
-									fecha = premio.fecha_obtenido.slice(0, 10);
+						if (user.premios) {
+							user.premios.forEach((premio) => {
+								if (premio.fecha_obtenido) {
+									let fecha;
+									if (premio.estado == "Entregado") {
+										fecha =
+											premio.transferencia && premio.transferencia.fecha_reclamado ? premio.transferencia.fecha_reclamado.slice(0, 10) : "";
+									} else {
+										fecha = premio.fecha_obtenido.slice(0, 10);
+									}
+									acc.push({
+										nombre: user.usuario,
+										usuario: user._id,
+										id_concurso: premio.id_concurso,
+										premio: premio.premio,
+										descripcion: premio.descripcion,
+										fecha_obtenido: fecha,
+										fecha_unica: premio.fecha_obtenido,
+										tipo_premio: premio.tipo_premio,
+										transferencia: premio.transferencia,
+										estado: premio.estado,
+									});
 								}
-								acc.push({
-									nombre: user.usuario,
-									usuario: user._id,
-									id_concurso: premio.id_concurso,
-									premio: premio.premio,
-									descripcion: premio.descripcion,
-									fecha_obtenido: fecha,
-									tipo_premio: premio.tipo_premio,
-									transferencia: premio.transferencia,
-									estado: premio.estado,
-								});
-							}
-						});
+							});
+						}
 						return acc;
 					}, []);
 				} else {
@@ -240,7 +278,6 @@ export default {
 				}
 			}
 		},
-
 		ponerEstado(estado) {
 			if (estado == "Sin reclamar") {
 				return "warning";
@@ -304,13 +341,62 @@ export default {
 				});
 			}
 		},
-		ponerEstado(estado) {
-			if (estado == "Sin reclamar") {
-				return "warning";
-			} else if (estado == "En proceso") {
-				return "info";
-			} else {
-				return "success";
+		async eliminarPremio(usuario = null, id_concurso = null, fecha_obtenido = null) {
+			if (usuario != null && id_concurso != null) {
+				await axios
+					.delete(`${this.API}/usuario/${usuario}/premio/${id_concurso}/${fecha_obtenido}`, this.token)
+					.then((resp) => {
+						if (!resp.data.error) {
+							this.getCreadores();
+						}
+						this.$toast.add({
+							severity: resp.data.error ? "error" : "success",
+							summary: "Premio eliminado",
+							detail: resp.data.message,
+							life: 1600,
+						});
+					})
+					.catch((error) => {
+						switch (error.response.data.statusCode) {
+							case 401:
+								//Se le termino la sesión
+								this.store.clearUser();
+								this.$router.push("/login");
+								break;
+							default:
+								console.log("Error: ", error);
+								break;
+						}
+					});
+			}
+		},
+		async cambiarEstadoPremio(usuario = null, id_concurso = null, nuevo_estado = "Expirado", fecha_obtenido = null) {
+			if (usuario && id_concurso && nuevo_estado) {
+				await axios
+					.put(`${this.API}/usuario/${usuario}/premio/${id_concurso}/${nuevo_estado}/${fecha_obtenido}`, {}, this.token)
+					.then((resp) => {
+						if (!resp.data.error) {
+							this.getCreadores();
+						}
+						this.$toast.add({
+							severity: resp.data.error ? "error" : "success",
+							summary: "Actualizar premio",
+							detail: resp.data.message,
+							life: 1600,
+						});
+					})
+					.catch((error) => {
+						switch (error.response.data.statusCode) {
+							case 401:
+								//Se le termino la sesión
+								this.store.clearUser();
+								this.$router.push("/login");
+								break;
+							default:
+								console.log("Error: ", error);
+								break;
+						}
+					});
 			}
 		},
 		Preparar(datos) {
@@ -319,12 +405,30 @@ export default {
 			this.paquete.usuario = datos.usuario;
 			this.datosTransferencia = datos;
 		},
+		confirmarEliminar(usuario, id_concurso, fecha_obtenido) {
+			this.$confirm.require({
+				message: `¿Está seguro de eliminar este premio?`,
+				header: "Eliminar premio",
+				icon: "pi pi-exclamation-triangle",
+				rejectClass: "p-button-secondary p-button-outlined",
+				rejectLabel: "No, cancelar",
+				acceptLabel: "Sí, eliminar",
+				acceptClass: "p-button-danger",
+				accept: () => {
+					this.eliminarPremio(usuario, id_concurso, fecha_obtenido);
+				},
+				reject: () => {},
+			});
+		},
 	},
 	computed: {
 		totalPagar() {
 			return this.premios.reduce((acum, premio) => {
 				if (["Sin reclamar", "En proceso"].includes(premio.estado)) {
-					const gano = premio.premio.match(/\d+/);
+					if (premio.premio == null || premio.premio == NaN) {
+						premio.premio = "0";
+					}
+					const gano = premio.premio.toString().match(/\d+/);
 					return acum + parseInt(gano != null ? gano[0] : 0);
 				}
 				return acum;
