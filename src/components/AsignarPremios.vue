@@ -73,7 +73,7 @@
 						/>
 						<Button
 							v-if="slotProps.data.estado == 'Expirado'"
-							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'En proceso', slotProps.data.fecha_unica)"
+							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'Sin reclamar', slotProps.data.fecha_unica)"
 							v-tooltip.top="'Habilitar premio'"
 							icon="pi pi-replay"
 							severity="info"
