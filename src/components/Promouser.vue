@@ -62,7 +62,7 @@
 							>
 								<template #option="slotProps">
 									<div class="flex align-items-center">
-										<div>{{ slotProps.option.name }}</div>
+										<div>{{ slotProps.option.service }} - {{ slotProps.option.name }}</div>
 									</div>
 								</template>
 							</Dropdown>
@@ -469,6 +469,7 @@ export default {
 						qrcodeLink: response.data.qrcodeLink,
 						checkoutUrl: response.data.checkoutUrl,
 					};
+					this.startCheckingStatus(response.data.idRecarga);
 				})
 				.catch((error) => {
 					switch (error.response.data.statusCode) {
@@ -483,7 +484,51 @@ export default {
 							break;
 					}
 				});
+
 			this.btnPagarBinance = false;
+		},
+		async getStatusOrderBinance(idRecarga) {
+			try {
+				const response = await axios.get(`${this.API}/tienda/validar/recarga/${idRecarga}`, this.token);
+				return response.data;
+			} catch (error) {
+				switch (error.response.data.statusCode) {
+					case 401:
+						this.store.clearUser();
+						this.$router.push("/login");
+						break;
+					default:
+						this.$toast.add({
+							severity: "danger",
+							summary: "Obteniendo recargas",
+							detail: error.response.data.message,
+							life: 1500,
+						});
+						console.log("Error: ", error);
+						break;
+				}
+			}
+		},
+		startCheckingStatus(idRecarga) {
+			const intervalId = setInterval(async () => {
+				const status = await this.getStatusOrderBinance(idRecarga);
+				console.log(`Estado de la recarga: ${status}`);
+				if (status === "aprobado") {
+					clearInterval(intervalId);
+					await this.getUserInfo();
+					this.checkoutBinance = {
+						qrcodeLink: null,
+						checkoutUrl: null,
+					};
+					this.modalRecargarBinance = false;
+					this.selectRecargaBinance = [];
+					this.crearRecargaBinance = {
+						amount: null,
+						creditos: null,
+					};
+					this.$toast.add({ severity: "success", summary: "Recargar Cuenta", detail: "Gracias por recargar en samyflw ;)", life: 5500 });
+				}
+			}, 4000);
 		},
 		async getMisOrdenes() {
 			await axios
@@ -505,6 +550,7 @@ export default {
 					}
 				});
 		},
+
 		async getPricingRecargas() {
 			await axios
 				.get(`${this.API}/tienda/recarga/disponible`, this.token)

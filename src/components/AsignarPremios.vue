@@ -2,9 +2,10 @@
 	<Panel class="creadores">
 		<Toast />
 		<template #header>
-			<div class="flex align-items-center gap-2 flex-end w-full justify-content-between">
+			<div class="flex align-items-center gap-2 flex-end flex-wrap w-full justify-content-between">
 				<h1 class="m-0">Entregar premios</h1>
 				<h3 class="m-0 p-0 text-white">Total pagar: ${{ totalPagar }}</h3>
+				<InputText v-model="filters['global'].value" placeholder="Buscar...  " />
 			</div>
 		</template>
 		<DataTable
@@ -13,6 +14,7 @@
 			sortField="estado"
 			:sortOrder="1"
 			:customSort="customSort"
+			v-model:filters="filters"
 			paginator
 			:rows="5"
 			:rowsPerPageOptions="[5, 10, 20, 50]"
@@ -73,7 +75,7 @@
 						/>
 						<Button
 							v-if="slotProps.data.estado == 'Expirado'"
-							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'Sin reclamar', slotProps.data.fecha_unica)"
+							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'En proceso', slotProps.data.fecha_unica)"
 							v-tooltip.top="'Habilitar premio'"
 							icon="pi pi-replay"
 							severity="info"
@@ -201,6 +203,7 @@
 <script>
 import axios from "axios";
 import { useStoreEvento } from "../store";
+import { FilterMatchMode } from "primevue/api";
 
 export default {
 	data: () => ({
@@ -209,6 +212,9 @@ export default {
 		servicios: [],
 		usuarios: null,
 		EnviarModal: false,
+		filters: {
+			global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+		},
 		Usuarios: [],
 		premios: [],
 		tipo: null,
