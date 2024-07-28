@@ -22,6 +22,7 @@ import EventoEspecialView from "../views/EventoEspecial.vue";
 import Deseos from "../components/Deseos.vue";
 import Terminos from "../views/Terminos.vue";
 import ControlReglas from "../components/ControlReglas.vue";
+import ActualizacionesReglas from "../components/ActualizacionesReglas.vue";
 
 const routes = [
     { path: "/", name: "Home", component: Home },
@@ -30,7 +31,7 @@ const routes = [
     { path: "/registro", name: "RegistroEvento", component: Registro },
     { path: "/terminos", name: "Terminos", component: Terminos },
     { path: "/EventoEspecialView", name: "EventoEspecialView", component: EventoEspecialView },
-
+    { path: "/actualizaciones-reglas", name: "ActualizacionesReglas", component: ActualizacionesReglas },
     {
         path: "/panel",
         name: "Panel",

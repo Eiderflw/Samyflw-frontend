@@ -551,6 +551,11 @@ export default {
 							route: "/panel/premio",
 						},
 						{
+							label: "Control de reglas",
+							icon: "pi pi-sliders-h",
+							route: "/actualizaciones-reglas",
+						},
+						{
 							label: "Editar perfil",
 							icon: "pi pi-user-edit",
 							action: "editar_perfil",

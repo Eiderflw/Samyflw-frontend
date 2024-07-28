@@ -28,8 +28,8 @@
 				</a>
 				<nav>
 					<router-link to="/duckracer">Juegos</router-link>
-					<a></a>
 					<a href="#/terminos">Terminos</a>
+					<router-link to="/actualizaciones-reglas">Control reglas</router-link>
 					<router-link to="/evento">Eventos</router-link>
 					<router-link to="/EventoEspecialView">Eventos Categoría</router-link>
 					<router-link to="/login">Login</router-link>
@@ -110,7 +110,7 @@ export default {
 
 header {
 	height: 67px;
-	padding: 10px 80px 10px 80px;
+	padding: 10px 20px 10px 10px;
 	font-family: "planet-gamers" !important;
 	background-image: url("/assets/img/header/header-bg.png") !important;
 	background-repeat: no-repeat !important;
@@ -143,13 +143,22 @@ header .logo span {
 
 header nav {
 	display: flex;
-	gap: 25px;
+	gap: 15px;
 }
 
 .botonMenu {
 	display: none;
 }
-
+@media (max-width: 960px) {
+	header .logo {
+		font-size: 1.5em;
+	}
+}
+@media (max-width: 865px) {
+	header .logo {
+		font-size: 1.2em;
+	}
+}
 @media (max-width: 739px) {
 	header nav a {
 		display: none;
