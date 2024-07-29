@@ -218,11 +218,9 @@
 						<Carousel
 							:value="novedades"
 							:circular="true"
-							:showIndicators="false"
 							:showNavigators="false"
 							:autoplayInterval="1800"
 							:numVisible="3"
-							:numScroll="3"
 							class="w-11"
 							:responsiveOptions="responsiveOptions"
 						>
