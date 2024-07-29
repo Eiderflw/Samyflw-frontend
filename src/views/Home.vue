@@ -68,7 +68,6 @@
 					<span style="--i: 17"></span>
 					<span style="--i: 13"></span>
 					<span style="--i: 28"></span>
-					{
 					<span style="--i: 22"></span>
 					<span style="--i: 24"></span>
 					<span style="--i: 18"></span>
@@ -219,8 +218,9 @@
 						<Carousel
 							:value="novedades"
 							:circular="true"
-              :showIndicators="false"
-              :autoplayInterval="1800"
+							:showIndicators="false"
+							:showNavigators="false"
+							:autoplayInterval="1800"
 							:numVisible="3"
 							:numScroll="3"
 							class="w-11"
@@ -236,7 +236,7 @@
 										<Tag :severity="props.data.tipo == 'Regla' ? 'warning' : 'info'" rounded :value="props.data.tipo" />
 									</div>
 									<div class="w-full overflow-auto mb-2 descripcion" style="word-break: break-word">
-										<p>{{ props.data.descripcion }}</p>
+										<p v-html="props.data.descripcion" />
 									</div>
 									<div class="fecha">
 										<p class="m-0">{{ props.data.fecha.slice(0, 10) }}</p>

@@ -7,7 +7,7 @@
 		<div class="contenido">
 			<div class="info">
 				<div class="img">
-					<img src="/assets/img/control-regla/pregunta.png" alt="" />
+					<img src="/assets/img/control-regla/pregunta.png" alt="Preguntas, reglas y actualizaciones" />
 				</div>
 				<div class="reglas_act">
 					<div class="btns mb-5 flex-wrap">
@@ -16,6 +16,7 @@
 						</button>
 						<button @click="cambiarVista(2)" :class="`btn-reglas cursor-pointer ${tabActive == 2 ? 'active' : ''}`">ACTUALIZACIONES</button>
 					</div>
+					<div class="header rectangulo" />
 					<div class="ver font-gamers text-white">
 						<DataView :value="currentDatos.nuevas">
 							<template #list="slotProps">
@@ -33,8 +34,7 @@
 														<img src="/assets/img/control-regla/fuego.png" alt="Nuevo" />
 													</div>
 												</div>
-
-												{{ item.descripcion }}
+												<p class="m-0 w-full" v-html="item.descripcion" />
 											</div>
 										</div>
 									</div>
@@ -52,7 +52,7 @@
 												<div class="fecha">{{ item.fecha.slice(0, 10) }}</div>
 											</div>
 											<div class="content text-white flex align-items-start mb-3 py-2 px-4" style="word-break: break-word">
-												{{ item.descripcion }}
+												<p class="m-0 w-full" v-html="item.descripcion" />
 											</div>
 										</div>
 									</div>
@@ -91,6 +91,10 @@ export default {
 		getItems() {
 			let findTipo = this.tabActive == 1 ? "Regla" : "Actualización";
 			let coinc = this.reglas_act.find((item) => item._id == findTipo);
+			this.currentDatos = {
+				nuevas: [],
+				antiguas: [],
+			};
 			if (coinc != null) {
 				this.currentDatos.nuevas = coinc.items.filter((item) => item.estado == "Nueva");
 				this.currentDatos.antiguas = coinc.items.filter((item) => item.estado == "Antigua");
@@ -124,7 +128,7 @@ export default {
 .actualizaciones-reglas > .contenido {
 	padding: 0 12px 0 12px;
 	margin: 90px 15px 30px 15px;
-	height: 680px;
+	height: 730px;
 	width: calc(100% - 30px);
 	background-image: url("/assets/img/control-regla/borde-reglas.png");
 	background-repeat: no-repeat;
@@ -170,10 +174,21 @@ export default {
 .actualizaciones-reglas > .contenido > .info > .reglas_act > .btns > button.active {
 	background: #84dc16;
 }
-.actualizaciones-reglas > .contenido > .info > .reglas_act > .ver {
+
+.actualizaciones-reglas > .contenido > .info > .reglas_act > .header.rectangulo {
+	background-image: url("/assets/img/control-regla/tab_header.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 48px;
+	bottom: -5px;
 	width: 100%;
+	position: relative;
+}
+.actualizaciones-reglas > .contenido > .info > .reglas_act > .ver {
+	width: calc(100% - 26px);
 	height: 460px;
 	display: flex;
+	margin: 0 auto;
 	gap: 10px;
 	justify-content: space-between;
 	overflow: auto;
@@ -204,9 +219,15 @@ export default {
 	}
 	.actualizaciones-reglas > .contenido > .info {
 		flex-direction: column;
+		height: max-content;
 	}
 	.actualizaciones-reglas > .contenido > .info > .reglas_act {
 		width: 100%;
+		height: max-content;
+	}
+	.actualizaciones-reglas > .contenido > .info > .reglas_act > .ver {
+		overflow: hidden;
+		height: max-content;
 	}
 }
 
@@ -223,11 +244,14 @@ export default {
 	.actualizaciones-reglas > .contenido > .info > .img {
 		width: 100%;
 	}
+	.actualizaciones-reglas > .contenido > .info {
+		padding-top: 60px;
+	}
 }
 </style>
 <style>
 .actualizaciones-reglas > .contenido > .info > .reglas_act > .ver > :first-child {
-	background: linear-gradient(179deg, #49ff00, transparent);
+	background: linear-gradient(179deg, #49ff0066, transparent);
 }
 .actualizaciones-reglas > .contenido > .info > .reglas_act > .ver > :last-child {
 	background: linear-gradient(179deg, #29641157, transparent);

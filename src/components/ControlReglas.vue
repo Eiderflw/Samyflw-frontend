@@ -8,8 +8,8 @@
 				<button @click="cambiarVista(1)" :class="`btn-reglas cursor-pointer ${tabActive == 1 ? 'active' : ''}`">PREGUNTAS Y REGLAS</button>
 				<button @click="cambiarVista(2)" :class="`btn-reglas cursor-pointer ${tabActive == 2 ? 'active' : ''}`">ACTUALIZACIONES</button>
 			</div>
-			<div class="forms">
-				<div class="info">
+			<div :class="`forms ${mostrarItems.length == 0 ? 'justify-content-center' : ''}`">
+				<div class="info" v-if="mostrarItems.length > 0">
 					<Accordion :multiple="true" class="accordion_reglas_act" :activeIndex="[0]">
 						<AccordionTab v-for="(item, index) in mostrarItems" :key="index">
 							<template #headericon="scope">
@@ -37,9 +37,7 @@
 									{{ item.titulo }}
 								</div>
 							</template>
-							<p class="m-0 px-4">
-								{{ item.descripcion }}
-							</p>
+							<p class="m-0 px-4" v-html="item.descripcion" />
 						</AccordionTab>
 					</Accordion>
 				</div>
@@ -173,8 +171,12 @@ export default {
 				const valid = this.formValid();
 				if (valid) {
 					this.btnGuardar = true;
+					const copiaPaquete = {
+						...this.paquete,
+						descripcion: this.paquete.descripcion.replace(/\n/g, "<br>"),
+					};
 					await axios
-						.post(`${this.API}/regla-actualizacion/crear`, this.paquete, this.token)
+						.post(`${this.API}/regla-actualizacion/crear`, copiaPaquete, this.token)
 						.then((resp) => {
 							if (!resp.data.error) {
 								this.paquete.titulo = null;
@@ -462,7 +464,7 @@ export default {
 }
 @media (max-width: 994px) {
 	.control-reglas-admin > .contenido > .forms {
-		padding:0;
+		padding: 0;
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: center;

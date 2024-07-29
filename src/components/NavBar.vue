@@ -81,6 +81,16 @@ export default {
 				],
 			},
 			{
+				label: "Control Reglas",
+                items: [
+                    {
+                        label: "Control Reglas",
+                        icon: "pi pi-sliders-h",
+                        route: "/actualizaciones-reglas",
+                    },
+                ],
+			},
+			{
 				separator: true,
 			},
 			{
