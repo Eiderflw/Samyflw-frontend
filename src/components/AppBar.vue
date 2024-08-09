@@ -603,6 +603,11 @@ export default {
 	background-color: #1f2937 !important;
 	border-radius: 0 !important;
 	border: 0 !important;
+	padding: 0 200px;
+}
+
+.opciones {
+	padding: 0 50px !important;
 }
 
 .p-sidebar-content > div,
