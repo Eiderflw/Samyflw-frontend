@@ -388,6 +388,11 @@ export default {
 							route: "/panel/promocion",
 						},
 						{
+							label: "Regalos",
+							icon: "pi pi-gift",
+							route: "/panel/regalos",
+						},
+						{
 							label: "Agregar creadores",
 							icon: "pi pi-user-plus",
 							action: "add_creador",
@@ -603,7 +608,7 @@ export default {
 	background-color: #1f2937 !important;
 	border-radius: 0 !important;
 	border: 0 !important;
-	padding: 0 200px;
+	/* padding: 0 200px; */
 }
 
 .opciones {

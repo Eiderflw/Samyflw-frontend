@@ -23,6 +23,7 @@ import Deseos from "../components/Deseos.vue";
 import Terminos from "../views/Terminos.vue";
 import ControlReglas from "../components/ControlReglas.vue";
 import ActualizacionesReglas from "../components/ActualizacionesReglas.vue";
+import Regalos from "../components/Regalos.vue";
 
 const routes = [
     { path: "/", name: "Home", component: Home },
@@ -151,6 +152,15 @@ const routes = [
                 path: "/panel/reglas",
                 name: "ControlReglas",
                 component: ControlReglas,
+                beforeEnter: (to, from, next) => {
+                    const store = useStoreEvento();
+                    return store.isAdmin() ? next() : next(from);
+                },
+            },
+            {
+                path: "/panel/regalos",
+                name: "Regalos",
+                component: Regalos,
                 beforeEnter: (to, from, next) => {
                     const store = useStoreEvento();
                     return store.isAdmin() ? next() : next(from);
