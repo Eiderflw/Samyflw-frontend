@@ -15,7 +15,7 @@
 
 				<template #item="{ item, props }">
 					<router-link :to="item.route" v-slot="{ href }" custom>
-						<a v-ripple :href="href" v-bind="props.action" aria-hidden="true"  @click="actionMenu(item.action)">
+						<a v-ripple :href="href" v-bind="props.action" aria-hidden="false" @click="actionMenu(item.action)">
 							<span :class="item.icon" />
 							<span class="ml-2">{{ item.label }}</span>
 						</a>
@@ -444,6 +444,7 @@ export default {
 				{
 					label: "Administración",
 					items: [
+						{ label: "Proveedores", icon: "pi pi-sitemap", route: "/panel/proveedores" },
 						{
 							label: "Insignias",
 							icon: "pi pi-star",
