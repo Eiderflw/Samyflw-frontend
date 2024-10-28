@@ -752,8 +752,8 @@ export default {
 					icon: "pi pi-thumbs-up-fill",
 					children: [
 						{ label: "Crear orden", icon: "pi pi-cart-plus", route: "/panel/ordenar" },
-						{ label: "Ordenes", icon: "pi pi-shopping-cart", route: "/panel/bonus" },
-						{ label: "Agregar fondos", icon: "pi pi-money-bill", route: "/panel/bonus" },
+						{ label: "Ordenes", icon: "pi pi-shopping-cart", route: "/panel/ordenes" },
+						{ label: "Agregar fondos", icon: "pi pi-money-bill", route: "/panel/agregarfondos" },
 					],
 				},
 				{

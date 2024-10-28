@@ -26,6 +26,7 @@ import ActualizacionesReglas from "../components/ActualizacionesReglas.vue";
 import Regalos from "../components/Regalos.vue";
 import Proveedores from "../components/Proveedores.vue";
 import Ordenar from "../components/Ordenar.vue";
+import AgregarFondos from "../components/AgregarFondos.vue";
 
 const routes = [
 	{ path: "/", name: "Home", component: Home },
@@ -95,8 +96,8 @@ const routes = [
 				},
 			},
 			{
-				path: "/panel/promouser",
-				name: "Promouser",
+				path: "/panel/ordenes",
+				name: "Ordenes",
 				component: Promouser,
 				beforeEnter: (to, from, next) => {
 					const store = useStoreEvento();
@@ -180,13 +181,22 @@ const routes = [
 			},
 			{
 				path: "/panel/ordenar",
-                name: "Ordenar",
-                component: Ordenar,
-                beforeEnter: (to, from, next) => {
-                    const store = useStoreEvento();
-                    return store.isActive() ? next() : next("/login");
-                },
-			}
+				name: "Ordenar",
+				component: Ordenar,
+				beforeEnter: (to, from, next) => {
+					const store = useStoreEvento();
+					return store.isActive() ? next() : next("/login");
+				},
+			},
+			{
+				path: "/panel/agregarfondos",
+				name: "AgregarFondos",
+				component: AgregarFondos,
+				beforeEnter: (to, from, next) => {
+					const store = useStoreEvento();
+					return store.isActive() ? next() : next("/login");
+				},
+			},
 		],
 	},
 	{ path: "/duckracer", name: "Game", component: Game },

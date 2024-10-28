@@ -1,5 +1,5 @@
 <template>
-	<Panel class="w-full h-full ordenar border-none">
+	<Panel class="w-full h-full sin-panel-header ordenar border-none">
 		<div class="flex flex-wrap justify-content-center align-items-center">
 			<Card style="width: 35rem; overflow: hidden" class="p-3 shadow-6">
 				<template #title><div class="m-0 p-0 text-center w-full text-break">Crear orden</div></template>
@@ -69,6 +69,11 @@ export default {
 		btnOrden: false,
 		API: import.meta.env.VITE_APP_API,
 		store: null,
+		token: {
+			headers: {
+				Authorization: null,
+			},
+		},
 		User: {
 			saldo: "",
 			_id: null,
@@ -204,11 +209,7 @@ export default {
 		if (!this.store.isActive()) {
 			this.$router.push("/login");
 		}
-		this.token = {
-			headers: {
-				Authorization: `Bearer ${this.store.getToken()}`,
-			},
-		};
+		this.token.headers.Authorization = `Bearer ${this.store.getToken()}`;
 		this.User._id = this.store.getId();
 		this.paquetePromocion.idUsuario = this.store.getId();
 		await this.getUserInfo();
@@ -217,7 +218,7 @@ export default {
 };
 </script>
 <style>
-.ordenar > .p-panel-header {
+.sin-panel-header > .p-panel-header {
 	display: none !important;
 }
 </style>
