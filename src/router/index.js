@@ -25,6 +25,7 @@ import ControlReglas from "../components/ControlReglas.vue";
 import ActualizacionesReglas from "../components/ActualizacionesReglas.vue";
 import Regalos from "../components/Regalos.vue";
 import Proveedores from "../components/Proveedores.vue";
+import Ordenar from "../components/Ordenar.vue";
 
 const routes = [
 	{ path: "/", name: "Home", component: Home },
@@ -177,6 +178,15 @@ const routes = [
 					return store.isAdmin() ? next() : next("/login");
 				},
 			},
+			{
+				path: "/panel/ordenar",
+                name: "Ordenar",
+                component: Ordenar,
+                beforeEnter: (to, from, next) => {
+                    const store = useStoreEvento();
+                    return store.isActive() ? next() : next("/login");
+                },
+			}
 		],
 	},
 	{ path: "/duckracer", name: "Game", component: Game },
