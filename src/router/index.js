@@ -27,6 +27,7 @@ import Regalos from "../components/Regalos.vue";
 import Proveedores from "../components/Proveedores.vue";
 import Ordenar from "../components/Ordenar.vue";
 import AgregarFondos from "../components/AgregarFondos.vue";
+import Servicios from "../components/Servicios.vue";
 
 const routes = [
 	{ path: "/", name: "Home", component: Home },
@@ -196,7 +197,16 @@ const routes = [
 					const store = useStoreEvento();
 					return store.isActive() ? next() : next("/login");
 				},
+			},{
+				path: "/panel/servicios",
+				name: "Servicios",
+				component: Servicios,
+				beforeEnter: (to, from, next) => {
+					const store = useStoreEvento();
+					return store.isActive() ? next() : next("/login");
+				},
 			},
+			
 		],
 	},
 	{ path: "/duckracer", name: "Game", component: Game },
