@@ -1,115 +1,136 @@
 <template>
 	<Panel class="w-full h-screen agregar_fondos sin-panel-header border-none">
-		<div class="flex h-full flex-wrap justify-content-center align-items-center">
-			<Card style="width: 35rem; overflow: hidden" class="p-3 shadow-6">
-				<template #title><div class="m-0 p-0 text-center w-full text-break">Agregar fondos</div></template>
-				<template #content>
-					<form ref="formRecarga">
-						<div class="form-container">
-							<div class="flex flex-column gap-1 mb-2">
-								<label class="font-bold block">Método</label>
-								<Dropdown
-									v-model="metodoRecarga"
-									:options="metodosRecarga"
-									showClear
-									optionValue="metodo"
-									optionLabel="metodo"
-									placeholder="Selecciona método"
-								/>
-							</div>
-							<div v-if="metodoRecarga == 'OpenPay'" class="flex flex-column gap-1 mb-2">
+		<div class="flex flex-column gap-3 justify-content-center align-items-center">
+			<div class="flex h-full flex-wrap justify-content-center align-items-center">
+				<Card style="width: 35rem; overflow: hidden" class="p-3 shadow-6">
+					<template #title><div class="m-0 p-0 text-center w-full text-break">Agregar fondos</div></template>
+					<template #content>
+						<form ref="formRecarga">
+							<div class="form-container">
 								<div class="flex flex-column gap-1 mb-2">
-									<label class="font-bold block">Nombre</label>
-									<InputText name="nombre" v-model="crearRecargaOpenPay.customer.name" aria-describedby="url-help" />
-								</div>
-								<div class="flex flex-column gap-1 mb-2">
-									<label class="font-bold block">Apellido</label>
-									<InputText name="apellido" v-model="crearRecargaOpenPay.customer.last_name" aria-describedby="url-help" />
-								</div>
-								<div class="flex flex-column gap-1 mb-2">
-									<label class="font-bold block">Teléfono</label>
-									<InputText
-										name="telefono"
-										type="number"
-										v-model="crearRecargaOpenPay.customer.phone_number"
-										aria-describedby="url-help"
+									<label class="font-bold block">Método</label>
+									<Dropdown
+										v-model="metodoRecarga"
+										:options="metodosRecarga"
+										showClear
+										optionValue="metodo"
+										optionLabel="metodo"
+										placeholder="Selecciona método"
 									/>
 								</div>
-								<div class="flex flex-column gap-1 mb-2">
-									<label class="font-bold block">Correo Electrónico</label>
-									<InputText name="correo" type="email" v-model="crearRecargaOpenPay.customer.email" aria-describedby="url-help" />
-								</div>
-								<div class="flex flex-column gap-1 mb-2">
-									<label class="font-bold block">Cantidad</label>
-									<Dropdown
-										v-model="selectCantidad"
-										:options="paquetesRecargas"
-										filter
-										@change="changeRecarga"
-										optionLabel="nombre"
-										placeholder="Selecciona una opción"
-									>
-										<template #option="slotProps">
-											<div class="flex align-items-center">
-												<div>
-													{{ slotProps.option.nombre }} - {{ Math.ceil(slotProps.option.cop).toLocaleString() }} COP -
-													{{ slotProps.option.creditos }} CRÉDITOS
+								<div v-if="metodoRecarga == 'OpenPay'" class="flex flex-column gap-1 mb-2">
+									<div class="flex flex-column gap-1 mb-2">
+										<label class="font-bold block">Nombre</label>
+										<InputText name="nombre" v-model="crearRecargaOpenPay.customer.name" aria-describedby="url-help" />
+									</div>
+									<div class="flex flex-column gap-1 mb-2">
+										<label class="font-bold block">Apellido</label>
+										<InputText name="apellido" v-model="crearRecargaOpenPay.customer.last_name" aria-describedby="url-help" />
+									</div>
+									<div class="flex flex-column gap-1 mb-2">
+										<label class="font-bold block">Teléfono</label>
+										<InputText
+											name="telefono"
+											type="number"
+											v-model="crearRecargaOpenPay.customer.phone_number"
+											aria-describedby="url-help"
+										/>
+									</div>
+									<div class="flex flex-column gap-1 mb-2">
+										<label class="font-bold block">Correo Electrónico</label>
+										<InputText name="correo" type="email" v-model="crearRecargaOpenPay.customer.email" aria-describedby="url-help" />
+									</div>
+									<div class="flex flex-column gap-1 mb-2">
+										<label class="font-bold block">Cantidad</label>
+										<Dropdown
+											v-model="selectCantidad"
+											:options="paquetesRecargas"
+											filter
+											@change="changeRecarga"
+											optionLabel="nombre"
+											placeholder="Selecciona una opción"
+										>
+											<template #option="slotProps">
+												<div class="flex align-items-center">
+													<div>
+														{{ slotProps.option.nombre }} - {{ Math.ceil(slotProps.option.cop).toLocaleString() }} COP -
+														{{ slotProps.option.creditos }} CRÉDITOS
+													</div>
 												</div>
-											</div>
-										</template>
-									</Dropdown>
+											</template>
+										</Dropdown>
+									</div>
+									<div class="flex flex-column gap-1 my-2">
+										<Message icon="pi pi-dollar" class="m-0" v-if="crearRecargaOpenPay.amount" severity="success" :closable="false">
+											{{ Math.ceil(crearRecargaOpenPay.amount).toLocaleString() }} COP
+										</Message>
+									</div>
+									<div class="flex flex-column gap-1 mb-1">
+										<Message icon="pi pi-bitcoin" class="m-0" v-if="selectCantidad.creditos" :closable="false">
+											{{ selectCantidad.creditos.toLocaleString() }} CRÉDITOS
+										</Message>
+									</div>
 								</div>
-								<div class="flex flex-column gap-1 my-2">
-									<Message icon="pi pi-dollar" class="m-0" v-if="crearRecargaOpenPay.amount" severity="success" :closable="false">
-										{{ Math.ceil(crearRecargaOpenPay.amount).toLocaleString() }} COP
-									</Message>
-								</div>
-								<div class="flex flex-column gap-1 mb-1">
-									<Message icon="pi pi-bitcoin" class="m-0" v-if="selectCantidad.creditos" :closable="false">
-										{{ selectCantidad.creditos.toLocaleString() }} CRÉDITOS
-									</Message>
-								</div>
-							</div>
 
-							<div v-else-if="metodoRecarga == 'Binance'" class="flex flex-column gap-1 mb-2">
-								<div class="flex flex-column gap-1 mb-2" v-if="!checkoutBinance.checkoutUrl">
-									<label class="font-bold block">Cantidad</label>
-									<Dropdown
-										v-model="selectCantidad"
-										filter
-										:options="paquetesRecargas"
-										@change="changeRecarga"
-										optionLabel="nombre"
-										placeholder="Selecciona cantidad"
-									>
-										<template #option="slotProps">
-											<div class="flex align-items-center">
-												<div>{{ slotProps.option.usd }} USDT - {{ slotProps.option.creditos }} CRÉDITOS</div>
-											</div>
-										</template>
-									</Dropdown>
-								</div>
-								<div class="flex flex-column gap-1 mb-2" v-if="!checkoutBinance.checkoutUrl">
-									<Message icon="pi pi-bitcoin" v-if="selectCantidad.creditos" :closable="false">
-										{{ selectCantidad.creditos.toLocaleString() }} CRÉDITOS
-									</Message>
-								</div>
-								<div class="flex justify-content-center gap-1 mb-2">
-									<Image v-if="checkoutBinance.qrcodeLink" :src="checkoutBinance.qrcodeLink" alt="Image" width="250" preview />
+								<div v-else-if="metodoRecarga == 'Binance'" class="flex flex-column gap-1 mb-2">
+									<div class="flex flex-column gap-1 mb-2" v-if="!checkoutBinance.checkoutUrl">
+										<label class="font-bold block">Cantidad</label>
+										<Dropdown
+											v-model="selectCantidad"
+											filter
+											:options="paquetesRecargas"
+											@change="changeRecarga"
+											optionLabel="nombre"
+											placeholder="Selecciona cantidad"
+										>
+											<template #option="slotProps">
+												<div class="flex align-items-center">
+													<div>{{ slotProps.option.usd }} USDT - {{ slotProps.option.creditos }} CRÉDITOS</div>
+												</div>
+											</template>
+										</Dropdown>
+									</div>
+									<div class="flex flex-column gap-1 mb-2" v-if="!checkoutBinance.checkoutUrl">
+										<Message icon="pi pi-bitcoin" v-if="selectCantidad.creditos" :closable="false">
+											{{ selectCantidad.creditos.toLocaleString() }} CRÉDITOS
+										</Message>
+									</div>
+									<div class="flex justify-content-center gap-1 mb-2">
+										<Image v-if="checkoutBinance.qrcodeLink" :src="checkoutBinance.qrcodeLink" alt="Image" width="250" preview />
+									</div>
 								</div>
 							</div>
+						</form>
+					</template>
+					<template #footer>
+						<div class="flex flex-column flex-wrap gap-2 mt-1">
+							<Button label="Pagar" icon="pi pi-check" v-if="!checkoutBinance.checkoutUrl" :disabled="btnPagar" @click="pagar" />
+							<a :href="checkoutBinance.checkoutUrl" v-if="checkoutBinance.checkoutUrl">
+								<Button label="Binance Pay" icon="pi pi-wallet" severity="warning" />
+							</a>
 						</div>
-					</form>
-				</template>
-				<template #footer>
-					<div class="flex flex-column flex-wrap gap-2 mt-1">
-						<Button label="Pagar" icon="pi pi-check" v-if="!checkoutBinance.checkoutUrl" :disabled="btnPagar" @click="pagar" />
-						<a :href="checkoutBinance.checkoutUrl" v-if="checkoutBinance.checkoutUrl">
-							<Button label="Binance Pay" icon="pi pi-wallet" severity="warning" />
-						</a>
-					</div>
-				</template>
-			</Card>
+					</template>
+				</Card>
+			</div>
+			<DataTable
+				:value="misRecargas"
+				sortField="estado"
+				:sortOrder="1"
+				paginator
+				:rows="5"
+				:rowsPerPageOptions="[5, 10, 20, 50]"
+				class="my-3 shadow-6 w-full"
+				tableStyle="min-width: 100%"
+			>
+				<Column field="pasarela" header="Método" sortable class="primera-mayus" />
+				<Column field="createdAt" header="Fecha" sortable>
+					<template #body="props">{{ getFechaFormat(props.data.createdAt) }}</template>
+				</Column>
+				<Column field="currency" header="Moneda" sortable />
+				<Column field="creditos" header="Créditos" sortable />
+				<Column field="total" header="Total" />
+				<Column field="estado" header="Estado" class="primera-mayus" sortable />
+			</DataTable>
 		</div>
 	</Panel>
 </template>
@@ -129,6 +150,7 @@ export default {
 			saldo: "",
 			_id: null,
 		},
+		misRecargas: [],
 		btnPagar: false,
 		paquetesRecargas: [],
 		metodoRecarga: null,
@@ -155,6 +177,10 @@ export default {
 		},
 	}),
 	methods: {
+		getFechaFormat(fecha) {
+			const d = new Date(fecha).toISOString();
+			return `${d.slice(0, 10)} ${d.slice(11, 16)}`;
+		},
 		changeRecarga() {
 			if (this.metodoRecarga == "OpenPay") {
 				this.crearRecargaOpenPay.amount = this.selectCantidad.cop;
@@ -353,6 +379,31 @@ export default {
 					}
 				});
 		},
+		async getMisRecargas() {
+			await axios
+				.get(`${this.API}/usuario/${this.User._id}/recargas`, this.token)
+				.then((response) => {
+					this.misRecargas = response.data;
+				})
+				.catch((error) => {
+					switch (error.response.data.statusCode) {
+						case 401:
+							//Se le termino la sesión
+							this.store.clearUser();
+							this.$router.push("/login");
+							break;
+						default:
+							this.$toast.add({
+								severity: "error",
+								summary: "Obteniendo recargas",
+								detail: error.response.data.message,
+								life: 1500,
+							});
+							console.log("Error: ", error);
+							break;
+					}
+				});
+		},
 	},
 	async created() {
 		this.store = useStoreEvento();
@@ -362,13 +413,13 @@ export default {
 		this.token.headers.Authorization = `Bearer ${this.store.getToken()}`;
 		this.User._id = this.store.getId();
 		await this.getUserInfo();
+		await this.getMisRecargas();
 		await this.getPricingRecargas();
 	},
 };
 </script>
 <style>
-.agregar_fondos > .p-toggleable-content,
-.agregar_fondos > .p-toggleable-content > * {
-	height: 100%;
+.agregar_fondos > .p-toggleable-content {
+	height: 100vh;
 }
 </style>
