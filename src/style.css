@@ -24,9 +24,11 @@ html {
 .Panel,
 .Panel>*,
 .main,
+.main>*,
 .p-panel,
-.p-panel .p-panel-content {
-  height: 100vh !important;
+.p-panel .p-panel-content,
+.p-toggleable-content {
+  height: auto !important;
 }
 
 p {
