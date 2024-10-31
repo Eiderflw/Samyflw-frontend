@@ -32,7 +32,7 @@
 			</template>
 			<Column field="service" header="ID Servicio" sortable />
 			<Column field="name" header="Descripción" />
-			<Column field="rate" header="Precio x1000" sortable />
+			<Column field="rate" header="Precio" sortable />
 			<Column field="min" header="Min Orden" sortable />
 			<Column field="max" header="Max Orden" sortable />
 		</DataTable>

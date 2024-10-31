@@ -5,7 +5,13 @@
 			<template #header>
 				<div class="flex flex-column items-center gap-2 flex-end w-full justify-content-between">
 					<h1 class="m-0">Ordenes</h1>
-					<SelectButton v-model="estadoOrden" @change="filtrarOrdenes" :options="estadoOrdenes" aria-labelledby="basic" />
+					<SelectButton
+						v-model="estadoOrden"
+						@change="filtrarOrdenes"
+						optionLabel="title"
+						optionValue="value"
+						:options="estadoOrdenes"
+					/>
 				</div>
 			</template>
 			<DataTable
@@ -29,9 +35,7 @@
 					</div>
 				</template>
 				<template #empty>
-					<div class="flex flex-column align-items-center text-center gap-2 flex-end w-full justify-content-end">
-						Sin ordenes
-					</div>
+					<div class="flex flex-column align-items-center text-center gap-2 flex-end w-full justify-content-end">Sin ordenes</div>
 				</template>
 				<Column field="fecha" header="Fecha" sortable style="min-width: 11rem">
 					<template #body="props">{{ props.data.fecha.slice(0, 10) }} {{ props.data.fecha.slice(11, 16) }}</template>
@@ -63,7 +67,15 @@ export default {
 		store: null,
 		token: { headers: { Authorization: null } },
 		estadoOrden: "Todos",
-		estadoOrdenes: ["Todos", "Pending", "In progress", "Completed", "Partial", "Processing", "Canceled"],
+		estadoOrdenes: [
+			{ title: "Todos", value: "Todos" },
+			{ title: "Pendiente", value: "Pending" },
+			{ title: "En progreso", value: "In progress" },
+			{ title: "Completado", value: "Completed" },
+			{ title: "Parcial", value: "Partial" },
+			{ title: "Procesando", value: "Processing" },
+			{ title: "Cancelado", value: "Canceled" },
+		],
 		ordenes: [],
 		copia_ordenes: [],
 		filtersOrdenes: {

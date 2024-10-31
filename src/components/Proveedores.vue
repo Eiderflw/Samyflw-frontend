@@ -41,15 +41,16 @@
 				</template>
 			</Column>
 		</DataTable>
-		<!-- Modal agregar evento -->
+		<!-- Modal agregar proveedor -->
 		<Dialog
 			v-model:visible="modalProveedor"
-			header="Nuevo proveedor"
+			:header="id_current_edit_proveedor == null ? 'Nuevo proveedor' : 'Editar proveedor'"
 			:style="{ width: '40rem' }"
 			:breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
 			position="top"
 			:modal="true"
 			:draggable="false"
+			@hide="resetPaqueteProveedor"
 		>
 			<form ref="formProveedor">
 				<div class="flex flex-column gap-1 mb-2">
@@ -101,6 +102,14 @@ export default {
 		proveedores: [],
 	}),
 	methods: {
+		resetPaqueteProveedor() {
+			this.id_current_edit_proveedor = null;
+			this.paquete = {
+				nombre: null,
+				api_url: null,
+				api_key: null,
+			};
+		},
 		editarProveedorDialog(proveedor) {
 			if (proveedor) {
 				this.id_current_edit_proveedor = proveedor._id;
@@ -199,30 +208,30 @@ export default {
 					})
 					.catch((error) => {
 						switch (error.response.data.statusCode) {
-                            case 400:
-                                //Bad Request
-                                this.$toast.add({
-                                    severity: "error",
-                                    summary: "Editar proveedor",
-                                    detail: "Formato de los datos incorrecto",
-                                    life: 1600,
-                                });
-                                break;
-                            case 401:
-                                //Se le termino la sesión
-                                this.store.clearUser();
-                                this.$router.push("/login");
-                                break;
-                            default:
-                                this.$toast.add({
-                                    severity: "error",
-                                    summary: "Editar proveedor",
-                                    detail: "Sucedió un error, comuníquese con soporte",
-                                    life: 1600,
-                                });
-                                console.log("Error: ", error);
-                                break;
-                        }
+							case 400:
+								//Bad Request
+								this.$toast.add({
+									severity: "error",
+									summary: "Editar proveedor",
+									detail: "Formato de los datos incorrecto",
+									life: 1600,
+								});
+								break;
+							case 401:
+								//Se le termino la sesión
+								this.store.clearUser();
+								this.$router.push("/login");
+								break;
+							default:
+								this.$toast.add({
+									severity: "error",
+									summary: "Editar proveedor",
+									detail: "Sucedió un error, comuníquese con soporte",
+									life: 1600,
+								});
+								console.log("Error: ", error);
+								break;
+						}
 					});
 			}
 			this.btnCrearProveedor = false;

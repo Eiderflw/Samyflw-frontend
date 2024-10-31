@@ -7,11 +7,26 @@
 					<form ref="formServicio">
 						<div class="form-container">
 							<div class="flex flex-column gap-1 mb-2">
+								<label class="font-bold block">Categorías</label>
+								<Dropdown
+									v-model="categoriaSelect"
+									:options="categoriasFilter"
+									emptyMessage="Sin categorías disponibles"
+									filter
+									optionLabel="categoria"
+									optionValue="categoria"
+									placeholder="Selecciona categoría para filtrar servicios"
+									aria-describedby="categoria-help"
+								/>
+								<small id="categoria-help">Selecciona una categoría para filtrar los servicios.</small>
+							</div>
+							<div class="flex flex-column gap-1 mb-2">
 								<label class="font-bold block">Servicios</label>
 								<Dropdown
 									v-model="servicioSelect"
 									showClear
-									:options="serviciosActivos"
+									:options="servicios"
+									emptyMessage="Sin servicios disponibles"
 									filter
 									optionLabel="name"
 									@update:modelValue="selectServicio"
@@ -80,7 +95,10 @@ export default {
 		},
 		min: 1,
 		max: 2,
+		categoriaSelect: null,
+		categoriasFilter: [],
 		servicioSelect: null,
+		servicios: [],
 		serviciosActivos: [],
 		paquetesRecargas: [],
 		paquetePromocion: {
@@ -94,6 +112,16 @@ export default {
 		},
 		help_cantidad: "Cantidad del servicio.",
 	}),
+	watch: {
+		categoriaSelect: {
+			handler(newVal) {
+				if (newVal) {
+					this.servicios = this.serviciosActivos.filter((s) => s.category == newVal);
+				}
+			},
+			deep: true,
+		},
+	},
 	methods: {
 		selectServicio(event) {
 			this.paquetePromocion.proveedor = event.proveedor._id;
@@ -136,6 +164,15 @@ export default {
 				.get(`${this.API}/promocion/servicesActive`, this.token)
 				.then((response) => {
 					this.serviciosActivos = response.data;
+					this.serviciosActivos.forEach((service) => {
+						const existCat = this.categoriasFilter.some((cat) => cat.categoria == service.category);
+						if (!existCat) {
+							this.categoriasFilter.push({ categoria: service.category });
+						}
+					});
+					if (this.categoriasFilter.length > 0) {
+						this.categoriaSelect = this.categoriasFilter[0].categoria;
+					}
 				})
 				.catch((error) => {
 					switch (error.response.data.statusCode) {
