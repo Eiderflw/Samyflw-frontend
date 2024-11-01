@@ -103,6 +103,7 @@
 			maximizable
 		>
 			<DataTable
+				ref="dtServicios"
 				:value="servicios"
 				:filters="filters"
 				paginator
@@ -123,17 +124,27 @@
 								<Button icon="pi pi-trash" label="Vaciar" @click="selectedServicios = []" />
 							</div>
 						</div>
-						<Dropdown
-							v-model="categoria"
-							:options="categorias"
-							filter
-							showClear
-							optionLabel="categoria"
-							@update:modelValue="filtrarCategorias"
-							optionValue="categoria"
-							placeholder="Selecciona una categoría para filtrar"
-							class="w-full"
-						/>
+						<div class="flex overflow-hidden flex-wrap w-full align-items-center justify-content-end gap-2">
+							<Dropdown
+								v-model="categoria"
+								:options="categorias"
+								filter
+								showClear
+								optionLabel="categoria"
+								@update:modelValue="filtrarCategorias"
+								optionValue="categoria"
+								placeholder="Selecciona una categoría para filtrar"
+								class="flex-1 w-full"
+							/>
+							<Button
+								class="w-max m-2"
+								v-tooltip.top="'Se seleccionarán todas las filas visibles'"
+								severity="info"
+								icon="pi pi-check"
+								label="Seleccionar todo"
+								@click="selectServicios"
+							/>
+						</div>
 					</div>
 				</template>
 				<Column field="proveedor.nombre" header="Proveedor" sortable />
@@ -261,9 +272,26 @@ export default {
 		ordenesHistorial: [],
 	}),
 	methods: {
-		filtrarProveedores(proveedor) {
-			console.log(proveedor);
+		selectServicios() {
+			const rowsVisible = this.$refs.dtServicios.dataToRender();
+			if (rowsVisible.length > 0) {
+				let addSelected = rowsVisible.filter((r) => {
+					return !this.selectedServicios.some((s) => s.proveedor == r.proveedor._id && s.service == r.service);
+				});
 
+				if (addSelected.length > 0) {
+					addSelected = addSelected.map((s) => ({ proveedor: s.proveedor._id, service: s.service }));
+					this.selectedServicios = this.selectedServicios.concat(addSelected);
+					this.$toast.add({
+						severity: "info",
+						summary: "Servicios seleccionados",
+						detail: `Se agregaron ${addSelected.length} servicios`,
+						life: 1600,
+					});
+				}
+			}
+		},
+		filtrarProveedores(proveedor) {
 			if (proveedor != null) {
 				this.servicios =
 					proveedor == "Todos" ? this.copia_servicios : this.copia_servicios.filter((servicio) => servicio.proveedor.nombre === proveedor);
