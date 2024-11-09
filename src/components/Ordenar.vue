@@ -29,6 +29,7 @@
 									emptyMessage="Sin servicios disponibles"
 									filter
 									optionLabel="name"
+									:filterFields="['service', 'name']"
 									@update:modelValue="selectServicio"
 									placeholder="Selecciona servicio"
 								>
