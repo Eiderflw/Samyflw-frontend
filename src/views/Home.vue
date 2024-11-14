@@ -1,131 +1,43 @@
 <template>
 	<div class="home">
-		<NavBar></NavBar>
+		<NavBar />
 		<div class="inicio">
-			<div class="bg">
-				<div class="bubbles bubblesP">
-					<span style="--i: 11"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 24"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 14"></span>
-					<span style="--i: 23"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 16"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 11"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 24"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 14"></span>
-					<span style="--i: 23"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 16"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 24"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 14"></span>
-					<span style="--i: 23"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 16"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 11"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 24"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 14"></span>
-					<span style="--i: 23"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 16"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-					<span style="--i: 18"></span>
-					<span style="--i: 21"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 15"></span>
-					<span style="--i: 26"></span>
-					<span style="--i: 17"></span>
-					<span style="--i: 13"></span>
-					<span style="--i: 28"></span>
-					<span style="--i: 19"></span>
-					<span style="--i: 20"></span>
-					<span style="--i: 22"></span>
-					<span style="--i: 25"></span>
-				</div>
-			</div>
 			<div class="fondo">
+				<div class="destacado" id="destacado">
+					<video src="/assets/video/home/fondo_leones.mp4" autoplay muted>
+						<source src="/assets/video/home/fondo_leones.mp4" type="video/mp4" />
+						Tu navegador no soporta esta funcionalidad video
+					</video>
+					<div class="diamantes w-max">
+						<div class="title">
+							<div class="animacion" />
+						</div>
+						<div class="flex w-full flex-wrap gap-1 justify-content-center align-items-center">
+							<img src="/assets/img/home/diamante.gif" alt="Diamantes" style="width: 40px; object-fit: fill" />
+							<p class="m-0 text-2xl text-center font-bold">{{ top3[0].diamantes_mes_actual }}</p>
+						</div>
+					</div>
+					<div class="top">
+						<img class="fondo" src="/assets/img/home/marco-foto.png" alt="Marco foto" />
+						<img :src="top3[0].foto" alt="Top 1" class="top_destacado" />
+						<p class="m-0 username">{{ top3[0].usuario }}</p>
+					</div>
+					<div class="categoria w-max flex flex-column flex-wrap gap-1 justify-content-center align-items-center">
+						<h2 class="m-0 white-space-nowrap overflow-hidden text-overflow-ellipsis w-full text-center">CATEGORIA</h2>
+						<div class="rookie" v-if="top3[0].categoria == 'Rookie'">
+							<div class="animacion" />
+						</div>
+						<div class="veteran" v-else-if="top3[0].categoria == 'Veteran'">
+							<div class="animacion" />
+						</div>
+						<div class="pro" v-else-if="top3[0].categoria == 'Pro'">
+							<div class="animacion" />
+						</div>
+						<div class="proplus" v-else-if="top3[0].categoria == 'Pro+'">
+							<div class="animacion" />
+						</div>
+					</div>
+				</div>
 				<section id="hero">
 					<div class="hero-container">
 						<h1 class="mb-4 pb-0 animation-duration-1000">
@@ -144,74 +56,6 @@
 						</a>
 					</div>
 				</section>
-				<div class="bg">
-					<div class="bubbles bubblesP">
-						<span style="--i: 11"></span>
-						<span style="--i: 22"></span>
-						<span style="--i: 24"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 14"></span>
-						<span style="--i: 23"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 16"></span>
-						<span style="--i: 19"></span>
-						<span style="--i: 20"></span>
-						<span style="--i: 22"></span>
-						<span style="--i: 25"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 21"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 15"></span>
-						<span style="--i: 26"></span>
-						<span style="--i: 17"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 28"></span>
-						<span style="--i: 11"></span>
-						<span style="--i: 22"></span>
-						<span style="--i: 24"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 14"></span>
-						<span style="--i: 23"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 16"></span>
-						<span style="--i: 19"></span>
-						<span style="--i: 20"></span>
-						<span style="--i: 22"></span>
-						<span style="--i: 25"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 21"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 15"></span>
-						<span style="--i: 26"></span>
-						<span style="--i: 17"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 28"></span>
-						<span style="--i: 19"></span>
-						<span style="--i: 20"></span>
-						<span style="--i: 22"></span>
-						<span style="--i: 25"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 21"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 15"></span>
-						<span style="--i: 26"></span>
-						<span style="--i: 17"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 28"></span>
-						<span style="--i: 19"></span>
-						<span style="--i: 20"></span>
-						<span style="--i: 22"></span>
-						<span style="--i: 25"></span>
-						<span style="--i: 18"></span>
-						<span style="--i: 21"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 15"></span>
-						<span style="--i: 26"></span>
-						<span style="--i: 17"></span>
-						<span style="--i: 13"></span>
-						<span style="--i: 28"></span>
-					</div>
-				</div>
 				<section id="novedades">
 					<div class="containerC pb-5 flex-column align-items-center">
 						<h1 class="mb-0">Novedades</h1>
@@ -448,13 +292,66 @@ export default {
 			},
 		],
 		novedades: [],
+		topAgencias: [],
+		top3: [
+			{
+				usuario: "x",
+				foto: "/assets/img/perfil1.jpg",
+				categoria: "",
+				diamantes_mes_actual: 0,
+				grupo: "",
+			},
+			{
+				usuario: "x",
+				foto: "",
+				categoria: "",
+				diamantes_mes_actual: 0,
+				grupo: "",
+			},
+			{
+				usuario: "x",
+				foto: "",
+				categoria: "",
+				diamantes_mes_actual: 0,
+				grupo: "",
+			},
+		],
 	}),
 	async created() {
+		await axios.get(`${this.API}/usuario/top`).then((resp) => {
+			if (resp.data.length > 0) {
+				const usuarios = resp.data.flatMap((grupo) => grupo.usuarios);
+				usuarios.sort((a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual);
+
+				//this.top3[0].foto = usuarios[0].foto;
+				this.top3[0].usuario = usuarios[0].usuario;
+				this.top3[0].categoria = "Veteran"; //usuarios[0].creator_type;
+				this.top3[0].diamantes_mes_actual = usuarios[0].diamantes_mes_actual;
+				this.top3[0].grupo = usuarios[0].grupo;
+
+				this.top3[1].foto = usuarios[1].foto;
+				this.top3[1].usuario = usuarios[1].usuario;
+				this.top3[1].categoria = usuarios[1].creator_type;
+				this.top3[1].diamantes_mes_actual = usuarios[1].diamantes_mes_actual;
+				this.top3[1].grupo = usuarios[1].grupo;
+
+				this.top3[2].foto = usuarios[2].foto;
+				this.top3[2].usuario = usuarios[2].usuario;
+				this.top3[2].categoria = usuarios[2].creator_type;
+				this.top3[2].diamantes_mes_actual = usuarios[2].diamantes_mes_actual;
+				this.top3[2].grupo = usuarios[2].grupo;
+			}
+		});
+
 		await axios.get(`${this.API}/regla-actualizacion/nuevas`).then((resp) => {
 			this.novedades = resp.data;
 		});
 		await axios.get(`${this.API}/usuario/homeCreadores`).then((resp) => {
 			this.clasificados = resp.data;
+		});
+
+		await axios.get(`${this.API}/usuario/agencias/top10`).then((resp) => {
+			this.topAgencias = resp.data;
 		});
 	},
 };
@@ -469,9 +366,13 @@ html {
 	margin: 0;
 	padding: 0;
 	min-height: 100vh;
-	background: #0c192c;
+	background: #000000;
 	box-sizing: border-box;
 	scroll-behavior: smooth !important;
+}
+
+.home {
+	background: #000000;
 }
 
 #clasificados {
@@ -480,54 +381,111 @@ html {
 	background: -webkit-linear-gradient(to right, #18c499, #d8f05e);
 	background: linear-gradient(to right, #18c499, #d8f05e);
 }
-
-.bg {
-	position: absolute;
+.destacado {
+	width: 100%;
+	height: 520px;
+}
+.destacado > * {
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	object-fit: contain;
+	object-position: top;
 }
-
-.bubbles {
-	position: relative;
+.destacado > .diamantes > .title {
+	background-image: url("/assets/img/home/diamantes-title.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	object-fit: contain;
+	height: 54px;
+	width: 300px;
+	margin: 0;
+}
+.destacado > .diamantes > .title > .animacion,
+.destacado > .categoria > div > .animacion {
+	height: 100%;
+	width: 100%;
+	background: url("/assets/img/home/electricidad.gif");
+	object-fit: contain;
+	mix-blend-mode: lighten;
+	background-repeat: no-repeat;
+}
+.destacado > .diamantes {
+	position: absolute;
+	left: 16%;
+	top: 230px;
+	height: auto;
+}
+.destacado > .categoria {
+	position: absolute;
+	text-align: center;
+	right: 14%;
+	top: 220px;
+	height: auto;
+}
+.destacado > .categoria > h2 {
+	height: 22px;
+}
+.destacado > .categoria > div {
+	pointer-events: none;
+	background-repeat: no-repeat;
+	background-position: top;
+	background-size: contain;
+	object-fit: contain;
+	height: 54px;
+	width: 300px;
+	margin: 0;
+}
+.destacado > .categoria > .rookie {
+	background-image: url("/assets/img/grupos/rookie.png");
+}
+.destacado > .categoria > .veteran {
+	background-image: url("/assets/img/grupos/veterano.png");
+}
+.destacado > .categoria > .pro {
+	background-image: url("/assets/img/grupos/pro.png");
+}
+.destacado > .categoria > .proplus {
+	background-image: url("/assets/img/grupos/pro+.png");
+}
+.destacado > video {
+	min-height: 540px;
+	height: 540px;
+	max-height: 650px;
+}
+.destacado > .top {
+	position: absolute;
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
+	align-items: center;
+	top: 137px;
 }
-
-.bubbles span {
-	position: relative;
-	min-width: 15px;
-	height: 15px;
-	background: #4fc3dc;
+.destacado > .top > img.fondo {
+	width: 80%;
+	object-fit: contain;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+.destacado > .top > img.top_destacado {
+	position: absolute;
 	border-radius: 50%;
-	box-shadow: 0 0 0 10px #4fc3dc44, 0 0 50px #4fc3dc, 0 0 100px #4fc3dc;
-	margin: 0 4px;
-	animation: animate 15s linear infinite;
-	animation-duration: calc(205s / var(--i));
+	bottom: 16px;
+	left: calc(50% - 69px);
+	width: 136px;
+	height: 136px;
 }
-
-.bubblesP span {
-	min-width: 2px;
-	height: 2px;
-	box-shadow: 0px;
-	border-radius: 100%;
-	animation: animate 15s linear infinite;
-	animation-duration: calc(45s / var(--i));
-}
-
-.bubbles span:nth-child(even) {
-	background: #84dc16;
-	box-shadow: 0 0 0 10px #84dc1644, 0 0 50px #84dc16, 0 0 100px #84dc16;
-}
-
-@keyframes animate {
-	0% {
-		transform: translateY(100vh) scale(0);
-	}
-
-	100% {
-		transform: translateY(-10vh) scale(0.5);
-	}
+.destacado > .top > .username {
+	position: absolute;
+	text-align: center;
+	width: 208px;
+	font-weight: bold;
+	font-size: 20px;
+	max-width: 208px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	bottom: -76px;
+	left: calc(50% - 94px);
 }
 
 #hero {
@@ -756,5 +714,502 @@ html {
 }
 .descripcion::-webkit-scrollbar-thumb:hover {
 	background: #84dc09;
+}
+
+@media (max-width: 1263px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 245px !important;
+		height: 50px !important;
+	}
+	.destacado > video {
+		background: red !important;
+		object-fit: fill !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: 19px !important;
+		left: calc(50% - 67px) !important;
+		width: 133px !important;
+		height: 133px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -67px !important;
+	}
+}
+
+@media (max-width: 1212px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 27px !important;
+		left: calc(50% - 63px) !important;
+		width: 125px !important;
+		height: 125px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -60px !important;
+	}
+}
+@media (max-width: 1170px) {
+	.destacado > .top > .username {
+		bottom: -53px !important;
+	}
+}
+@media (max-width: 1125px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 31px !important;
+		left: calc(50% - 60px) !important;
+		width: 120px !important;
+		height: 120px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -46px !important;
+	}
+}
+@media (max-width: 1077px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 37px !important;
+		left: calc(50% - 57px) !important;
+		width: 112px !important;
+		height: 112px !important;
+	}
+	.destacado > .diamantes {
+		left: 11% !important;
+	}
+	.destacado > .top > .username {
+		bottom: -40px !important;
+	}
+}
+@media (max-width: 1051px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 41px !important;
+		left: calc(50% - 54px) !important;
+		width: 108px !important;
+		height: 108px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -35px !important;
+	}
+}
+@media (max-width: 1010px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 44px !important;
+		left: calc(50% - 53px) !important;
+		width: 104px !important;
+		height: 104px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -30px !important;
+	}
+}
+
+@media (max-width: 977px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 47px !important;
+		left: calc(50% - 51px) !important;
+		width: 100px !important;
+		height: 100px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -24px !important;
+		font-size: 16px !important;
+	}
+}
+@media (max-width: 958px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 48px !important;
+		left: calc(50% - 50px) !important;
+		width: 100px !important;
+		height: 100px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -18px !important;
+	}
+}
+@media (max-width: 911px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 52px !important;
+		left: calc(50% - 49px) !important;
+		width: 95px !important;
+		height: 95px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -12px !important;
+	}
+}
+@media (max-width: 878px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 56px !important;
+		left: calc(50% - 46px) !important;
+		width: 90px !important;
+		height: 90px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -6px !important;
+	}
+	.destacado > .categoria {
+		right: 9%;
+		top: 224px;
+	}
+}
+@media (max-width: 850px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 60px !important;
+		left: calc(50% - 43px) !important;
+		width: 85px !important;
+		height: 85px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -2px !important;
+	}
+	.destacado > .diamantes {
+		left: 30px !important;
+	}
+	.destacado > .categoria {
+		right: 45px !important;
+	}
+}
+@media (max-width: 840px) {
+	.destacado > .top > img.top_destacado {
+		bottom: 60px !important;
+		left: calc(50% - 43px) !important;
+		width: 85px !important;
+		height: 85px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -2px !important;
+	}
+}
+@media (max-width: 812px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 88px) !important;
+		left: calc(50% - 50px) !important;
+		width: 100px !important;
+		height: 100px !important;
+	}
+
+	.destacado > .top > img.fondo {
+		width: 95% !important;
+	}
+	.destacado > .top > .username {
+		bottom: -20px !important;
+	}
+}
+@media (max-width: 766px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 88px) !important;
+		left: calc(50% - 50px) !important;
+		width: 100px !important;
+		height: 100px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -11px !important;
+	}
+
+	.destacado > .diamantes {
+		left: 20px !important;
+	}
+	.destacado > .categoria {
+		right: 30px !important;
+	}
+}
+@media (max-width: 733px) {
+	.containerC {
+		flex-direction: column;
+		align-items: center !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 79px) !important;
+		left: calc(50% - 46px) !important;
+		width: 90px !important;
+		height: 90px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -5px !important;
+	}
+
+	.destacado > .diamantes {
+		left: 20px !important;
+	}
+	.destacado > .categoria {
+		right: 30px !important;
+	}
+}
+@media (max-width: 700px) {
+	.destacado > .top > img.fondo {
+		width: 99% !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 79px) !important;
+		left: calc(50% - 46px) !important;
+		width: 90px !important;
+		height: 90px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -6px !important;
+	}
+
+	.destacado > .diamantes {
+		left: 20px !important;
+	}
+	.destacado > .categoria {
+		right: 30px !important;
+	}
+}
+@media (max-width: 678px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 76px) !important;
+		left: calc(50% - 43px) !important;
+		width: 86px !important;
+		height: 86px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -1px !important;
+	}
+
+	.destacado > .diamantes {
+		left: 8px !important;
+	}
+	.destacado > .categoria {
+		right: 8px !important;
+	}
+}
+@media (max-width: 660px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 190px !important;
+		height: 40px !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 76px) !important;
+		left: calc(50% - 43px) !important;
+		width: 86px !important;
+		height: 86px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 1px !important;
+		font-size: 15px !important;
+	}
+
+	.destacado > .diamantes,
+	.destacado > .categoria {
+		top: 255px !important;
+	}
+}
+@media (max-width: 635px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 71px) !important;
+		left: calc(50% - 41px) !important;
+		width: 81px !important;
+		height: 81px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 7px !important;
+		left: calc(50% - 99px) !important;
+	}
+}
+@media (max-width: 610px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 69px) !important;
+		left: calc(50% - 40px) !important;
+		width: 79px !important;
+		height: 79px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 13px !important;
+		font-size: 14px !important;
+	}
+}
+@media (max-width: 585px) {
+	.destacado > .diamantes > .title > .animacion,
+	.destacado > .categoria > div > .animacion {
+		background-size: contain !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 65px) !important;
+		left: calc(50% - 39px) !important;
+		width: 76px !important;
+		height: 75px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 17px !important;
+		font-size: 13.5px !important;
+	}
+}
+@media (max-width: 561px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 62px) !important;
+		left: calc(50% - 35px) !important;
+		width: 70px !important;
+		height: 70px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 22px !important;
+		font-size: 13px !important;
+	}
+}
+@media (max-width: 540px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 60px) !important;
+		left: calc(50% - 35px) !important;
+		width: 68px !important;
+		height: 68px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 27px !important;
+		font-size: 13.1px !important;
+	}
+}
+@media (max-width: 520px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 160px !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 60px) !important;
+		left: calc(50% - 35px) !important;
+		width: 68px !important;
+		height: 68px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 27px !important;
+	}
+}
+@media (max-width: 510px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 150px !important;
+	}
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 57px) !important;
+		left: calc(50% - 33px) !important;
+		width: 66px !important;
+		height: 66px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 33px !important;
+	}
+}
+@media (max-width: 485px) {
+	.destacado > .top > .username {
+		bottom: 35px !important;
+	}
+}
+@media (max-width: 472px) {
+	.destacado > .top > .username {
+		bottom: 39px !important;
+	}
+}
+@media (max-width: 450px) {
+	.destacado > .top > .username {
+		bottom: 42px !important;
+	}
+}
+@media (max-width: 436px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 55px) !important;
+		left: calc(50% - 35px) !important;
+		width: 68px !important;
+		height: 68px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: 45px !important;
+	}
+
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 130px !important;
+		height: 30px !important;
+	}
+}
+@media (max-width: 418px) {
+	.destacado > .top > .username {
+		bottom: 48px !important;
+		font-size: 15px !important;
+	}
+}
+@media (max-width: 400px) {
+	.destacado > .top > .username {
+		bottom: 51px !important;
+	}
+}
+@media (max-width: 387px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 120px !important;
+	}
+	.destacado > .categoria {
+		right: 2px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 51px !important;
+	}
+}
+@media (max-width: 375px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 110px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 54px !important;
+	}
+	.destacado > .categoria > div {
+		width: 100% !important;
+	}
+	.destacado > .categoria {
+		max-width: 141px !important;
+		width: 100% !important;
+		overflow: hidden !important;
+	}
+	.destacado > .diamantes > div:last-child > img {
+		width: 30px !important;
+		height: 30px !important;
+	}
+	.destacado > .diamantes > div:last-child > p,
+	.destacado > .categoria > h2 {
+		font-size: 1.2rem !important;
+	}
+}
+@media (max-width: 360px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 47px) !important;
+		left: calc(50% - 31px) !important;
+		width: 60px !important;
+		height: 60px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 58px !important;
+	}
+}
+@media (max-width: 345px) {
+	.destacado > .top > img.top_destacado {
+		bottom: calc(50% - 47px) !important;
+		left: calc(50% - 31px) !important;
+		width: 60px !important;
+		height: 60px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 63px !important;
+	}
+	.destacado > .categoria {
+		width: 120px !important;
+	}
+}
+@media (max-width: 320px) {
+	.destacado > .top > .username {
+		bottom: 65px !important;
+	}
+	.destacado > .categoria {
+		width: 100px !important;
+	}
 }
 </style>

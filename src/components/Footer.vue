@@ -1,6 +1,6 @@
 <template>
 	<div class="Footer">
-		<article id="wrap">
+		<!-- <article id="wrap">
 			<article id="lightings">
 				<section id="one">
 					<section id="two">
@@ -12,7 +12,7 @@
 					</section>
 				</section>
 			</article>
-		</article>
+		</article> -->
 
 		<footer>
 			<div class="footer">
@@ -572,7 +572,11 @@ section {
 }
 
 .footer {
-	background: #00092d;
+	background: #000000;
+	background-image: url("/assets/img/footer/fondo.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	object-fit: contain;
 	padding: 30px 0px;
 	font-family: "Play", sans-serif;
 	text-align: center;
