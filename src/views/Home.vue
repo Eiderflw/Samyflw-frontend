@@ -4,7 +4,7 @@
 		<div class="inicio">
 			<div class="fondo">
 				<div class="destacado" id="destacado">
-					<video src="/assets/video/home/fondo_leones.mp4" autoplay muted>
+					<video src="/assets/video/home/fondo_leones.mp4" autoplay loop muted>
 						<source src="/assets/video/home/fondo_leones.mp4" type="video/mp4" />
 						Tu navegador no soporta esta funcionalidad video
 					</video>
@@ -14,7 +14,7 @@
 						</div>
 						<div class="flex w-full flex-wrap gap-1 justify-content-center align-items-center">
 							<img src="/assets/img/home/diamante.gif" alt="Diamantes" style="width: 40px; object-fit: fill" />
-							<p class="m-0 text-2xl text-center font-bold">{{ top3[0].diamantes_mes_actual }}</p>
+							<p class="m-0 text-2xl text-center font-bold">{{ top3[0].diamantes_mes_actual.toLocaleString() }}</p>
 						</div>
 					</div>
 					<div class="top">
@@ -38,6 +38,58 @@
 						</div>
 					</div>
 				</div>
+				<section class="top-creadores flex flex-wrap mt-8 gap-2 justify-content-center">
+					<div class="top-seleccionado">
+						<div class="flex flex-column gap-1">
+							<h2 class="m-0 uppercase text-center">Top Seleccionado</h2>
+							<DataTable :value="topSeleccionado" unstyled tableStyle="min-width: 100%">
+								<Column field="usuario">
+									<template #body="slotProps">
+										{{ `${(slotProps.index + 1).toString().padStart(2, "0")} -  ${slotProps.data.usuario}` }}
+									</template>
+								</Column>
+								<Column>
+									<template #body="props">
+										<Avatar :image="props.data.foto" size="large" shape="circle" />
+									</template>
+								</Column>
+								<Column field="diamantes_mes_actual">
+									<template #body="props">
+										<div class="flex flex-wrap gap-1 justify-content-center align-items-center">
+											<Avatar image="/assets/img/home/diamante.gif" size="large" />
+											<strong>{{ props.data.diamantes_mes_actual.toLocaleString() }}</strong>
+										</div>
+									</template>
+								</Column>
+							</DataTable>
+						</div>
+					</div>
+					<div class="top-agencias">
+						<div class="flex flex-column gap-1">
+							<h2 class="m-0 uppercase text-center">Top Aliados</h2>
+							<DataTable :value="topAliados" unstyled tableStyle="min-width: 100%; max-height: 90%;">
+								<Column field="usuario">
+									<template #body="slotProps">
+										{{ `${(slotProps.index + 1).toString().padStart(2, "0")} -  ${slotProps.data.usuario}` }}
+									</template>
+								</Column>
+								<Column>
+									<template #body="props">
+										<Avatar :image="props.data.foto" size="large" shape="circle" />
+									</template>
+								</Column>
+								<Column field="diamantes_mes_actual">
+									<template #body="props">
+										<div class="flex flex-wrap gap-1 justify-content-center align-items-center">
+											<Avatar image="/assets/img/home/diamante.gif" size="large" />
+											<strong>{{ props.data.diamantes_mes_actual.toLocaleString() }}</strong>
+										</div>
+									</template>
+								</Column>
+							</DataTable>
+						</div>
+					</div>
+				</section>
 				<section id="hero">
 					<div class="hero-container">
 						<h1 class="mb-4 pb-0 animation-duration-1000">
@@ -293,6 +345,8 @@ export default {
 		],
 		novedades: [],
 		topAgencias: [],
+		topSeleccionado: [],
+		topAliados: [],
 		top3: [
 			{
 				usuario: "x",
@@ -343,6 +397,12 @@ export default {
 			}
 		});
 
+		await axios.get(`${this.API}/top-seleccionado`).then((r) => {
+			this.topSeleccionado = r.data.length == 1 ? r.data[0].seleccionado : [];
+		});
+		await axios.get(`${this.API}/usuario/agencias/top10`).then((r) => {
+			this.topAliados = r.data;
+		});
 		await axios.get(`${this.API}/regla-actualizacion/nuevas`).then((resp) => {
 			this.novedades = resp.data;
 		});
@@ -395,10 +455,10 @@ html {
 	background-image: url("/assets/img/home/diamantes-title.png");
 	background-repeat: no-repeat;
 	background-position: center;
-	background-size: contain;
+	background-size: 100% 100%;
 	object-fit: contain;
 	height: 54px;
-	width: 300px;
+	width: 340px;
 	margin: 0;
 }
 .destacado > .diamantes > .title > .animacion,
@@ -412,28 +472,26 @@ html {
 }
 .destacado > .diamantes {
 	position: absolute;
-	left: 16%;
-	top: 230px;
+	left: calc(50% - 507px);
+	top: 222px;
 	height: auto;
 }
 .destacado > .categoria {
 	position: absolute;
 	text-align: center;
-	right: 14%;
-	top: 220px;
+	left: calc(50% + 153px);
+	top: 208px;
 	height: auto;
 }
-.destacado > .categoria > h2 {
-	height: 22px;
-}
+
 .destacado > .categoria > div {
 	pointer-events: none;
 	background-repeat: no-repeat;
 	background-position: top;
-	background-size: contain;
+	background-size: 100% 100%;
 	object-fit: contain;
 	height: 54px;
-	width: 300px;
+	width: 340px;
 	margin: 0;
 }
 .destacado > .categoria > .rookie {
@@ -450,7 +508,8 @@ html {
 }
 .destacado > video {
 	min-height: 540px;
-	height: 540px;
+	height: auto;
+	object-fit: cover !important;
 	max-height: 650px;
 }
 .destacado > .top {
@@ -462,6 +521,7 @@ html {
 }
 .destacado > .top > img.fondo {
 	width: 80%;
+	max-width: 1041px;
 	object-fit: contain;
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -469,23 +529,26 @@ html {
 .destacado > .top > img.top_destacado {
 	position: absolute;
 	border-radius: 50%;
-	bottom: 16px;
-	left: calc(50% - 69px);
-	width: 136px;
-	height: 136px;
+	top: 95px;
+	left: calc(50% - 92px);
+	width: 181px;
+	height: 181px;
 }
 .destacado > .top > .username {
 	position: absolute;
 	text-align: center;
 	width: 208px;
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 24px;
 	max-width: 208px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	bottom: -76px;
 	left: calc(50% - 94px);
+}
+.destacado > .categoria > h2 {
+	line-height: 0.85;
 }
 
 #hero {
@@ -715,38 +778,56 @@ html {
 .descripcion::-webkit-scrollbar-thumb:hover {
 	background: #84dc09;
 }
+.top-creadores {
+	aspect-ratio: 16/9;
+}
+.top-creadores > .top-seleccionado,
+.top-creadores > .top-agencias {
+	background-image: url("/assets/img/home/top/fondo.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	padding: 48px 60px;
+	width: 560px;
+	height: auto;
+	max-height: 821px;
+}
 
 @media (max-width: 1263px) {
-	.destacado > .diamantes > .title,
-	.destacado > .categoria > div {
-		width: 245px !important;
-		height: 50px !important;
-	}
-	.destacado > video {
-		background: red !important;
-		object-fit: fill !important;
-	}
 	.destacado > .top > img.top_destacado {
-		bottom: 19px !important;
-		left: calc(50% - 67px) !important;
-		width: 133px !important;
-		height: 133px !important;
+		width: 178px !important;
+		height: 178px !important;
+		left: calc(50% - 90px) !important;
 	}
 	.destacado > .top > .username {
-		bottom: -67px !important;
+		bottom: -72px !important;
+	}
+}
+@media (max-width: 1240px) {
+	.destacado > .top > img.top_destacado {
+		width: 176px !important;
+		height: 176px !important;
+		left: calc(50% - 89px) !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -68px !important;
 	}
 }
 
-@media (max-width: 1212px) {
-	.destacado > .top > img.top_destacado {
-		bottom: 27px !important;
-		left: calc(50% - 63px) !important;
-		width: 125px !important;
-		height: 125px !important;
-	}
-
+@media (max-width: 1213px) {
 	.destacado > .top > .username {
-		bottom: -60px !important;
+		bottom: -64px !important;
+	}
+}
+@media (max-width: 1185px) {
+	.destacado > .top > img.top_destacado {
+		width: 167px !important;
+		height: 167px !important;
+		left: calc(50% - 85px) !important;
+		top: 98px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -59px !important;
 	}
 }
 @media (max-width: 1170px) {
@@ -756,42 +837,254 @@ html {
 }
 @media (max-width: 1125px) {
 	.destacado > .top > img.top_destacado {
-		bottom: 31px !important;
-		left: calc(50% - 60px) !important;
-		width: 120px !important;
-		height: 120px !important;
+		width: 158px !important;
+		height: 158px !important;
+		left: calc(50% - 79px) !important;
+		top: 100px !important;
 	}
 
 	.destacado > .top > .username {
-		bottom: -46px !important;
+		bottom: -51px !important;
+		font-size: 22px !important;
+	}
+}
+@media (max-width: 1111px) {
+	.destacado > .top > img.fondo {
+		width: 90% !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 170px !important;
+		height: 170px !important;
+		left: calc(50% - 86px) !important;
+		top: 99px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -70px !important;
+	}
+}
+@media (max-width: 1093px) {
+	.destacado > .top > img.top_destacado {
+		left: calc(50% - 86px) !important;
+		top: 98px !important;
+	}
+
+	.destacado > .top > .username {
+		bottom: -66px !important;
+	}
+	.destacado > .categoria > div,
+	.destacado > .diamantes > .title {
+		width: 320px !important;
 	}
 }
 @media (max-width: 1077px) {
-	.destacado > .top > img.top_destacado {
-		bottom: 37px !important;
-		left: calc(50% - 57px) !important;
-		width: 112px !important;
-		height: 112px !important;
-	}
-	.destacado > .diamantes {
-		left: 11% !important;
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 300px;
 	}
 	.destacado > .top > .username {
-		bottom: -40px !important;
+		bottom: -62px !important;
 	}
 }
 @media (max-width: 1051px) {
 	.destacado > .top > img.top_destacado {
-		bottom: 41px !important;
-		left: calc(50% - 54px) !important;
-		width: 108px !important;
-		height: 108px !important;
+		width: 166px !important;
+		height: 166px !important;
+		left: calc(50% - 84px) !important;
+		top: 98px !important;
 	}
-
+	.destacado > .diamantes {
+		left: calc(50% - 460px) !important;
+	}
 	.destacado > .top > .username {
-		bottom: -35px !important;
+		bottom: -57px !important;
 	}
 }
+@media (max-width: 1024px) {
+	.destacado > .top > img.top_destacado {
+		width: 162px !important;
+		height: 162px !important;
+		left: calc(50% - 82px) !important;
+		top: 99px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -53px !important;
+	}
+}
+@media (max-width: 998px) {
+	.destacado > .top > img.top_destacado {
+		width: 158px !important;
+		height: 158px !important;
+		left: calc(50% - 80px) !important;
+		top: 100px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -49px !important;
+	}
+}
+@media (max-width: 984px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 280px !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 156px !important;
+		height: 156px !important;
+		left: calc(50% - 78px) !important;
+		top: 100px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -47px !important;
+	}
+}
+@media (max-width: 900px) {
+	.destacado > .top > img.fondo {
+		width: 98% !important;
+	}
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 250px !important;
+	}
+}
+@media (max-width: 750px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 200px !important;
+		height: 45px !important;
+	}
+	.destacado > .diamantes,
+	.destacado > .categoria {
+		top: 264px !important;
+	}
+	.destacado > .diamantes {
+		left: calc(50% - 335px) !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 130px !important;
+		height: 130px !important;
+		left: calc(50% - 66px) !important;
+		top: 105px !important;
+	}
+	.destacado > .top > .username {
+		bottom: -18px !important;
+	}
+}
+@media (max-width: 572px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 140px !important;
+	}
+	.destacado > .diamantes {
+		left: calc(50% - 246px) !important;
+	}
+	.destacado > .categoria {
+		left: calc(50% + 102px) !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 100px !important;
+		height: 100px !important;
+		left: calc(50% - 51px) !important;
+		top: 112px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 15px !important;
+	}
+}
+@media (max-width: 480px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 140px !important;
+	}
+	.destacado > .diamantes {
+		left: calc(50% - 246px) !important;
+	}
+	.destacado > .categoria {
+		left: calc(50% + 102px) !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 100px !important;
+		height: 100px !important;
+		left: calc(50% - 51px) !important;
+		top: 112px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 15px !important;
+	}
+}
+@media (max-width: 440px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 120px !important;
+		height: 35px !important;
+	}
+	.destacado > .diamantes {
+		left: calc(50% - 208px) !important;
+	}
+	.destacado > .categoria {
+		left: calc(50% + 60px) !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 74px !important;
+		height: 74px !important;
+		left: calc(50% - 37px) !important;
+		top: 118px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 38px !important;
+	}
+}
+@media (max-width: 425px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 110px !important;
+		height: 31px !important;
+	}
+	.destacado > .diamantes {
+		left: calc(50% - 198px) !important;
+		font-size: 14px !important;
+	}
+	.destacado > .categoria {
+		left: calc(50% + 45px) !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 74px !important;
+		height: 74px !important;
+		left: calc(50% - 37px) !important;
+		top: 118px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 38px !important;
+	}
+}
+@media (max-width: 415px) {
+	.destacado > .diamantes > .title,
+	.destacado > .categoria > div {
+		width: 100px !important;
+		height: 29px !important;
+	}
+	.destacado > .diamantes {
+		left: calc(50% - 178px) !important;
+	}
+	.destacado > .diamantes > div > p {
+		font-size: 14px !important;
+	}
+	.destacado > .categoria>h2{
+		font-size: 17px !important;
+	}
+	.destacado > .categoria {
+		left: calc(50% + 65px) !important;
+	}
+	.destacado > .top > img.top_destacado {
+		width: 70px !important;
+		height: 70px !important;
+		left: calc(50% - 36px) !important;
+		top: 119px !important;
+	}
+	.destacado > .top > .username {
+		bottom: 44px !important;
+	}
+}
+/*
 @media (max-width: 1010px) {
 	.destacado > .top > img.top_destacado {
 		bottom: 44px !important;
@@ -1211,5 +1504,5 @@ html {
 	.destacado > .categoria {
 		width: 100px !important;
 	}
-}
+} */
 </style>

@@ -480,6 +480,7 @@ export default {
 					label: "Administración",
 					items: [
 						{ label: "Proveedores", icon: "pi pi-sitemap", route: "/panel/proveedores" },
+						{ label: "Top seleccionado", icon: "pi pi-check-circle", route: "/panel/topseleccionado" },
 						{
 							label: "Insignias",
 							icon: "pi pi-star",
@@ -686,5 +687,15 @@ export default {
 
 .logo > span {
 	color: #84dc16;
+}
+@media (max-width: 1012px){
+	.opciones{
+		padding: 0 30px !important;
+	}
+}
+@media (max-width: 972px){
+	.opciones{
+		padding: 0 20px !important;
+	}
 }
 </style>
