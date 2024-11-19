@@ -698,4 +698,9 @@ export default {
 		padding: 0 20px !important;
 	}
 }
+@media (max-width: 909px){
+	.opciones{
+		padding: 0 0 !important;
+	}
+}
 </style>
