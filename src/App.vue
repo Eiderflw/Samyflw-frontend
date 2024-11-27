@@ -7,12 +7,21 @@
 	src: url("/assets/fonts/Planet-Gamers/Planet-Gamers.otf");
 	src: url("/assets/fonts/Planet-Gamers/Planet-Gamers.woff");
 }
+@font-face {
+	font-family: "play-pretend-home";
+	src: url("/assets/fonts/Play-Pretend-Home/Play-Pretend.otf");
+}
+
 .primera-mayus::first-letter {
 	text-transform: uppercase;
 }
 
 .font-gamers {
 	font-family: "planet-gamers" !important;
+}
+
+.font-play-pretend-home {
+	font-family: "play-pretend-home" !important;
 }
 
 .color-blue {

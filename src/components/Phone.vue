@@ -1,102 +1,97 @@
 <template>
-	<div class="container">
-		<div class="text">
-			<div class="container2 w-full">
-				<h1>Hola somos</h1>
-				<a href="" class="logo">
-					<span>Samy</span>
-					flw
-				</a>
-			</div>
-			<ul>
-				<li>Estaras los mejores streamers del top LatinoAmerica</li>
-				<li>No cobramos comisiones por nuestro trabajo.</li>
-				<li>Capacitaciones y acompañamiento constantes.</li>
-				<li>Participaciones en eventos anticipados y exclusivos</li>
-				<li>Premiaciones para los mejores EMISORES DEL MES.</li>
-				<li>Bonificación de reclutamiento por nuevos EMISORES.</li>
-				<li>Protecion de cuenta, mínima y soporte mejor.</li>
-				<li>Poder participar en las Premiaciones de los TikTok Awards.</li>
-				<li>Los mejores estrategias y consejos en crecimiento personal.</li>
-			</ul>
-		</div>
-		<section>
-			<div class="outside-border">
-				<video autoplay="autoplay" loop="loop" id="video_background" preload="auto" volume="0">
-					<source src="../assets/video/tiktok.mp4" type="video/mp4" />
-				</video>
-				<div class="silencer"></div>
-				<div class="volume-up"></div>
-				<div class="volume-down"></div>
-				<div class="button-on"></div>
-				<div class="inside-border">
-					<!-- Camera -->
-
-					<div class="camera">
-						<div class="camera-dot">
-							<div class="camera-dot-2"></div>
-							<div class="camera-dot-3"></div>
-						</div>
-						<div class="camera-speaker"></div>
-					</div>
-
-					<!-- Bottom Line -->
-
-					<div class="bottom-line"></div>
+	<div class="nosotros relative h-full" :style="{ height: `${heightNosotros}px !important` }">
+		<video
+			src="/assets/video/home/fondo_nosotros.mp4"
+			autoplay
+			loop
+			muted
+			class="w-full"
+			:style="{ 'object-fit': 'fill', height: `${heightNosotros + 5}px !important` }"
+		>
+			<source src="/assets/video/home/fondo_nosotros.mp4" type="video/mp4" />
+			Tu navegador no soporta esta funcionalidad video
+		</video>
+		<div ref="info_nosotros" class="flex flex-wrap justify-content-evenly row-gap-4 absolute top-0 w-full mt-8 pt-5">
+			<Image src="/assets/img/logo_samyflw.png" alt="Logo SAMYFLW" :imageStyle="{ 'border-radius': '12px' }" width="220" height="280" />
+			<div class="text">
+				<div class="flex flex-column w-full uppercase text-white-alpha-90 line-height-1 titulo_nosotros">
+					<h1 class="font-play-pretend-home text-6xl m-0">Hola somos</h1>
+					<router-link to="/" class="font-play-pretend-home color-verde no-underline text-7xl word-break"><span>Samyflw</span></router-link>
 				</div>
+				<ul class="lista_nosotros font-bold pl-4">
+					<li>Estaras los mejores streamers del top LatinoAmerica</li>
+					<li>No cobramos comisiones por nuestro trabajo.</li>
+					<li>Capacitaciones y acompañamiento constantes.</li>
+					<li>Participaciones en eventos anticipados y exclusivos</li>
+					<li>Premiaciones para los mejores EMISORES DEL MES.</li>
+					<li>Bonificación de reclutamiento por nuevos EMISORES.</li>
+					<li>Protecion de cuenta, mínima y soporte mejor.</li>
+					<li>Poder participar en las Premiaciones de los TikTok Awards.</li>
+					<li>Los mejores estrategias y consejos en crecimiento personal.</li>
+				</ul>
 			</div>
-		</section>
+			<section>
+				<div class="outside-border">
+					<video autoplay="autoplay" loop="loop" id="video_background" preload="auto" volume="0">
+						<source src="../assets/video/tiktok.mp4" type="video/mp4" />
+					</video>
+					<div class="silencer"></div>
+					<div class="volume-up"></div>
+					<div class="volume-down"></div>
+					<div class="button-on"></div>
+					<div class="inside-border">
+						<!-- Camera -->
+
+						<div class="camera">
+							<div class="camera-dot">
+								<div class="camera-dot-2"></div>
+								<div class="camera-dot-3"></div>
+							</div>
+							<div class="camera-speaker"></div>
+						</div>
+
+						<!-- Bottom Line -->
+
+						<div class="bottom-line"></div>
+					</div>
+				</div>
+			</section>
+		</div>
 	</div>
 </template>
 <script>
-export default {};
+export default {
+	data: () => ({
+		heightNosotros: 700,
+		timeoutHeight: null,
+	}),
+	mounted() {
+		//Esperamos que el DOM cargue todo
+		this.$nextTick(() => {
+			this.timeoutHeight = setTimeout(() => {
+				const info_nosotros = this.$refs.info_nosotros;
+				this.heightNosotros = info_nosotros.offsetHeight + 150;
+				if (this.timeoutHeight != null) {
+					clearTimeout(this.timeoutHeight);
+					this.timeoutHeight = null;
+				}
+			}, 100);
+		});
+	},
+};
 </script>
 <style scoped>
 * {
 	box-sizing: border-box;
 }
 
-.container {
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	background-color: #f4f4f4;
-	flex-wrap: wrap;
+.lista_nosotros > li::marker {
+	color: #25e007;
 }
-
-.container2 {
-	padding: 22px 4px 0 20px;
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	gap: 4px;
-}
-
-.container2 a {
-	color: #0b2035 !important;
-}
-
 .text {
 	min-width: 33%;
 	justify-content: center;
 	align-items: center;
-	color: #0b2035;
-}
-
-body {
-	color: #0b2035;
-	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-	font-size: 16px;
-}
-
-section {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	margin: 75px 0;
-	min-width: 23%;
 }
 
 .outside-border {
@@ -230,5 +225,10 @@ section {
 	position: absolute;
 	top: 35px;
 	width: 206px;
+}
+@media (max-width: 930px) {
+	.titulo_nosotros {
+		text-align: center !important;
+	}
 }
 </style>

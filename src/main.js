@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import "./style.css";
-import "../node_modules/primeflex/primeflex.css";
+import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-dark-green/theme.css";
 
@@ -118,9 +118,15 @@ import TreeTable from "primevue/treetable";
 import TriStateCheckbox from "primevue/tristatecheckbox";
 import VirtualScroller from "primevue/virtualscroller";
 import ListaRegalos from "./components/ListaRegalos.vue";
+import Carousel3d from "vue3-carousel-3d";
+import "vue3-carousel-3d/dist/index.css";
+import TopsCarouselVideos from "./components/TopsCarouselVideos.vue";
+import CarouselNovedades from "./components/CarouselNovedades.vue";
+import CarouselResenas from "./components/CarouselResenas.vue";
 
 const app = createApp(App);
 
+app.use(Carousel3d);
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue, {
@@ -166,6 +172,9 @@ app.component("Phone", Phone);
 app.component("Insignias", Insignias);
 app.component("CajaSorpresa", CajaSorpresa);
 app.component("ListaRegalos", ListaRegalos);
+app.component("TopsCarouselVideos", TopsCarouselVideos);
+app.component("CarouselNovedades", CarouselNovedades);
+app.component("CarouselResenas", CarouselResenas);
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);
