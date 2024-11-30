@@ -9,31 +9,58 @@
 						Tu navegador no soporta esta funcionalidad video
 					</video>
 					<div class="diamantes w-max">
-						<div class="title">
+						<div class="title transition-all transition-duration-1000 fadein animation-duration-1000">
 							<div class="animacion" />
 						</div>
 						<div class="flex w-full flex-wrap gap-1 justify-content-center align-items-center">
-							<img src="/assets/img/home/diamante.gif" alt="Diamantes" style="width: 40px; object-fit: fill" />
-							<p class="m-0 text-2xl text-center font-bold">{{ top3[0].diamantes_mes_actual.toLocaleString() }}</p>
+							<img
+								src="/assets/img/home/diamante.gif"
+								alt="Diamantes"
+								class="transition-all transition-duration-1000 fadein animation-duration-1000"
+								style="width: 40px; object-fit: fill"
+							/>
+							<p class="m-0 text-2xl text-center font-bold transition-all transition-duration-1000 fadein animation-duration-1000">
+								{{ topDestacado.diamantes_mes_actual.toLocaleString() }}
+							</p>
 						</div>
 					</div>
 					<div class="top">
 						<img class="fondo" src="/assets/img/home/marco-foto.png" alt="Marco foto" />
-						<img :src="top3[0].foto" alt="Top 1" class="top_destacado" />
-						<p class="m-0 username">{{ top3[0].usuario }}</p>
+						<img
+							:src="topDestacado.foto"
+							alt="Top 1"
+							class="top_destacado transition-all transition-duration-1000 fadein animation-duration-1000"
+						/>
+						<p class="m-0 username transition-all transition-duration-1000 fadein animation-duration-1000">{{ topDestacado.usuario }}</p>
 					</div>
 					<div class="categoria w-max flex flex-column flex-wrap gap-1 justify-content-center align-items-center">
-						<h2 class="m-0 white-space-nowrap overflow-hidden text-overflow-ellipsis w-full text-center">CATEGORIA</h2>
-						<div class="rookie" v-if="top3[0].categoria == 'Rookie'">
+						<h2
+							class="m-0 white-space-nowrap overflow-hidden text-overflow-ellipsis w-full text-center transition-all transition-duration-1000 fadein animation-duration-1000"
+						>
+							CATEGORIA
+						</h2>
+						<div
+							class="rookie transition-all transition-duration-1000 fadein"
+							v-if="topDestacado.categoria == 'Rookie'"
+						>
 							<div class="animacion" />
 						</div>
-						<div class="veteran" v-else-if="top3[0].categoria == 'Veteran'">
+						<div
+							class="veteran transition-all transition-duration-1000 fadein"
+							v-else-if="topDestacado.categoria == 'Veteran'"
+						>
 							<div class="animacion" />
 						</div>
-						<div class="pro" v-else-if="top3[0].categoria == 'Pro'">
+						<div
+							class="pro transition-all transition-duration-1000 fadein"
+							v-else-if="topDestacado.categoria == 'Pro'"
+						>
 							<div class="animacion" />
 						</div>
-						<div class="proplus" v-else-if="top3[0].categoria == 'Pro+'">
+						<div
+							class="proplus transition-all transition-duration-1000 fadein"
+							v-else-if="topDestacado.categoria == 'Pro+'"
+						>
 							<div class="animacion" />
 						</div>
 					</div>
@@ -153,7 +180,18 @@ export default {
 				foto: "",
 			},
 		],
-		topAgencias: [],
+		top5Diamantes: [],
+		topDiamantesCategorias: [],
+		indexTopDestacado: 0,
+		indexTopCategoria: 0,
+		topDestacadoTitle: "Diamantes",
+		idIntervalDestacado: null,
+		topDestacado: {
+			categoria: null,
+			diamantes_mes_actual: 0,
+			foto: "",
+			usuario: "",
+		},
 		top3: [
 			{
 				usuario: "x",
@@ -178,15 +216,64 @@ export default {
 			},
 		],
 	}),
+	methods: {
+		mostrarTopDestacado() {
+			this.idIntervalDestacado = setInterval(() => {
+				//Top5 diamates
+				if (this.indexTopDestacado <= this.top5Diamantes.length - 1 && this.topDestacadoTitle == "Diamantes") {
+					this.topDestacado.diamantes_mes_actual = this.top5Diamantes[this.indexTopDestacado].diamantes_mes_actual;
+					this.topDestacado.foto = this.top5Diamantes[this.indexTopDestacado].foto;
+					this.topDestacado.categoria = this.top5Diamantes[this.indexTopDestacado].creator_type;
+					this.topDestacado.usuario = this.top5Diamantes[this.indexTopDestacado].usuario;
+					this.indexTopDestacado++;
+					
+					if (this.indexTopDestacado > this.top5Diamantes.length - 1) {
+						this.indexTopDestacado = 0;
+						this.topDestacadoTitle = "Categorías";
+					}
+				} else if (this.topDestacadoTitle == "Categorías") {
+					if (this.indexTopDestacado <= this.topDiamantesCategorias.length - 1) {
+						const categoria = this.topDiamantesCategorias[this.indexTopDestacado];
+						if (this.indexTopCategoria <= categoria.usuarios.length - 1) {
+							this.topDestacado.diamantes_mes_actual = categoria.usuarios[this.indexTopCategoria].diamantes_mes_actual;
+							this.topDestacado.foto = categoria.usuarios[this.indexTopCategoria].foto;
+							this.topDestacado.categoria = categoria.usuarios[this.indexTopCategoria].creator_type;
+							this.topDestacado.usuario = categoria.usuarios[this.indexTopCategoria].usuario;
+							this.indexTopCategoria++;
+							if (this.indexTopCategoria > categoria.usuarios.length - 1) {
+								this.indexTopCategoria = 0;
+								this.indexTopDestacado++;
+							}
+						}
+						if (this.indexTopDestacado > this.topDiamantesCategorias.length - 1) {
+							this.topDestacadoTitle = "Diamantes";
+							this.indexTopDestacado = 0;
+						}
+					}
+				}
+			}, 2800);
+		},
+	},
 	async created() {
+		//Obtener 10 mejores por diamantes, se cortan 5 primeros
+		await axios.get(`${this.API}/usuario/diamantes/top10`).then((resp) => {
+			this.top5Diamantes = resp.data.slice(0, 5);
+		});
+		//Primero se muestran los top5 de diamantes
+		this.mostrarTopDestacado();
+		//Obtenemos los 5 mejores de cada categoría
+		await axios.get(`${this.API}/usuario/top5/categoria`).then((resp) => {
+			this.topDiamantesCategorias = resp.data;
+		});
+
 		await axios.get(`${this.API}/usuario/top`).then((resp) => {
 			if (resp.data.length > 0) {
 				const usuarios = resp.data.flatMap((grupo) => grupo.usuarios);
 				usuarios.sort((a, b) => b.diamantes_mes_actual - a.diamantes_mes_actual);
 
-				//this.top3[0].foto = usuarios[0].foto;
+				this.top3[0].foto = usuarios[0].foto;
 				this.top3[0].usuario = usuarios[0].usuario;
-				this.top3[0].categoria = "Veteran"; //usuarios[0].creator_type;
+				this.top3[0].categoria = usuarios[0].creator_type;
 				this.top3[0].diamantes_mes_actual = usuarios[0].diamantes_mes_actual;
 				this.top3[0].grupo = usuarios[0].grupo;
 
@@ -207,10 +294,9 @@ export default {
 		await axios.get(`${this.API}/usuario/homeCreadores`).then((resp) => {
 			this.clasificados = resp.data;
 		});
-
-		await axios.get(`${this.API}/usuario/agencias/top10`).then((resp) => {
-			this.topAgencias = resp.data;
-		});
+	},
+	unmounted() {
+		clearInterval(this.idIntervalDestacado);
 	},
 };
 </script>

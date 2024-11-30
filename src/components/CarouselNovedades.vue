@@ -46,13 +46,16 @@ export default {
 		API: import.meta.env.VITE_APP_API,
 		responsiveOptions: [
 			{
-				breakpoint: "1400px",
-				numVisible: 3,
+				breakpoint: "2000px",
+				numVisible: 5,
 				numScroll: 1,
 			},
+			{ breakpoint: "1800px", numVisible: 4, numScroll: 1 },
+			{ breakpoint: "1440px", numVisible: 3, numScroll: 1 },
+			{ breakpoint: "1024px", numVisible: 2, numScroll: 1 },
 			{
-				breakpoint: "1199px",
-				numVisible: 3,
+				breakpoint: "900px",
+				numVisible: 2,
 				numScroll: 1,
 			},
 			{

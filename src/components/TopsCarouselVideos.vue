@@ -394,12 +394,17 @@ export default {
 		width: 100% !important;
 	}
 }
+
 @media (min-width: 1280px) {
 	.top-creadores {
 		justify-content: space-between !important;
 	}
 }
-
+@media (min-width: 1500px) {
+	.top-creadores {
+		justify-content: space-evenly !important;
+	}
+}
 @media (max-width: 1024px) {
 	.carousel {
 		width: 100% !important;
