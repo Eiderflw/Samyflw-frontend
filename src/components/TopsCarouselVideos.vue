@@ -158,12 +158,7 @@ export default {
 		btn_filtros: ["BATALLAS", "MOMENTOS", "PREMIOS"],
 		topSeleccionado: [],
 		topAliados: [],
-		slides: [
-			{ url: "/assets/video/home/fondo_leones.mp4" },
-			{
-				url: "/assets/video/tiktok.mp4",
-			},
-		],
+		slides: [],
 		current_index_slide: 0,
 		last_index_slide: null,
 		current_video: null,
@@ -276,6 +271,15 @@ export default {
 		window.onresize = () => {
 			this.calcularMedidasCarousel();
 		};
+		this.slides = [
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002154/videosdestacados/yjsjfc0ywhtymiojclt8.mp4" },
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002140/videosdestacados/rzwfwplhtygdvbd6kq9c.mp4" },
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002136/videosdestacados/aktjptvgq3wbfndgkwgb.mp4" },
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002135/videosdestacados/hsexksruxxtqlczahj4c.mp4" },
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002135/videosdestacados/qsvfbu389m7tficerpax.mp4" },
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002125/videosdestacados/kl1yevqrqk2hlhjf4dec.mp4" },
+			{ url: "https://res.cloudinary.com/dyo2vl0fx/video/upload/v1733002119/videosdestacados/h6n9yf7ybpa37qys01rm.mp4" },
+		];
 	},
 };
 </script>
