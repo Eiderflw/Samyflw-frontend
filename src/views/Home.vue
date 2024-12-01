@@ -4,8 +4,8 @@
 		<div class="inicio">
 			<div class="fondo">
 				<div class="destacado" id="destacado">
-					<video src="/assets/video/home/fondo_leones.mp4" autoplay loop muted>
-						<source src="/assets/video/home/fondo_leones.mp4" type="video/mp4" />
+					<video src="/assets/video/home/fondo_leones.webm" autoplay loop muted>
+						<source src="/assets/video/home/fondo_leones.webm" type="video/webm" />
 						Tu navegador no soporta esta funcionalidad video
 					</video>
 					<div class="diamantes w-max">
@@ -26,6 +26,7 @@
 					</div>
 					<div class="top">
 						<img class="fondo" src="/assets/img/home/marco-foto.png" alt="Marco foto" />
+						<strong class="absolute top-0 pt-2 text-lg descripcion_destacado">{{ descripcion_destacado }}</strong>
 						<img
 							:src="topDestacado.foto"
 							alt="Top 1"
@@ -39,28 +40,16 @@
 						>
 							CATEGORIA
 						</h2>
-						<div
-							class="rookie transition-all transition-duration-1000 fadein"
-							v-if="topDestacado.categoria == 'Rookie'"
-						>
+						<div class="rookie transition-all transition-duration-1000 fadein" v-if="topDestacado.categoria == 'Rookie'">
 							<div class="animacion" />
 						</div>
-						<div
-							class="veteran transition-all transition-duration-1000 fadein"
-							v-else-if="topDestacado.categoria == 'Veteran'"
-						>
+						<div class="veteran transition-all transition-duration-1000 fadein" v-else-if="topDestacado.categoria == 'Veteran'">
 							<div class="animacion" />
 						</div>
-						<div
-							class="pro transition-all transition-duration-1000 fadein"
-							v-else-if="topDestacado.categoria == 'Pro'"
-						>
+						<div class="pro transition-all transition-duration-1000 fadein" v-else-if="topDestacado.categoria == 'Pro'">
 							<div class="animacion" />
 						</div>
-						<div
-							class="proplus transition-all transition-duration-1000 fadein"
-							v-else-if="topDestacado.categoria == 'Pro+'"
-						>
+						<div class="proplus transition-all transition-duration-1000 fadein" v-else-if="topDestacado.categoria == 'Pro+'">
 							<div class="animacion" />
 						</div>
 					</div>
@@ -192,6 +181,7 @@ export default {
 			foto: "",
 			usuario: "",
 		},
+		descripcion_destacado: "Top 1",
 		top3: [
 			{
 				usuario: "x",
@@ -225,8 +215,9 @@ export default {
 					this.topDestacado.foto = this.top5Diamantes[this.indexTopDestacado].foto;
 					this.topDestacado.categoria = this.top5Diamantes[this.indexTopDestacado].creator_type;
 					this.topDestacado.usuario = this.top5Diamantes[this.indexTopDestacado].usuario;
+					this.descripcion_destacado = `Top ${this.indexTopDestacado + 1}`;
 					this.indexTopDestacado++;
-					
+
 					if (this.indexTopDestacado > this.top5Diamantes.length - 1) {
 						this.indexTopDestacado = 0;
 						this.topDestacadoTitle = "Categorías";
@@ -239,6 +230,7 @@ export default {
 							this.topDestacado.foto = categoria.usuarios[this.indexTopCategoria].foto;
 							this.topDestacado.categoria = categoria.usuarios[this.indexTopCategoria].creator_type;
 							this.topDestacado.usuario = categoria.usuarios[this.indexTopCategoria].usuario;
+							this.descripcion_destacado = `${categoria._id} ${this.indexTopCategoria + 1}`;
 							this.indexTopCategoria++;
 							if (this.indexTopCategoria > categoria.usuarios.length - 1) {
 								this.indexTopCategoria = 0;
@@ -363,7 +355,9 @@ html {
 	top: 208px;
 	height: auto;
 }
-
+.descripcion_destacado {
+	text-shadow: 2px 2px 9px white;
+}
 .destacado > .categoria > div {
 	pointer-events: none;
 	background-repeat: no-repeat;
@@ -459,7 +453,9 @@ html {
 	height: 1200px;
 	width: 1200px;
 }
-
+.clasificados_destacados>.borde_tabla>div:last-child>div>div>div{
+	max-height: 578px;
+}
 .container {
 	--bs-gutter-x: 1.5rem;
 	--bs-gutter-y: 0;
@@ -559,6 +555,9 @@ html {
 	.destacado > .top > .username {
 		bottom: -68px !important;
 	}
+	.descripcion_destacado{
+		top: 11px !important;
+	}
 }
 
 @media (max-width: 1213px) {
@@ -587,6 +586,9 @@ html {
 	.destacado > .top > .username {
 		bottom: -53px !important;
 	}
+	.descripcion_destacado{
+		top: 16px !important;
+	}
 }
 @media (max-width: 1125px) {
 	.destacado > .top > img.top_destacado {
@@ -614,6 +616,9 @@ html {
 
 	.destacado > .top > .username {
 		bottom: -70px !important;
+	}
+	.descripcion_destacado{
+		top: 11px !important;
 	}
 }
 @media (max-width: 1093px) {
@@ -663,6 +668,9 @@ html {
 	.destacado > .top > .username {
 		bottom: -53px !important;
 	}
+	.descripcion_destacado{
+		top: 16px !important;
+	}
 }
 @media (max-width: 1000px) {
 	.clasificados_destacados > .borde_tabla {
@@ -695,6 +703,9 @@ html {
 	.destacado > .top > .username {
 		bottom: -47px !important;
 	}
+	.descripcion_destacado{
+		top: 19px !important;
+	}
 }
 @media (max-width: 970px) {
 	.destacado > .diamantes > .title,
@@ -721,6 +732,9 @@ html {
 	.destacado > .diamantes,
 	.destacado > .categoria {
 		top: 250px !important;
+	}
+	.descripcion_destacado{
+		top: 24px !important;
 	}
 }
 @media (max-width: 929px) {
@@ -762,6 +776,9 @@ html {
 		left: calc(50% - 77px) !important;
 		top: 102px !important;
 	}
+	.descripcion_destacado{
+		top: 18px !important;
+	}
 }
 @media (max-width: 878px) {
 	.destacado > .top > img.top_destacado {
@@ -775,6 +792,9 @@ html {
 	}
 	.destacado > .categoria {
 		right: 9%;
+	}
+	.descripcion_destacado{
+		top: 23px !important;
 	}
 }
 @media (max-width: 860px) {
@@ -808,6 +828,9 @@ html {
 	}
 	.destacado > .categoria {
 		left: calc(50% + 118px) !important;
+	}
+	.descripcion_destacado{
+		top: 30px !important;
 	}
 }
 @media (max-width: 809px) {
@@ -870,6 +893,9 @@ html {
 	.destacado > .categoria {
 		left: calc(50% + 115px) !important;
 	}
+	.descripcion_destacado{
+		top: 31px !important;
+	}
 }
 @media (max-width: 760px) {
 	.destacado > .top > .username {
@@ -904,6 +930,9 @@ html {
 	.destacado > .top > .username {
 		bottom: -15px !important;
 	}
+	.descripcion_destacado{
+		top: 36px !important;
+	}
 }
 @media (max-width: 732px) {
 	.destacado > .top > img.top_destacado {
@@ -925,6 +954,9 @@ html {
 	}
 	.destacado > .top > .username {
 		bottom: -9px !important;
+	}
+	.descripcion_destacado{
+		top: 38px !important;
 	}
 }
 @media (max-width: 700px) {
@@ -954,6 +986,10 @@ html {
 	.destacado > .top > .username {
 		bottom: -3px !important;
 	}
+	.descripcion_destacado{
+		font-size: 15px !important;
+		top: 45px !important;
+	}
 }
 @media (max-width: 670px) {
 	.destacado > .top > img.top_destacado {
@@ -977,6 +1013,9 @@ html {
 	}
 	.clasificados_destacados > .borde_tabla {
 		width: 100% !important;
+	}
+	.descripcion_destacado{
+		top: 49px !important;
 	}
 }
 @media (max-width: 640px) {
@@ -1049,6 +1088,9 @@ html {
 	.destacado > .diamantes {
 		left: calc(50% - 275px) !important;
 	}
+	.descripcion_destacado{
+		top: 54px !important;
+	}
 }
 @media (max-width: 595px) {
 	.destacado > .top > img.top_destacado {
@@ -1103,6 +1145,9 @@ html {
 	.destacado > .top > .username {
 		bottom: 23px !important;
 	}
+	.descripcion_destacado{
+		top: 58px !important;
+	}
 }
 @media (max-width: 540px) {
 	.destacado > .top > img.top_destacado {
@@ -1124,6 +1169,9 @@ html {
 	}
 	.destacado > .top > .username {
 		bottom: 30px !important;
+	}
+	.descripcion_destacado{
+		top: 63px !important;
 	}
 }
 @media (max-width: 500px) {
@@ -1195,6 +1243,9 @@ html {
 	}
 	.destacado > .top > .username {
 		bottom: 41px !important;
+	}
+	.descripcion_destacado{
+		top: 68px !important;
 	}
 }
 @media (max-width: 454px) {
@@ -1280,6 +1331,9 @@ html {
 	.destacado > .top > .username {
 		bottom: 50px !important;
 	}
+	.descripcion_destacado{
+		top: 72px !important;
+	}
 }
 @media (max-width: 400px) {
 	.destacado > .top > img.top_destacado {
@@ -1305,6 +1359,9 @@ html {
 	.avatar-tabla {
 		width: 38px !important;
 		height: 38px !important;
+	}
+	.descripcion_destacado{
+		top: 76px !important;
 	}
 }
 @media (max-width: 378px) {
@@ -1343,6 +1400,9 @@ html {
 	}
 	.destacado > .categoria {
 		left: calc(50% + 45px) !important;
+	}
+	.descripcion_destacado{
+		top: 79px !important;
 	}
 }
 @media (max-width: 325px) {

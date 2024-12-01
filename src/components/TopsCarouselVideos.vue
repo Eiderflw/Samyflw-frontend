@@ -232,10 +232,10 @@ export default {
 				this.widthSlide = 400;
 				this.heightSlide = 300;
 			} else if (widthVen > 1280 && widthVen < 1440) {
-				this.widthSlide = 410;
+				this.widthSlide = 430;
 				this.heightSlide = 310;
 			} else if (widthVen >= 1440 && widthVen < 2200) {
-				this.widthSlide = 420;
+				this.widthSlide = 440;
 				this.heightSlide = 310;
 			} else if (widthVen >= 2200) {
 				this.widthSlide = 480;
@@ -244,9 +244,12 @@ export default {
 
 			if (widthVen <= 1024) {
 				this.displaySlides = 3;
-			} else if (widthVen > 1280 && widthVen < 1440) {
+			} else if (widthVen > 1024 && widthVen < 1440) {
 				this.displaySlides = 4;
+			}else{
+				this.displaySlides = 5;
 			}
+
 		},
 	},
 	watch: {
@@ -403,10 +406,16 @@ export default {
 	.top-creadores {
 		justify-content: space-between !important;
 	}
+	.top-creadores > .carousel {
+		width: calc(100% - 800px) !important;
+	}
 }
 @media (min-width: 1500px) {
 	.top-creadores {
 		justify-content: space-evenly !important;
+	}
+	.top-creadores > .carousel {
+		width: calc(100% - 990px) !important;
 	}
 }
 @media (max-width: 1024px) {
