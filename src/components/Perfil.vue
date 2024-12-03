@@ -125,10 +125,8 @@
                             <div class="informacion flex flex-column font-gamers uppercase text-white text-left line-height-2">
                                 <span class="w-full word-break text-xl color-blue">Días de incorporación</span>
                                 <span class="font-bold text-2xl">
-                                    {{ store.getUsuario().dias_since_joining_agency.slice(0,
-                                        (store.getUsuario().dias_since_joining_agency.length) - 1) +
-                                        (parseInt(store.getUsuario().dias_since_joining_agency.slice(0,
-                                            (store.getUsuario().dias_since_joining_agency.length) - 1)) == 1 ? ' día' : ' días')
+                                    {{ store.getUsuario().dias_since_joining_agency +
+                                            (store.getUsuario().dias_since_joining_agency == 1 ? ' día' : ' días')
                                     }}
                                 </span>
                             </div>

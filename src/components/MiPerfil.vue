@@ -64,7 +64,7 @@
                     </div>
                     <div class="flex flex-column">
                         <span class="w-full word-break">Días después de la incorporación</span>
-                        <span class="font-bold text-lg">{{ datosUsuario.dias_since_joining_agency.slice(0, (datosUsuario.dias_since_joining_agency.length) - 1) + (parseInt(datosUsuario.dias_since_joining_agency.slice(0, (datosUsuario.dias_since_joining_agency.length) - 1)) == 1 ? ' día' : ' días') }}</span>
+                        <span class="font-bold text-lg">{{ datosUsuario.dias_since_joining_agency + (datosUsuario.dias_since_joining_agency == 1 ? ' día' : ' días') }}</span>
                     </div>
                 </div>
                 <div class="fans flex justify-content-between w-full mt-3 gap-2">
