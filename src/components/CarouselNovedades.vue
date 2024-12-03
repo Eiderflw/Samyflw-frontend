@@ -4,12 +4,12 @@
 			<h1 class="mb-0 text-6xl color-verde font-play-pretend-home word-break">Novedades</h1>
 			<Carousel
 				:value="novedades"
+				:numVisible="numItemsVisible"
 				:circular="true"
 				:showNavigators="true"
 				:showIndicators="false"
-				:autoplayInterval="2000"
+				:autoplayInterval="2800"
 				class="w-12"
-				:responsiveOptions="responsiveOptions"
 			>
 				<template #item="props">
 					<div class="item_novedad flex flex-column align-items-end gap-1">
@@ -44,41 +44,31 @@ import axios from "axios";
 export default {
 	data: () => ({
 		API: import.meta.env.VITE_APP_API,
-		responsiveOptions: [
-			{
-				breakpoint: "2000px",
-				numVisible: 5,
-				numScroll: 1,
-			},
-			{ breakpoint: "1800px", numVisible: 4, numScroll: 1 },
-			{ breakpoint: "1440px", numVisible: 3, numScroll: 1 },
-			{ breakpoint: "1024px", numVisible: 2, numScroll: 1 },
-			{
-				breakpoint: "900px",
-				numVisible: 2,
-				numScroll: 1,
-			},
-			{
-				breakpoint: "767px",
-				numVisible: 2,
-				numScroll: 1,
-			},
-			{
-				breakpoint: "575px",
-				numVisible: 1,
-				numScroll: 1,
-			},
-		],
+		numItemsVisible: 1,
 		novedades: [],
 	}),
 	async created() {
 		await axios.get(`${this.API}/regla-actualizacion/nuevas`).then((resp) => {
 			this.novedades = resp.data;
-			this.novedades.push(...resp.data);
 		});
 		const widthVen = window.innerWidth;
-		if (widthVen <= 767) {
+		if (widthVen <= 420) {
 			this.numItemsVisible = 1;
+		} else if (widthVen <= 575) {
+			this.numItemsVisible = 2;
+		} else if (widthVen <= 900) {
+			this.numItemsVisible = 3;
+		} else if (widthVen <= 1024) {
+			this.numItemsVisible = 4;
+		} else if (widthVen <= 1440) {
+			this.numItemsVisible = 5;
+		} else if (widthVen <= 1800) {
+			this.numItemsVisible = 6;
+		} else {
+			this.numItemsVisible = 7;
+		}
+		if(this.novedades.length<this.numItemsVisible){
+			this.numItemsVisible = Math.round(this.novedades.length/2);
 		}
 	},
 };
@@ -114,6 +104,7 @@ export default {
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	width: 320px;
+	max-width: 330px;
 	padding: 20px 25px;
 	height: 420px;
 }

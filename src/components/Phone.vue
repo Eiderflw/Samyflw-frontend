@@ -1,14 +1,14 @@
 <template>
 	<div class="nosotros relative h-full" :style="{ height: `${heightNosotros}px !important` }">
 		<video
-			src="/assets/video/home/fondo_nosotros.mp4"
+			src="/assets/video/home/fondo_nosotros.webm"
 			autoplay
 			loop
 			muted
 			class="w-full"
 			:style="{ 'object-fit': 'fill', height: `${heightNosotros + 5}px !important` }"
 		>
-			<source src="/assets/video/home/fondo_nosotros.mp4" type="video/mp4" />
+			<source src="/assets/video/home/fondo_nosotros.webm" type="video/webm" />
 			Tu navegador no soporta esta funcionalidad video
 		</video>
 		<div ref="info_nosotros" class="flex flex-wrap justify-content-evenly row-gap-4 absolute top-0 w-full mt-8 pt-5">
