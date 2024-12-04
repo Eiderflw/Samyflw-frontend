@@ -84,7 +84,8 @@
 										slotProps.data.id_concurso,
 										slotProps.data.estado,
 										slotProps.data.premio,
-										slotProps.data.descripcion
+										slotProps.data.descripcion,
+										slotProps.data.fecha_obtenido
 									);
 								}
 							"
@@ -521,7 +522,7 @@ export default {
 					}
 				});
 		},
-		async Reclamar(tipo, posicion, estado, premio = null, descripcion = null) {
+		async Reclamar(tipo, posicion, estado, premio = null, descripcion = null, fecha_obtenido = "") {
 			if (estado == "Sin reclamar") {
 				this.transferencia.usuario = this.usuario;
 				// sin reclamar
@@ -534,6 +535,7 @@ export default {
 					this.dialogo = tipo;
 				}
 				this.transferencia.posPremio = posicion;
+				this.transferencia.fecha_obtenido = fecha_obtenido;
 				//Para usar en el emit
 				this.paqueteReclamando.tipo_premio = tipo;
 				this.paqueteReclamando.id_concurso = posicion;
