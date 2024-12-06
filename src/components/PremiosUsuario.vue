@@ -14,6 +14,9 @@
 							con el botón:
 						</p>
 						<Button class="btn_regalo" severity="danger" icon="pi pi-gift" />
+						<p class="m-0">
+							<strong>UBICADO EN CADA PREMIO</strong>
+						</p>
 					</div>
 				</Message>
 			</div>
@@ -480,8 +483,11 @@ export default {
 				this.dataListaRegalo.misMonedas = parseInt(bono.premio.match(/\d+/)) * 100;
 				this.transferencia.usuario = this.usuario;
 				this.transferencia.posPremio = bono.id_concurso;
+				this.transferencia.fecha_obtenido = bono.fecha_obtenido;
 				this.transferencia.metodo_pago = "regalo";
 				this.dataListaRegalo.mostrarLista = true;
+				console.log(this.transferencia);
+				
 			}
 		},
 		fullScreenVideo(event) {

@@ -9,7 +9,7 @@
 }
 @font-face {
 	font-family: "play-pretend-home";
-	src: url("/assets/fonts/Play-Pretend-Home/Play-Pretend.otf");
+	src: url("/assets/fonts/Play-Pretend-Home/Play-Pretend.woff");
 }
 
 .primera-mayus::first-letter {
