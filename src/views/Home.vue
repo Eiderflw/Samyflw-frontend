@@ -453,9 +453,7 @@ html {
 	height: 1200px;
 	width: 1200px;
 }
-.clasificados_destacados>.borde_tabla>div:last-child>div>div>div{
-	max-height: 578px;
-}
+
 .container {
 	--bs-gutter-x: 1.5rem;
 	--bs-gutter-y: 0;
@@ -520,6 +518,16 @@ html {
 	width: 40px !important;
 	height: 40px !important;
 }
+.clasificados_destacados > .borde_tabla > div:last-child > div > div > div {
+	max-height: 578px;
+	height: 100%;
+}
+.clasificados_destacados > .borde_tabla > div:last-child{
+	height: 50%;
+}
+.clasificados_destacados > .borde_tabla > div:last-child>*, .tabla_destacados_home{
+	height: 100%;
+}
 .clasificados_destacados > .borde_tabla > div:last-child > div > .tabla_destacados_home > div:first-child > table > thead > tr > th {
 	border-spacing: 0;
 }
@@ -555,7 +563,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -68px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 11px !important;
 	}
 }
@@ -586,7 +594,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -53px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 16px !important;
 	}
 }
@@ -617,7 +625,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -70px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 11px !important;
 	}
 }
@@ -668,7 +676,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -53px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 16px !important;
 	}
 }
@@ -703,7 +711,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -47px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 19px !important;
 	}
 }
@@ -733,7 +741,7 @@ html {
 	.destacado > .categoria {
 		top: 250px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 24px !important;
 	}
 }
@@ -776,7 +784,7 @@ html {
 		left: calc(50% - 77px) !important;
 		top: 102px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 18px !important;
 	}
 }
@@ -793,7 +801,7 @@ html {
 	.destacado > .categoria {
 		right: 9%;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 23px !important;
 	}
 }
@@ -829,7 +837,7 @@ html {
 	.destacado > .categoria {
 		left: calc(50% + 118px) !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 30px !important;
 	}
 }
@@ -893,7 +901,7 @@ html {
 	.destacado > .categoria {
 		left: calc(50% + 115px) !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 31px !important;
 	}
 }
@@ -930,7 +938,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -15px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 36px !important;
 	}
 }
@@ -955,7 +963,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -9px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 38px !important;
 	}
 }
@@ -986,7 +994,7 @@ html {
 	.destacado > .top > .username {
 		bottom: -3px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		font-size: 15px !important;
 		top: 45px !important;
 	}
@@ -1014,7 +1022,7 @@ html {
 	.clasificados_destacados > .borde_tabla {
 		width: 100% !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 49px !important;
 	}
 }
@@ -1088,7 +1096,7 @@ html {
 	.destacado > .diamantes {
 		left: calc(50% - 275px) !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 54px !important;
 	}
 }
@@ -1145,7 +1153,7 @@ html {
 	.destacado > .top > .username {
 		bottom: 23px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 58px !important;
 	}
 }
@@ -1170,7 +1178,7 @@ html {
 	.destacado > .top > .username {
 		bottom: 30px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 63px !important;
 	}
 }
@@ -1244,7 +1252,7 @@ html {
 	.destacado > .top > .username {
 		bottom: 41px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 68px !important;
 	}
 }
@@ -1331,7 +1339,7 @@ html {
 	.destacado > .top > .username {
 		bottom: 50px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 72px !important;
 	}
 }
@@ -1360,7 +1368,7 @@ html {
 		width: 38px !important;
 		height: 38px !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 76px !important;
 	}
 }
@@ -1401,7 +1409,7 @@ html {
 	.destacado > .categoria {
 		left: calc(50% + 45px) !important;
 	}
-	.descripcion_destacado{
+	.descripcion_destacado {
 		top: 79px !important;
 	}
 }
