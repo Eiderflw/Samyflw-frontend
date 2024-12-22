@@ -1815,6 +1815,8 @@ export default {
 				});
 		},
 		yaReclamaron(id, isExclusivo = false, categorias) {
+			const now = new Date();
+			const anio_mes = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}`;
 			//Se debe hacer toda la validación con usuario_actual y idsMisPremios para estar actualizados
 			//Falta arreglar los bonos por categoría no exclusivos
 			if (isExclusivo) {
@@ -1878,16 +1880,10 @@ export default {
 					if (indexPremio > -1) {
 						return this.idsMisPremios[indexPremio].estado == "Entregado" ? [true, "Entregado"] : [true, "Reclamado"];
 					}
-					//Si no fue entregado en el mes actual, lo busco en todos mis premios filtrando por la categoría
-					indexPremio = this.usuario_actual.premios.findIndex(
-						(premio) => premio.id_concurso == id && premio.descripcion == `Categoría ${this.usuario_actual.creator_type}`
-					);
-					if (indexPremio > -1) {
-						return [true, "Entregado"];
-					}
-					//Si ya se entrego uno de mi categoría
-					indexPremio = this.usuario_actual.premios.findIndex(
-						(premio) => premio.descripcion == `Categoría ${this.usuario_actual.creator_type}`
+
+					//Si ya se entrego uno de mi categoría para el mes actual
+					indexPremio = this.idsMisPremios.findIndex(
+						(premio) => premio.descripcion == `Categoría ${this.usuario_actual.creator_type}` && premio.fecha_obtenido.startsWith(anio_mes)
 					);
 					return indexPremio > -1 ? [true, "No aplica"] : [false, "No aplica"];
 				}

@@ -264,7 +264,7 @@ export default {
 	},
 	async created() {
 		await axios.get(`${this.API}/top-seleccionado`).then((r) => {
-			this.topSeleccionado = r.data.length == 1 ? r.data[0].seleccionado : [];
+			this.topSeleccionado = r.data != null ? r.data.seleccionado : [];
 		});
 		await axios.get(`${this.API}/usuario/agencias/top10`).then((r) => {
 			this.topAliados = r.data;

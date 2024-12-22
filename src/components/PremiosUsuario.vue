@@ -14,6 +14,9 @@
 							con el botón:
 						</p>
 						<Button class="btn_regalo" severity="danger" icon="pi pi-gift" />
+						<p class="m-0">
+							<strong>UBICADO EN CADA PREMIO</strong>
+						</p>
 					</div>
 				</Message>
 			</div>
@@ -84,7 +87,8 @@
 										slotProps.data.id_concurso,
 										slotProps.data.estado,
 										slotProps.data.premio,
-										slotProps.data.descripcion
+										slotProps.data.descripcion,
+										slotProps.data.fecha_obtenido
 									);
 								}
 							"
@@ -479,8 +483,11 @@ export default {
 				this.dataListaRegalo.misMonedas = parseInt(bono.premio.match(/\d+/)) * 100;
 				this.transferencia.usuario = this.usuario;
 				this.transferencia.posPremio = bono.id_concurso;
+				this.transferencia.fecha_obtenido = bono.fecha_obtenido;
 				this.transferencia.metodo_pago = "regalo";
 				this.dataListaRegalo.mostrarLista = true;
+				console.log(this.transferencia);
+				
 			}
 		},
 		fullScreenVideo(event) {
@@ -521,7 +528,7 @@ export default {
 					}
 				});
 		},
-		async Reclamar(tipo, posicion, estado, premio = null, descripcion = null) {
+		async Reclamar(tipo, posicion, estado, premio = null, descripcion = null, fecha_obtenido = "") {
 			if (estado == "Sin reclamar") {
 				this.transferencia.usuario = this.usuario;
 				// sin reclamar
@@ -534,6 +541,7 @@ export default {
 					this.dialogo = tipo;
 				}
 				this.transferencia.posPremio = posicion;
+				this.transferencia.fecha_obtenido = fecha_obtenido;
 				//Para usar en el emit
 				this.paqueteReclamando.tipo_premio = tipo;
 				this.paqueteReclamando.id_concurso = posicion;

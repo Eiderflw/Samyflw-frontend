@@ -34,18 +34,7 @@
 			<Column header="Seleccionar">
 				<template #body="props">
 					<div class="flex flex-wrap gap-2">
-						<Checkbox
-							v-model="topSeleccionados"
-							:inputId="props.data._id"
-							:value="{
-								_id: props.data._id,
-								usuario: props.data.usuario,
-								agencia: props.data.agencia,
-								diamantes_mes_actual: parseInt(props.data.diamantes_mes_actual),
-								diamantes_mes_anterior: parseInt(props.data.diamantes_mes_anterior),
-								foto: props.data.foto,
-							}"
-						/>
+						<Checkbox v-model="topSeleccionados" :inputId="props.data._id" :value="props.data._id" />
 					</div>
 				</template>
 			</Column>
@@ -136,7 +125,7 @@ export default {
 			await axios
 				.get(`${this.API}/top-seleccionado`, this.token)
 				.then((resp) => {
-					this.topSeleccionados = resp.data.length == 1 ? resp.data[0].seleccionado : [];
+					this.topSeleccionados = resp.data != null ? resp.data.seleccionado.flatMap((s) => s._id) : [];
 				})
 				.catch((error) => {
 					switch (error.response.data.statusCode) {

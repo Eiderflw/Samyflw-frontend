@@ -305,7 +305,7 @@ export default {
 		tipo: null,
 		sortField: "estado",
 		sortOrder: 1,
-		paquete: { usuario: null, comprobante: null, id_concurso: null },
+		paquete: { usuario: null, comprobante: null, id_concurso: null, fecha_obtenido: null },
 		datosTransferencia: {
 			transferencia: {
 				metodo_pago: null,
@@ -514,6 +514,7 @@ export default {
 			this.EnviarModal = true;
 			this.paquete.id_concurso = datos.id_concurso;
 			this.paquete.usuario = datos.usuario;
+			this.paquete.fecha_obtenido = datos.fecha_unica;
 			this.datosTransferencia = datos;
 		},
 		confirmarEliminar(usuario, id_concurso, fecha_obtenido) {
