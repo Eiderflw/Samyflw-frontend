@@ -412,6 +412,7 @@ export default {
 							icon: "pi pi-money-bill",
 							route: "/panel/bonus",
 						},
+						{ label: "Tabla seleccionados", icon: "pi pi-table", route: "/panel/tablas" },
 						{
 							label: "Premios Aleatorios",
 							icon: "pi pi-wallet",
@@ -688,18 +689,18 @@ export default {
 .logo > span {
 	color: #84dc16;
 }
-@media (max-width: 1012px){
-	.opciones{
+@media (max-width: 1012px) {
+	.opciones {
 		padding: 0 30px !important;
 	}
 }
-@media (max-width: 972px){
-	.opciones{
+@media (max-width: 972px) {
+	.opciones {
 		padding: 0 20px !important;
 	}
 }
-@media (max-width: 909px){
-	.opciones{
+@media (max-width: 909px) {
+	.opciones {
 		padding: 0 0 !important;
 	}
 }

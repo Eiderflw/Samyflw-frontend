@@ -29,6 +29,7 @@ import Ordenar from "../components/Ordenar.vue";
 import AgregarFondos from "../components/AgregarFondos.vue";
 import Servicios from "../components/Servicios.vue";
 import TopSeleccionado from "../components/TopSeleccionado.vue";
+import TablaSeleccionado from "../components/TablaSeleccionado.vue";
 
 const routes = [
     { path: "/", name: "Home", component: Home },
@@ -216,6 +217,16 @@ const routes = [
                     return store.isAdmin() ? next() : next("/login");
                 },
             },
+            {
+                path:"/panel/tablas",
+                name:"TablasSeleccionados",
+                component: TablaSeleccionado,
+                beforeEnter: (to, from, next) => {
+                    const store = useStoreEvento();
+                    return store.isAdmin() ? next() : next("/login");
+                },
+            }
+
         ],
     },
     { path: "/duckracer", name: "Game", component: Game },
