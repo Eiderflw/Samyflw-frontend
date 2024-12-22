@@ -72,6 +72,7 @@
 			<button v-show="!form" class="buttonGame">Patos: {{ patos }}</button>
 
 			<button v-show="!form" class="buttonGame" @click="dialogVisible = true">Puntos</button>
+			<button v-show="!form" class="buttonGame" @click="dialogRegalos = true">Regalos</button>
 		</div>
 		<button v-show="!form" :class="classSonido" @click="toggleMute()">
 			{{ btnSonido }}
@@ -95,6 +96,41 @@
 			<template #footer>
 				<Button label="Ok" @click="dialogVisible = false" />
 			</template>
+		</Dialog>
+		<Dialog
+			v-model:visible="dialogRegalos"
+			header="Regalos Activos"
+			:style="{ width: '600px' }"
+			maximizable
+			modal
+			:contentStyle="{ height: '600px' }"
+		>
+		<div class="my-3 flex gap-4">
+			<Button label="Seleccionar todo" @click="() => {
+				giftActive = giftListGeneral.map((gift) => gift.id);
+				validateGiftList();
+			}" />
+		<Button label="Quitar todo" severity="danger" @click="() => {
+			giftActive = [];
+			validateGiftList();
+		}" />
+		</div>
+		<div class="gifts-container">
+			<div 
+			v-for="gift in giftListGeneral" 
+			:key="gift.id" 
+			class="gift-box"
+			:class="{ active: isActive(gift.id) }"
+			@click="toggleGift(gift.id)"
+			>
+			<img 
+				:src="gift.image" 
+				:alt="gift.name" 
+				:class="{ grayscale: !isActive(gift.id) }"
+			/>
+			<p>{{  gift.points  }}</p>
+			</div>
+		</div>
 		</Dialog>
 		<div class="gameContainer">
 			<button v-show="timerShow" class="count">
@@ -133,10 +169,16 @@ export default {
 		btnSonido: "Mute",
 		classSonido: "btnRojo mute",
 		dialogVisible: false,
+		dialogRegalos: false,
 		players: [],
 		volumen: 20,
 		toast: null,
 		API: "https://patosgame.fly.dev",
+		giftListGeneral: [], // [] de los regalos
+		giftActive: [], // [] de los id de los regalos activos
+		giftList: [], // [] de los regalos filtrados para el juego
+		giftMoneyData: [], // [] de los regalos filtrados para el juego con su valor
+
 	}),
 	methods: {
 		async startGame() {
@@ -309,28 +351,7 @@ export default {
 
 					this.ganador = [];
 					this.players = [];
-					this.gifts = {
-						5655: 50, // Rose
-						7934: 50, // Heart Me
-						5827: 50, // Ice Cream Cone
-						6064: 50, // GG
-						9139: 100, //  Team Bracelet
-						5487: 250, // Finger Heart
-						6483: 500, // Spinning Top
-						5879: 1500, // Doughnut
-						5585: 5000, // Confetti
-						5660: 5000, // Hand Heart
-						6671: 10000, //Love You
-						6267: 15000, // Corgi
-						7168: 25000, // Money Gun
-						5978: 45000, // Train
-						6233: 50000, // Travel With You
-						6646: 245000, // Leon the Kitten
-						8916: 485000, // Leon and Lili
-						8912: 750000, // Rosa Nebula
-						6369: 1500000, // Lion
-						7312: 2000000, // TikTok Universe+
-					};
+					this.gifts = vueDataInstance.$data.giftList;
 					this.skin = [
 						"patitoceleste",
 						"patitomorado",
@@ -344,29 +365,11 @@ export default {
 						"patito",
 						"patitoverde",
 					];
+					this.giftsMoney = vueDataInstance.$data.giftMoneyData;
+				}
 
-					this.giftsMoney = {
-						5655: 1, // Rose
-						7934: 1, // Heart Me
-						5827: 1, // Ice Cream Cone
-						6064: 1, // GG
-						9139: 2, //  Team Bracelet
-						5487: 5, // Finger Heart
-						6483: 10, // Spinning Top
-						5879: 30, // Doughnut
-						5585: 100, // Confetti
-						5660: 100, // Hand Heart
-						6671: 199, //Love You
-						6267: 299, // Corgi
-						7168: 500, // Money Gun
-						5978: 899, // Train
-						6233: 999, // Travel With You
-						6646: 4888, // Leon the Kitten
-						8916: 9699, // Leon and Lili
-						8912: 15000, // Rosa Nebula
-						6369: 29900, // Lion
-						7312: 34999, // TikTok Universe+
-					};
+				updateGiftsData(giftList) {
+					this.gifts = giftList;
 				}
 
 				preload() {
@@ -701,9 +704,43 @@ export default {
 			let instanciaPhaser = this.game.scene.getScene("scene-game");
 			instanciaPhaser.empezarGame();
 		},
+		async getGiftList() {
+            await axios.get(this.API + '/gift/game').then(res => {
+                this.giftList = res.data.giftList;
+				this.giftMoneyData = res.data.giftMoneyData;
+            }).catch(err => {
+                this.toast.add({ severity: "error", summary: "Error obteniendo gifts", life: 3000 });
+            })
+			await axios.get(this.API + '/gift').then(res => {
+				this.giftListGeneral = res.data;
+            }).catch(err => {
+                this.toast.add({ severity: "error", summary: "Error obteniendo gifts", life: 3000 });
+            })
+        },
+		isActive(giftId) {
+		return this.giftActive.includes(giftId);
+		},
+
+		// Método para alternar el estado activo/desactivo de un regalo
+		toggleGift(giftId) {
+		if (this.isActive(giftId)) {
+			// Si está activo, lo removemos del array giftActive
+			this.giftActive = this.giftActive.filter(id => id !== giftId);
+		} else {
+			// Si no está activo, lo añadimos al array
+			this.giftActive.push(giftId);
+		}
+		this.validateGiftList();
+		},
+		validateGiftList() {
+		this.giftList = this.giftListGeneral.filter(gift => this.giftActive.includes(gift.id));
+		const instanciaPhaser = this.game.scene.getScene("scene-game");
+		instanciaPhaser.updateGiftsData(this.giftList);
+		}
 	},
-	mounted() {
+	async created() {
 		this.toast = useToast();
+		await this.getGiftList();
 	},
 };
 </script>
@@ -954,5 +991,41 @@ export default {
 	height: 1.25rem;
 	width: 1.25rem;
 	fill: #fff;
+}
+.gifts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Espacio entre las cajas */
+}
+
+.gift-box {
+  width: 100px;
+  height: 150px;
+  border: 2px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.gift-box.active {
+  border-color: #42b983; /* Cambia el borde cuando está activo */
+}
+
+.gift-box img {
+  height: auto;
+  max-height: 70px;
+  object-fit: cover;
+}
+
+.grayscale {
+  filter: grayscale(100%); /* Aplica filtro en blanco y negro */
+}
+
+.gift-box p {
+  margin-top: 10px;
+  text-align: center;
 }
 </style>
