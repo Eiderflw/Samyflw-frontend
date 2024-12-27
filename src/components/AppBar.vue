@@ -417,11 +417,11 @@ export default {
 							icon: "pi pi-wallet",
 							route: "/panel/aleatorios",
 						},
-						{
+						/* {
 							label: "Gestionar Promoción",
 							icon: "pi pi-thumbs-up-fill",
 							route: "/panel/promocion",
-						},
+						}, */
 						{
 							label: "Regalos",
 							icon: "pi pi-gift",
@@ -479,7 +479,7 @@ export default {
 				{
 					label: "Administración",
 					items: [
-						{ label: "Proveedores", icon: "pi pi-sitemap", route: "/panel/proveedores" },
+						/* { label: "Proveedores", icon: "pi pi-sitemap", route: "/panel/proveedores" }, */
 						{ label: "Top seleccionado", icon: "pi pi-check-circle", route: "/panel/topseleccionado" },
 						{
 							label: "Insignias",
