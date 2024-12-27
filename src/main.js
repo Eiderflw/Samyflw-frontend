@@ -123,6 +123,7 @@ import "vue3-carousel-3d/dist/index.css";
 import TopsCarouselVideos from "./components/TopsCarouselVideos.vue";
 import CarouselNovedades from "./components/CarouselNovedades.vue";
 import CarouselResenas from "./components/CarouselResenas.vue";
+import SeleccionarCreador from "./components/SeleccionarCreador.vue";
 
 const app = createApp(App);
 
@@ -175,6 +176,7 @@ app.component("ListaRegalos", ListaRegalos);
 app.component("TopsCarouselVideos", TopsCarouselVideos);
 app.component("CarouselNovedades", CarouselNovedades);
 app.component("CarouselResenas", CarouselResenas);
+app.component("SeleccionarCreador", SeleccionarCreador);
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);

@@ -21,12 +21,14 @@
 			tableStyle="min-width: 100%"
 		>
 			<Column field="tipo_premio" header="Tipo premio" sortable />
-			<Column field="nombre" header="Usuario" sortable></Column>
+			<Column field="nombre" header="Usuario" sortable />
 			<Column field="transferencia.metodo_pago" class="metodo_pago" header="Metodo" sortable />
 			<Column field="premio" header="Premio">
-				<template #body="slotProps">
-					<p class="m-0" v-if="slotProps.data.tipo_premio !== 'Objeto'">{{ slotProps.data.premio }}</p>
-					<Image v-else :src="slotProps.data.premio" alt="Imagen del premio" width="250" preview />
+				<template #body="props">
+					<p class="m-0" v-if="['Bonus', 'Efectivo', 'SaldoApi'].includes(props.data.tipo_premio) || !isImg(props.data.premio)">
+						{{ props.data.premio }}
+					</p>
+					<Image v-else :src="props.data.premio" alt="Imagen del premio" width="120" heigth="100" imageClass="border-round" preview />
 				</template>
 			</Column>
 			<Column field="descripcion" header="Descripción"></Column>
@@ -63,7 +65,7 @@
 							icon="pi pi-send"
 							v-tooltip.top="'Enviar premio'"
 							@click="Preparar(slotProps.data)"
-						></Button>
+						/>
 						<Button
 							v-if="slotProps.data.estado != 'Entregado' && slotProps.data.estado != 'Expirado'"
 							@click="cambiarEstadoPremio(slotProps.data.usuario, slotProps.data.id_concurso, 'Expirado', slotProps.data.fecha_unica)"
@@ -127,7 +129,7 @@
 			:draggable="false"
 		>
 			<div v-if="datosTransferencia.transferencia.metodo_pago != 'regalo'">
-				<div v-if="datosTransferencia.tipo_premio === 'Efectivo' || datosTransferencia.tipo_premio == 'Bonus'">
+				<div v-if="!isImg(datosTransferencia.premio)">
 					<div class="flex gap-2 sm:flex-column md:flex-row" v-if="datosTransferencia.transferencia.metodo_pago === 'banco'">
 						<div class="flex flex-column gap-2 w-6 sm:w-full md:w-6">
 							<label class="font-semibold">Tipo de cuenta</label>
@@ -203,7 +205,14 @@
 				</div>
 			</div>
 			<div v-else>
+				<div
+					class="flex flex-wrap gap-2 justify-content-center"
+					v-if="datosTransferencia.transferencia.regalos.length == 0 && isImg(datosTransferencia.premio)"
+				>
+					<Image :src="datosTransferencia.premio" alt="Regalo" width="250" heigth="220" preview imageClass="border-round" />
+				</div>
 				<Galleria
+					v-else
 					ref="galleria"
 					v-model:activeIndex="activeIndex"
 					:value="datosTransferencia.transferencia.regalos"
@@ -278,7 +287,7 @@
 			</div>
 			<template #footer>
 				<Button label="Cancelar" @click="EnviarModal = false" autofocus text severity="danger" />
-				<Button label="Entregar premio" :disabled="btnEnviarPremio" @click="EnviarPremio"></Button>
+				<Button label="Entregar premio" :disabled="btnEnviarPremio" @click="EnviarPremio" />
 			</template>
 		</Dialog>
 		<ConfirmDialog />
@@ -601,7 +610,7 @@ export default {
 			document.removeEventListener("msfullscreenchange", this.onFullScreenChange);
 		},
 		isImg(ruta = "") {
-			return ruta.match(/\.(jpeg|jpg|png|gif)$/) != null;
+			return ruta.match(/\.(jpeg|jpg|png|gif|webp|bmp|apng|svg|avif|heic|heif)$/) != null;
 		},
 	},
 	computed: {
