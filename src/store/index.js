@@ -150,7 +150,17 @@ export const useGiftGameStore = defineStore("game", {
 	},
 	getters: {
 		getGift(state) {
-			state.giftIdActive = JSON.parse(localStorage.giftIdActive);
+			const storedGift = localStorage.giftIdActive;
+			// Verifica si existe algo almacenado y si es un JSON válido
+			if (storedGift) {
+				try {
+					state.giftIdActive = JSON.parse(storedGift);
+				} catch (e) {
+					console.error("Error parsing giftIdActive from localStorage", e);
+				}
+			} else {
+				state.giftIdActive = []; // Valor por defecto si no hay nada almacenado
+			}
 			return state.giftIdActive;
 		},
 	}
