@@ -9,17 +9,14 @@ export const useSessionStore = defineStore("session", {
 
 	actions: {
 		isActive() {
-			console.log(this.user);
 			if (this.user) {
 				return true;
 			}
 			return false;
 		},
 		saveUser(user) {
-			console.log("guardando");
 			this.user = user;
 			this.sessionTime = new Date();
-			console.log(this.user);
 		},
 		token() {
 			return this.user.access_token;
@@ -139,4 +136,22 @@ export const useStoreMezcla = defineStore("mezcla", {
 			this.grupos = null;
 		},
 	},
+});
+
+export const useGiftGameStore = defineStore("game", {
+	state: () => ({
+		giftIdActive: [],
+	}),
+	actions: {
+		setGift(giftIdActive) {
+			localStorage.giftIdActive = JSON.stringify(giftIdActive);
+			this.giftIdActive = giftIdActive;
+		},
+	},
+	getters: {
+		getGift(state) {
+			state.giftIdActive = JSON.parse(localStorage.giftIdActive);
+			return state.giftIdActive;
+		},
+	}
 });

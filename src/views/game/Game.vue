@@ -147,6 +147,7 @@ import Phaser from "phaser";
 import VueCountdown from "@chenfengyuan/vue-countdown";
 import { io } from "socket.io-client";
 import { useToast } from "primevue/usetoast";
+import { useGiftGameStore } from "../../store";
 import axios from "axios";
 
 export default {
@@ -173,6 +174,7 @@ export default {
 		players: [],
 		volumen: 20,
 		toast: null,
+		storeGame: null,
 		API: "https://patosgame.fly.dev",
 		giftListGeneral: [], // [] de los regalos
 		giftActive: [], // [] de los id de los regalos activos
@@ -201,6 +203,15 @@ export default {
 			const urlSocket = this.API;
 			const usuario = this.usuario;
 			const tiempo = parseInt(this.tiempo);
+
+
+			this.giftActive = this.storeGame.getGift;
+			this.giftList = this.giftListGeneral.filter(gift => this.giftActive.includes(gift.id));
+			const giftListInitialGame = this.giftList.reduce((acc, gift) => {
+				acc[gift.id] = gift.points;
+				return acc;
+			}, {});
+
 			const fechaActual = new Date();
 			const timestamp = fechaActual.getTime();
 			const id = usuario + "_" + timestamp;
@@ -212,6 +223,8 @@ export default {
 					time: tiempo,
 				},
 			});
+
+
 
 			const gameCanvas = document.getElementById("gameCanvas");
 
@@ -349,9 +362,11 @@ export default {
 
 					this.espera = true;
 
+					this.groupIdGift = [];
+
 					this.ganador = [];
 					this.players = [];
-					this.gifts = vueDataInstance.$data.giftList;
+					this.gifts = giftListInitialGame;
 					this.skin = [
 						"patitoceleste",
 						"patitomorado",
@@ -404,6 +419,10 @@ export default {
 					this.backgroundMusic.play();
 					this.ducks = [];
 					vueDataInstance.$data.socket.on("gift", (user) => {
+						if(!user.repeatEnd && user.groupId !== '0'){
+							return
+						}
+
 						if (!this.gameActive) {
 							return;
 						}
@@ -414,12 +433,14 @@ export default {
 							});
 							return;
 						}
-						const puntosExiste = this.gifts[user.giftId];
+						let puntosExiste = this.gifts[user.giftId];
 						// Se verifica que el regalo exista en this.gifts
 						if (puntosExiste == undefined && puntosExiste == null) {
 							return;
 						}
-						this.coins = this.coins + this.giftsMoney[user.giftId];
+						puntosExiste = puntosExiste * user.repeatCount
+						;
+						this.coins = (this.coins + this.giftsMoney[user.giftId]) * user.repeatCount;
 						this.handleEventoApi(
 							{
 								userId: user.userId,
@@ -672,6 +693,7 @@ export default {
 
 			//constructor del juego
 			this.game = new Phaser.Game(config);
+
 		},
 		reiniciar() {
 			this.game.destroy(true);
@@ -735,10 +757,16 @@ export default {
 		validateGiftList() {
 		this.giftList = this.giftListGeneral.filter(gift => this.giftActive.includes(gift.id));
 		const instanciaPhaser = this.game.scene.getScene("scene-game");
-		instanciaPhaser.updateGiftsData(this.giftList);
+		const giftList = this.giftList.reduce((acc, gift) => {
+			acc[gift.id] = gift.points;
+			return acc;
+		}, {});
+		instanciaPhaser.updateGiftsData(giftList);
+		this.storeGame.setGift(this.giftActive);
 		}
 	},
 	async created() {
+		this.storeGame = useGiftGameStore();
 		this.toast = useToast();
 		await this.getGiftList();
 	},
