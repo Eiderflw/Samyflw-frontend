@@ -3,6 +3,7 @@
 		<Toast />
 		<div class="usuario" v-if="!admin">
 			<PerfilUsuario />
+			<ReporteReunionesUsuario />
 			<Panel class="Bonus">
 				<template #header>
 					<div class="flex items-center gap-2 flex-end w-full justify-content-center">
@@ -67,7 +68,17 @@
 							<Column header="Estado" class="font-gamers">
 								<template #body="props">
 									<div
-										v-if="miTablaSeleccionado.bonus_cumplidos.some((b) => b.nivel === props.data.nivel)"
+										class="aplica color-rojo"
+										v-if="
+											miTablaSeleccionado.bonus_cumplidos.some((b) => b.nivel === props.data.nivel) &&
+											reunionesConfig.activo &&
+											miCalendario.reuniones_asistencia.length < reunionesConfig.min_reuniones
+										"
+									>
+										Faltan reuniones
+									</div>
+									<div
+										v-else-if="miTablaSeleccionado.bonus_cumplidos.some((b) => b.nivel === props.data.nivel)"
 										class="aplica cursor-pointer color-verde"
 										v-tooltip.top="'Clic para reclamar el bono'"
 										@click="reclamarBonoSeleccionado(props.data.nivel)"
@@ -144,6 +155,19 @@
 										{{ yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[1] }}
 									</div>
 									<div
+										class="aplica color-rojo"
+										v-tooltip.top="'Debes cumplir las reuniones mínimas para reclamar el bono'"
+										v-else-if="
+											estadisticas.dias >= slotProps.data.dias &&
+											estadisticas.horas >= slotProps.data.horas &&
+											estadisticas.diamantes >= slotProps.data.meta &&
+											reunionesConfig.activo &&
+											miCalendario.reuniones_asistencia.length < reunionesConfig.min_reuniones
+										"
+									>
+										Faltan reuniones
+									</div>
+									<div
 										class="aplica cursor-pointer color-verde"
 										v-tooltip.top="'Clic para reclamar el bono'"
 										@click="reclamarBono(slotProps.data._id)"
@@ -167,11 +191,7 @@
 								<span class="font-bold white-space-nowrap">Rookie</span>
 							</div>
 						</template>
-						<DataTable
-							class="bonus-usuario"
-							:value="bonusByCategoria('Rookie')"
-							tableStyle="min-width: 100%"
-						>
+						<DataTable class="bonus-usuario" :value="bonusByCategoria('Rookie')" tableStyle="min-width: 100%">
 							<Column field="exclusivo" header="Exclusivo" class="font-gamers">
 								<template #body="props">
 									{{ props.data.exclusivo ? "Sí" : "No" }}
@@ -225,6 +245,19 @@
 										v-if="yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[0]"
 									>
 										{{ yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[1] }}
+									</div>
+									<div
+										class="aplica color-rojo"
+										v-tooltip.top="'Debes cumplir las reuniones mínimas para reclamar el bono'"
+										v-else-if="
+											estadisticas.dias >= slotProps.data.dias &&
+											estadisticas.horas >= slotProps.data.horas &&
+											estadisticas.diamantes >= slotProps.data.meta &&
+											reunionesConfig.activo &&
+											miCalendario.reuniones_asistencia.length < reunionesConfig.min_reuniones
+										"
+									>
+										Faltan reuniones
 									</div>
 									<div
 										class="aplica cursor-pointer color-verde"
@@ -250,11 +283,7 @@
 								<span class="font-bold white-space-nowrap">Veteran</span>
 							</div>
 						</template>
-						<DataTable
-							class="bonus-usuario"
-							:value="bonusByCategoria('Veteran')"
-							tableStyle="min-width: 100%"
-						>
+						<DataTable class="bonus-usuario" :value="bonusByCategoria('Veteran')" tableStyle="min-width: 100%">
 							<Column field="exclusivo" header="Exclusivo" class="font-gamers">
 								<template #body="props">
 									{{ props.data.exclusivo ? "Sí" : "No" }}
@@ -308,6 +337,19 @@
 										v-if="yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[0]"
 									>
 										{{ yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[1] }}
+									</div>
+									<div
+										class="aplica color-rojo"
+										v-tooltip.top="'Debes cumplir las reuniones mínimas para reclamar el bono'"
+										v-else-if="
+											estadisticas.dias >= slotProps.data.dias &&
+											estadisticas.horas >= slotProps.data.horas &&
+											estadisticas.diamantes >= slotProps.data.meta &&
+											reunionesConfig.activo &&
+											miCalendario.reuniones_asistencia.length < reunionesConfig.min_reuniones
+										"
+									>
+										Faltan reuniones
 									</div>
 									<div
 										class="aplica cursor-pointer color-verde"
@@ -333,11 +375,7 @@
 								<span class="font-bold white-space-nowrap">Pro</span>
 							</div>
 						</template>
-						<DataTable
-							class="bonus-usuario"
-							:value="bonusByCategoria('Pro')"
-							tableStyle="min-width: 100%"
-						>
+						<DataTable class="bonus-usuario" :value="bonusByCategoria('Pro')" tableStyle="min-width: 100%">
 							<Column field="exclusivo" header="Exclusivo" class="font-gamers">
 								<template #body="props">
 									{{ props.data.exclusivo ? "Sí" : "No" }}
@@ -391,6 +429,19 @@
 										v-if="yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[0]"
 									>
 										{{ yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[1] }}
+									</div>
+									<div
+										class="aplica color-rojo"
+										v-tooltip.top="'Debes cumplir las reuniones mínimas para reclamar el bono'"
+										v-else-if="
+											estadisticas.dias >= slotProps.data.dias &&
+											estadisticas.horas >= slotProps.data.horas &&
+											estadisticas.diamantes >= slotProps.data.meta &&
+											reunionesConfig.activo &&
+											miCalendario.reuniones_asistencia.length < reunionesConfig.min_reuniones
+										"
+									>
+										Faltan reuniones
 									</div>
 									<div
 										class="aplica cursor-pointer color-verde"
@@ -416,11 +467,7 @@
 								<span class="font-bold white-space-nowrap">Pro+</span>
 							</div>
 						</template>
-						<DataTable
-							class="bonus-usuario"
-							:value="bonusByCategoria('Pro+')"
-							tableStyle="min-width: 100%"
-						>
+						<DataTable class="bonus-usuario" :value="bonusByCategoria('Pro+')" tableStyle="min-width: 100%">
 							<Column field="exclusivo" header="Exclusivo" class="font-gamers">
 								<template #body="props">
 									{{ props.data.exclusivo ? "Sí" : "No" }}
@@ -474,6 +521,19 @@
 										v-if="yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[0]"
 									>
 										{{ yaReclamaron(slotProps.data._id, slotProps.data.exclusivo, slotProps.data.categorias)[1] }}
+									</div>
+									<div
+										class="aplica color-rojo"
+										v-tooltip.top="'Debes cumplir las reuniones mínimas para reclamar el bono'"
+										v-else-if="
+											estadisticas.dias >= slotProps.data.dias &&
+											estadisticas.horas >= slotProps.data.horas &&
+											estadisticas.diamantes >= slotProps.data.meta &&
+											reunionesConfig.activo &&
+											miCalendario.reuniones_asistencia.length < reunionesConfig.min_reuniones
+										"
+									>
+										Faltan reuniones
 									</div>
 									<div
 										class="aplica cursor-pointer color-verde"
@@ -987,9 +1047,11 @@
 import axios from "axios";
 import { useStoreEvento } from "../store";
 import PerfilUsuario from "./Perfil.vue";
+import ReporteReunionesUsuario from "./ReporteReunionesUsuario.vue";
 export default {
 	components: {
 		PerfilUsuario,
+		ReporteReunionesUsuario,
 	},
 	data() {
 		return {
@@ -1223,7 +1285,7 @@ export default {
 					},
 					{ header: "Referencia", field: "referencia" }
 				);
-			} 
+			}
 			if (notRegalo || this.miTablaSeleccionado.tabla.bonus.length == 0) {
 				headers.push(
 					{

@@ -120,6 +120,8 @@ import VirtualScroller from "primevue/virtualscroller";
 import ListaRegalos from "./components/ListaRegalos.vue";
 import Carousel3d from "vue3-carousel-3d";
 import "vue3-carousel-3d/dist/index.css";
+import VCalendar from "v-calendar";
+import "v-calendar/style.css";
 import TopsCarouselVideos from "./components/TopsCarouselVideos.vue";
 import CarouselNovedades from "./components/CarouselNovedades.vue";
 import CarouselResenas from "./components/CarouselResenas.vue";
@@ -165,6 +167,9 @@ app.use(PrimeVue, {
 	},
 });
 
+app.use(VCalendar, {
+	color: "green",
+});
 app.component("AppBar", AppBar);
 app.component("NavBar", NavBar);
 app.component("Clasificacion", Clasificacion);

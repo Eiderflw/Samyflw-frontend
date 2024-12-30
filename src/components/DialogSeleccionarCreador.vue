@@ -11,10 +11,6 @@
 		class="seleccionar-creador"
 		@hide="cerrarDialog"
 	>
-		<!-- <SeleccionarCreador
-			:creadores_seleccionados="creadores_seleccionados"
-			@creadoresSeleccionados="(c) => (paquete_creador_tabla.creadores = c)"
-		/> -->
 		<div class="flex w-full flex-wrap flex-column justify content-center gap-4">
 			<div class="modo-seleccion w-full flex flex-column gap-1">
 				<label class="m-0 font-bold">Seleccionar a creadores</label>

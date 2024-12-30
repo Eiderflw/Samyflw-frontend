@@ -52,6 +52,8 @@
 				</Message>
 			</div>
 		</div>
+		<!-- Configuración del confirm globalmente -->
+		<ConfirmDialog />
 	</div>
 </template>
 <script>
@@ -108,7 +110,7 @@ export default {
 		if (!this.store.isActive()) {
 			this.$router.push("/login");
 		}
-        this.getNewSaldo();
+		this.getNewSaldo();
 		await this.getNotificaciones();
 	},
 };
