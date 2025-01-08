@@ -125,7 +125,11 @@ export default {
 			await axios
 				.get(`${this.API}/top-seleccionado`, this.token)
 				.then((resp) => {
-					this.topSeleccionados = resp.data != null ? resp.data.seleccionado.flatMap((s) => s._id) : [];
+					if (resp.data && Array.isArray(resp.data.seleccionado)) {
+						this.topSeleccionados = resp.data.seleccionado.flatMap((s) => s._id);
+					} else {
+						this.topSeleccionados = []; // Si no existe, asigna un array vacío
+					}
 				})
 				.catch((error) => {
 					switch (error.response.data.statusCode) {

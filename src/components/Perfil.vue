@@ -73,7 +73,7 @@
 				<img src="/assets/img/eventos/divisor-titulo.png" class="w-full" alt="Divisor" />
 
 				<div
-					class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap md:flex-nowrap md:gap-3 xs:flex-wrap xs:justify-content-center md:justify-content-center lg:justify-content-center"
+					class="flex gap-8 xs:gap-3 sm:gap-3 sm:flex-wrap sm:justify-content-center md:flex-nowrap md:gap-3 xs:flex-wrap xs:justify-content-center md:justify-content-center lg:justify-content-center"
 				>
 					<div class="flex flex-column gap-4">
 						<div class="seguidores flex align-items-center decorador gap-2 p-2">
@@ -365,7 +365,7 @@ export default {
 	.editar-perfil {
 		padding: 0 !important;
 		padding-top: 14px !important;
-		background-size: cover !important;
+		background-size: 100% 100% !important;
 	}
 }
 

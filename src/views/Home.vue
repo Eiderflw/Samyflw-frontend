@@ -72,7 +72,7 @@
 				<section id="clasificados" class="clasificados_destacados p-7 flex flex-column align-items-center">
 					<Panel :unstyled="true" class="borde_tabla">
 						<template #header>
-							<div class="containerC" style="margin-bottom: 20px">
+							<div class="containerC" style="margin-bottom: 20px" v-if="clasificados.length > 2">
 								<Clasificacion :nombre="clasificados[1].usuario" top="2" tipo="Platino" :foto="clasificados[1].foto" />
 								<Clasificacion top="1" tipo="Oro" :nombre="clasificados[0].usuario" :foto="clasificados[0].foto" />
 								<Clasificacion :nombre="clasificados[2].usuario" top="3" tipo="Cobre" :foto="clasificados[2].foto" />
@@ -284,7 +284,7 @@ export default {
 		});
 
 		await axios.get(`${this.API}/usuario/homeCreadores`).then((resp) => {
-			this.clasificados = resp.data;
+			this.clasificados = resp.data.length == 0 ? this.clasificados : resp.data;
 		});
 	},
 	unmounted() {
@@ -522,10 +522,11 @@ html {
 	max-height: 578px;
 	height: 100%;
 }
-.clasificados_destacados > .borde_tabla > div:last-child{
+.clasificados_destacados > .borde_tabla > div:last-child {
 	height: 50%;
 }
-.clasificados_destacados > .borde_tabla > div:last-child>*, .tabla_destacados_home{
+.clasificados_destacados > .borde_tabla > div:last-child > *,
+.tabla_destacados_home {
 	height: 100%;
 }
 .clasificados_destacados > .borde_tabla > div:last-child > div > .tabla_destacados_home > div:first-child > table > thead > tr > th {

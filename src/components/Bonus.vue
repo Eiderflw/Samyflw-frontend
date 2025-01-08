@@ -6,8 +6,8 @@
 			<ReporteReunionesUsuario />
 			<Panel class="Bonus">
 				<template #header>
-					<div class="flex items-center gap-2 flex-end w-full justify-content-center">
-						<img src="/assets/img/perfil/iconos/bonus.png" height="170px" alt="Bonus" />
+					<div class="flex align-items-center w-full justify-content-center overflow-hidden">
+						<img src="/assets/img/perfil/iconos/bonus.png" height="170px" width="min-content" alt="Bonus" />
 					</div>
 				</template>
 				<TabView v-if="Object.hasOwn(miTablaSeleccionado.tabla, '_id')" :scrollable="true" class="tabBonusUsuario">

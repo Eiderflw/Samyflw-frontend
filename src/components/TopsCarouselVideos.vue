@@ -246,10 +246,9 @@ export default {
 				this.displaySlides = 3;
 			} else if (widthVen > 1024 && widthVen < 1440) {
 				this.displaySlides = 4;
-			}else{
+			} else {
 				this.displaySlides = 5;
 			}
-
 		},
 	},
 	watch: {
@@ -355,6 +354,11 @@ export default {
 	min-width: 400px;
 	height: 840px;
 	max-height: 1000px;
+}
+.top-creadores > .top-seleccionado > div > .lista-creadores{
+	max-height: 660px;
+	overflow: auto;
+	padding: 0 4px 4px 4px;
 }
 .top-creadores > .top-seleccionado > div > .lista-creadores > .top-creador:not(.top1) {
 	padding-left: 4px;

@@ -4,7 +4,7 @@
 			@click="modalCalendario = true"
 			:severity="getSeverity()"
 			rounded
-			class="cursor-pointer"
+			class="cursor-pointer btn-info-reunion w-auto"
 			v-tooltip.bottom="'Clic para ver más reuniones'"
 		>
 			<template #icon>
@@ -121,7 +121,7 @@ export default {
 			global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 			name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
 		},
-		miCalendario: { reuniones: [], reuniones_asistencia: [] },
+		miCalendario: { reuniones: [], reuniones_asistencia: [], reuniones_bonus_actual: [] },
 		reunionesCalendar: [],
 		dataReunion: { asunto: null, fecha: new Date(), estado: "Pendiente", asistentes: [] },
 		modalCalendario: false,
@@ -130,15 +130,19 @@ export default {
 	methods: {
 		getReunionCercana() {
 			if (this.miCalendario.reuniones.length > 0) {
-				const r = this.miCalendario.reuniones[0];
-				return `Reunión: ${r.fecha.slice(0, 10)} ${r.fecha.slice(11, 16)}`;
+				const r = this.miCalendario.reuniones_bonus_actual.find((re) => re.estado == "Pendiente");
+				if (r != undefined) {
+					return `Reunión: ${r.fecha.slice(0, 10)} ${r.fecha.slice(11, 16)}`;
+				}
 			}
 			return "Sin reuniones";
 		},
 		getSeverity() {
 			if (this.miCalendario.reuniones.length > 0) {
-				const reunion = this.miCalendario.reuniones[0];
-				return reunion.estado == "Pendiente" ? "info" : "success";
+				const reunion = this.miCalendario.reuniones_bonus_actual.find((re) => re.estado == "Pendiente");
+				if (reunion != undefined) {
+					return reunion.estado == "Pendiente" ? "info" : "success";
+				}
 			}
 			return "info";
 		},
@@ -257,5 +261,13 @@ export default {
 .dialogCalendario > .p-dialog-footer {
 	background: transparent;
 	border: none;
+}
+.calendario-usuario>.p-tag{
+	width: auto !important;
+}
+@media (max-width: 410px) {
+	.btn-info-reunion > div > span {
+		font-size: 0.8rem !important;
+	}
 }
 </style>
