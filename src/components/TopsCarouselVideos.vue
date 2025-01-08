@@ -355,7 +355,8 @@ export default {
 	height: 840px;
 	max-height: 1000px;
 }
-.top-creadores > .top-seleccionado > div > .lista-creadores{
+.top-creadores > .top-seleccionado > div > .lista-creadores,
+.top-creadores > .top-agencias > div > .lista-creadores {
 	max-height: 660px;
 	overflow: auto;
 	padding: 0 4px 4px 4px;

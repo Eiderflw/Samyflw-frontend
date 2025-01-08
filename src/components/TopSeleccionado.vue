@@ -21,23 +21,23 @@
 			:rows="10"
 			:rowsPerPageOptions="[5, 10, 20, 50]"
 			tableStyle="min-width: 100%"
+			dataKey="_id"
+			v-model:selection="topSeleccionados"
 		>
 			<template #header>
 				<p class="m-0 text-center text-xl">
 					{{ topSeleccionados.length }} {{ topSeleccionados.length == 1 ? "creador seleccionado" : "creadores seleccionados" }}
 				</p>
 			</template>
+			<Column selectionMode="multiple" headerStyle="width: 3rem">
+				<template #header>
+					<label for="p-checkbox-input" class="mx-1 flex-order-1">Seleccionar</label>
+				</template>
+			</Column>
 			<Column field="usuario" header="Creador" sortable />
 			<Column field="agencia" header="Agencia" sortable />
 			<Column field="diamantes_mes_actual" header="Diamantes mes" sortable />
 			<Column field="diamantes_mes_anterior" header="Diamantes anterior" sortable />
-			<Column header="Seleccionar">
-				<template #body="props">
-					<div class="flex flex-wrap gap-2">
-						<Checkbox v-model="topSeleccionados" :inputId="props.data._id" :value="props.data._id" />
-					</div>
-				</template>
-			</Column>
 		</DataTable>
 	</Panel>
 </template>
@@ -90,8 +90,9 @@ export default {
 		},
 		async guardarTopSeleccionado() {
 			this.btnGuardar = true;
+			const seleccionados = this.topSeleccionados.flatMap((top) => top._id);
 			await axios
-				.post(`${this.API}/top-seleccionado/crear`, this.topSeleccionados, this.token)
+				.post(`${this.API}/top-seleccionado/crear`, seleccionados, this.token)
 				.then((resp) => {
 					this.$toast.add({
 						severity: resp.data.error ? "error" : "success",
@@ -125,11 +126,7 @@ export default {
 			await axios
 				.get(`${this.API}/top-seleccionado`, this.token)
 				.then((resp) => {
-					if (resp.data && Array.isArray(resp.data.seleccionado)) {
-						this.topSeleccionados = resp.data.seleccionado.flatMap((s) => s._id);
-					} else {
-						this.topSeleccionados = []; // Si no existe, asigna un array vacío
-					}
+					this.topSeleccionados = resp.data && Array.isArray(resp.data.seleccionado) ? resp.data.seleccionado: [];
 				})
 				.catch((error) => {
 					switch (error.response.data.statusCode) {
