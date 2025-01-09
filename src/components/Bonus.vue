@@ -1127,6 +1127,11 @@ export default {
 				{ label: "Batallas", value: "batallas" },
 				{ label: "Diamantes por partida", value: "diamantes_partida" },
 			],
+			miCalendario: { reuniones: [], reuniones_asistencia: [], reuniones_bonus_actual: [] },
+			reunionesConfig: {
+				activo: false,
+				min_reuniones: 0,
+			},
 		};
 	},
 	methods: {
@@ -2218,6 +2223,51 @@ export default {
 			});
 			return heightExclusivos;
 		},
+		async getConfigReuniones() {
+			await axios.get(`${this.API}/reunion/config/actual`, this.token).then((resp) => {
+				if (resp.data != null && resp.data != "") {
+					this.reunionesConfig.min_reuniones = resp.data.min_reuniones;
+					this.reunionesConfig.activo = resp.data.activo;
+				}
+			});
+		},
+		async getMiCalendario() {
+			const d = new Date();
+			await axios
+				.get(`${this.API}/reunion/usuario/${this.store.getId()}`, this.token)
+				.then((resp) => {
+					if (!resp.data.error) {
+						this.miCalendario = resp.data;
+					}
+				})
+				.catch((error) => {
+					switch (error.response.data.statusCode) {
+						case 400:
+							//Bad Request
+							this.$toast.add({
+								severity: "error",
+								summary: "Obtener mi calendario",
+								detail: "Formato de los datos incorrecto",
+								life: 1600,
+							});
+							break;
+						case 401:
+							//Se le termino la sesión
+							this.store.clearUser();
+							this.$router.push("/login");
+							break;
+						default:
+							this.$toast.add({
+								severity: "error",
+								summary: "Obtener mi calendario",
+								detail: "Sucedió un error, comuníquese con soporte",
+								life: 1600,
+							});
+							console.log("Error: ", error);
+							break;
+					}
+				});
+		},
 	},
 	async created() {
 		this.store = useStoreEvento();
@@ -2234,6 +2284,8 @@ export default {
 			this.usuario = this.store.getUsuario();
 			await this.getMisPremiosActuales();
 			await this.getUsuario();
+			await this.getConfigReuniones();
+			await this.getMiCalendario();
 			this.estadisticas.dias = parseInt(this.usuario.dias_validos_mes_actual);
 			this.estadisticas.horas = this.usuario.last_live_duration_mes_actual.includes("h")
 				? parseInt(this.usuario.last_live_duration_mes_actual.split("h")[0])

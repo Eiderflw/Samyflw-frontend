@@ -5,14 +5,22 @@
 			<Carousel
 				:value="novedades"
 				:numVisible="numItemsVisible"
-				:circular="true"
 				:showNavigators="true"
 				:showIndicators="false"
-				:autoplayInterval="2800"
+				circular
+				:autoplayInterval="3000"
 				class="w-12"
+				:responsiveOptions="responsiveOptions"
+				ref="refsNovedades"
 			>
 				<template #item="props">
-					<div class="item_novedad flex flex-column align-items-end gap-1">
+					<div
+						class="item_novedad flex flex-column align-items-end gap-1"
+						@mouseenter="stopAutoplay"
+						@mouseleave="startAutoplay"
+						@focus="stopAutoplay"
+						@blur="startAutoplay"
+					>
 						<h1 class="text-right mb-0 font-bold">{{ props.data.titulo }}</h1>
 						<div :class="`tipo_novedad uppercase font-bold w-max text-xs ${props.data.tipo.toLowerCase()}`">
 							<span>{{ props.data.tipo }}</span>
@@ -46,30 +54,42 @@ export default {
 		API: import.meta.env.VITE_APP_API,
 		numItemsVisible: 1,
 		novedades: [],
+		responsiveOptions: [
+			{
+				breakpoint: "3000px",
+				numVisible: 3,
+				numScroll: 1,
+			},
+			{
+				breakpoint: "990px",
+				numVisible: 2,
+				numScroll: 1,
+			},
+			{
+				breakpoint: "730px",
+				numVisible: 1,
+				numScroll: 1,
+			},
+		],
 	}),
+	methods: {
+		stopAutoplay() {
+			this.$refs.refsNovedades.stopAutoplay();
+		},
+		startAutoplay() {
+			this.$refs.refsNovedades.startAutoplay();
+		},
+	},
 	async created() {
 		await axios.get(`${this.API}/regla-actualizacion/nuevas`).then((resp) => {
 			this.novedades = resp.data;
 		});
-		const widthVen = window.innerWidth;
-		if (widthVen <= 420) {
-			this.numItemsVisible = 1;
-		} else if (widthVen <= 575) {
-			this.numItemsVisible = 2;
-		} else if (widthVen <= 900) {
-			this.numItemsVisible = 3;
-		} else if (widthVen <= 1024) {
-			this.numItemsVisible = 4;
-		} else if (widthVen <= 1440) {
-			this.numItemsVisible = 5;
-		} else if (widthVen <= 1800) {
-			this.numItemsVisible = 6;
-		} else {
-			this.numItemsVisible = 7;
-		}
+		console.log(this.$refs.refsNovedades);
+
+		/*
 		if(this.novedades.length<this.numItemsVisible){
 			this.numItemsVisible = Math.round(this.novedades.length/2);
-		}
+		} */
 	},
 };
 </script>
@@ -103,6 +123,7 @@ export default {
 	background-image: url("/assets/img/home/item-carousel-novedades.png");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
+	margin: 0 10px;
 	width: 320px;
 	max-width: 330px;
 	padding: 20px 25px;
@@ -146,5 +167,17 @@ export default {
 	padding: 4px 47px 0px 38px;
 	text-align: start;
 	width: 100%;
+}
+
+@media (max-width: 990px) {
+	.item_novedad {
+		width: 300px !important;
+	}
+}
+
+@media (max-width: 330px) {
+	.item_novedad {
+		width: 98% !important;
+	}
 }
 </style>
