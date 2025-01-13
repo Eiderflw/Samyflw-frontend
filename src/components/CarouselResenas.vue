@@ -7,8 +7,9 @@
 			:showNavigators="true"
 			:showIndicators="true"
 			:autoplayInterval="2000"
-			class="w-full resenas_usuarios"
+			class="w-full resenas_usuarios carousel-items-centrados"
 			:numVisible="numItemsVisible"
+			:responsiveOptions="responsiveOptions"
 		>
 			<template #item="props">
 				<div class="item_resena_usuario relative mt-8 mb-4">
@@ -54,7 +55,7 @@
 <script>
 export default {
 	data: () => ({
-		numItemsVisible:1,
+		numItemsVisible: 1,
 		resenas: [
 			{
 				nombre: "Juan",
@@ -81,28 +82,24 @@ export default {
 				estrellas: 2,
 			},
 		],
+		responsiveOptions: [
+			{
+				breakpoint: "3000px",
+				numVisible: 3,
+				numScroll: 1,
+			},
+			{
+				breakpoint: "1200px",
+				numVisible: 2,
+				numScroll: 1,
+			},
+			{
+				breakpoint: "800px",
+				numVisible: 1,
+				numScroll: 1,
+			},
+		],
 	}),
-	created(){
-		const widthVen = window.innerWidth;
-		if (widthVen <= 420) {
-			this.numItemsVisible = 1;
-		} else if (widthVen <= 575) {
-			this.numItemsVisible = 2;
-		} else if (widthVen <= 900) {
-			this.numItemsVisible = 3;
-		} else if (widthVen <= 1024) {
-			this.numItemsVisible = 4;
-		} else if (widthVen <= 1440) {
-			this.numItemsVisible = 5;
-		} else if (widthVen <= 1800) {
-			this.numItemsVisible = 6;
-		} else {
-			this.numItemsVisible = 7;
-		}
-		if(this.resenas.length<this.numItemsVisible){
-			this.numItemsVisible = Math.round(this.resenas.length/2);
-		}
-	}
 };
 </script>
 <style scoped>
@@ -125,6 +122,7 @@ img.estrella {
 }
 .item_resena_usuario {
 	max-width: 350px;
+	min-width: 350px;
 	border: 3px solid #ffffff;
 	border-radius: 12px;
 	padding: 0 6px 28px 6px;
@@ -134,6 +132,12 @@ img.estrella {
 	margin-top: 70px !important;
 }
 
+@media (max-width: 450px) {
+	.item_resena_usuario {
+		max-width: 300px !important;
+		min-width: 300px !important;
+	}
+}
 @media (max-width: 300px) {
 	img.estrella {
 		width: 24px !important;

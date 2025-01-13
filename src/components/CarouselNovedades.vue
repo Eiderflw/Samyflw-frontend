@@ -9,7 +9,7 @@
 				:showIndicators="false"
 				circular
 				:autoplayInterval="3000"
-				class="w-12"
+				class="w-12 carousel-items-centrados"
 				:responsiveOptions="responsiveOptions"
 				ref="refsNovedades"
 			>
@@ -84,12 +84,6 @@ export default {
 		await axios.get(`${this.API}/regla-actualizacion/nuevas`).then((resp) => {
 			this.novedades = resp.data;
 		});
-		console.log(this.$refs.refsNovedades);
-
-		/*
-		if(this.novedades.length<this.numItemsVisible){
-			this.numItemsVisible = Math.round(this.novedades.length/2);
-		} */
 	},
 };
 </script>
