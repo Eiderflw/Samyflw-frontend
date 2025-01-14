@@ -109,8 +109,9 @@ export default {
 			handler(newVal) {
 				if (newVal) {
 					this.servicios = this.serviciosActivos.filter((s) => s.category == newVal);
+				} else {
+					this.servicios = this.serviciosActivos;
 				}
-				this.servicios = this.serviciosActivos;
 			},
 			deep: true,
 		},
