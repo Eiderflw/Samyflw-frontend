@@ -87,3 +87,8 @@ p {
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
+.carousel-items-centrados .p-carousel-item {
+  display: flex;
+  justify-content: center;
+}
