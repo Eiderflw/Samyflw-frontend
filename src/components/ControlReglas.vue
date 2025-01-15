@@ -76,7 +76,6 @@
 				</div>
 			</div>
 		</div>
-		<ConfirmDialog />
 	</div>
 </template>
 <script>
@@ -110,6 +109,7 @@ export default {
 		confirmarEliminar(id = null, tipo = "") {
 			if (id != null) {
 				this.$confirm.require({
+					group: "global",
 					message: `¿Está seguro de eliminar esta ${tipo}?`,
 					header: `Eliminar ${tipo}`,
 					icon: "pi pi-exclamation-triangle",

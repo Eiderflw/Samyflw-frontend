@@ -290,7 +290,6 @@
 				<Button label="Entregar premio" :disabled="btnEnviarPremio" @click="EnviarPremio" />
 			</template>
 		</Dialog>
-		<ConfirmDialog />
 	</Panel>
 </template>
 <script>
@@ -528,6 +527,7 @@ export default {
 		},
 		confirmarEliminar(usuario, id_concurso, fecha_obtenido) {
 			this.$confirm.require({
+				group: "global",
 				message: `¿Está seguro de eliminar este premio?`,
 				header: "Eliminar premio",
 				icon: "pi pi-exclamation-triangle",

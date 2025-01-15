@@ -238,7 +238,6 @@
 				<Button label="Cerrar" @click="modalVerCreadores = false" text severity="danger" />
 			</template>
 		</Dialog>
-		<ConfirmDialog />
 	</Panel>
 </template>
 <script>
@@ -259,7 +258,7 @@ export default {
 			creadores_seleccionados: [],
 			mostrar_modal: false,
 			guardando_datos: false,
-			id_current_tabla: '',
+			id_current_tabla: "",
 		},
 		paquete_creador_tabla: { tabla: null, creadores: [] },
 		paquete_bonus_tabla: {
@@ -889,6 +888,7 @@ export default {
 		confirmEliminarTabla(id_tabla, nivel = null) {
 			if (nivel == null) {
 				this.$confirm.require({
+					group: "global",
 					message: "¿Está seguro de eliminar esta tabla?",
 					header: "Eliminar tabla",
 					icon: "pi pi-exclamation-triangle",
@@ -904,6 +904,7 @@ export default {
 				});
 			} else {
 				this.$confirm.require({
+					group: "global",
 					message: "¿Está seguro de eliminar este bonus?",
 					header: "Eliminar bonus",
 					icon: "pi pi-exclamation-triangle",

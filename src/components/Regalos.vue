@@ -95,7 +95,6 @@
 				<Button :label="msg_btn_crear" :disabled="btnCrear" @click="crearRegalo" />
 			</template>
 		</Dialog>
-		<ConfirmDialog />
 	</div>
 </template>
 <script>
@@ -156,6 +155,7 @@ export default {
 		},
 		confirmarEliminar(id_regalo) {
 			this.$confirm.require({
+				group:'global',
 				message: `¿Está seguro de eliminar este regalo?`,
 				header: "Eliminar premio",
 				icon: "pi pi-exclamation-triangle",

@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		<!-- Configuración del confirm globalmente -->
-		<ConfirmDialog />
+		<ConfirmDialog group="global" />
 	</div>
 </template>
 <script>
