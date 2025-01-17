@@ -31,7 +31,7 @@
 					<a href="#/terminos">Terminos</a>
 					<router-link to="/actualizaciones-reglas">Control reglas</router-link>
 					<router-link to="/evento">Eventos</router-link>
-					<router-link to="/EventoEspecialView">Eventos Categoría</router-link>
+					<!-- <router-link to="/EventoEspecialView">Eventos Categoría</router-link> -->
 					<router-link to="/login">Login</router-link>
 					<Button icon="pi pi-bars" class="botonMenu" text size="large" @click="visibleSidebar = true" />
 				</nav>

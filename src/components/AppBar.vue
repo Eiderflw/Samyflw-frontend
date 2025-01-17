@@ -597,11 +597,11 @@ export default {
 					icon: "pi pi-calendar-plus",
 					route: "/evento",
 				},
-				{
+				/* {
 					label: "Eventos Especiales",
 					icon: "pi pi-flag-fill",
 					route: "/EventoEspecialView",
-				},
+				}, */
 				{
 					label: "Batallas",
 					icon: "pi pi-calendar-plus",
