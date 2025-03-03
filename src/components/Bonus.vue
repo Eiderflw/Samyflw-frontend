@@ -77,15 +77,21 @@
 									>
 										Faltan reuniones
 									</div>
+									<div class="aplica color-rojo" v-else-if="miTablaSeleccionado.bonus_reclamados.some((b) => b.nivel === props.data.nivel)">
+										{{ getMessageBono(props.data.nivel) }}
+									</div>
 									<div
-										v-else-if="miTablaSeleccionado.bonus_cumplidos.some((b) => b.nivel === props.data.nivel)"
+										v-else-if="
+											miTablaSeleccionado.bonus_cumplidos.some((b) => b.nivel === props.data.nivel) &&
+											miTablaSeleccionado.bonus_reclamados.length == 0
+										"
 										class="aplica cursor-pointer color-verde"
 										v-tooltip.top="'Clic para reclamar el bono'"
 										@click="reclamarBonoSeleccionado(props.data.nivel)"
 									>
 										Reclamar
 									</div>
-									<div class="aplica color-rojo" v-else>{{ getMessageBono(props.data.nivel) }}</div>
+									<div class="aplica color-rojo" v-else>No aplica</div>
 								</template>
 							</Column>
 						</DataTable>
@@ -1120,7 +1126,7 @@ export default {
 			modalVerCumplen: false,
 			idsMisPremios: [],
 			categorias: ["Rookie", "Pro", "Pro+", "Veteran"],
-			miTablaSeleccionado: { tabla: {}, bonus_cumplidos: [] },
+			miTablaSeleccionado: { tabla: {}, bonus_cumplidos: [], bonus_reclamados:[] },
 			criterios: [
 				{ label: "Horas", value: "horas" },
 				{ label: "Diamantes", value: "diamantes" },
