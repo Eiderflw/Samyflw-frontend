@@ -349,7 +349,7 @@ export default {
 	methods: {
 		async getCreadores() {
 			try {
-				const response = await axios.get(`${this.API}/usuario`, this.token);
+				const response = await axios.get(`${this.API}/usuario/premios`, this.token);
 				if (response && response.data) {
 					this.premios = response.data.reduce((acc, user) => {
 						if (user.premios) {
