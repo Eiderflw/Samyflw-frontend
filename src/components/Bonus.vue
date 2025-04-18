@@ -1985,6 +1985,16 @@ export default {
 				});
 		},
 		async reclamarBono(bono = null) {
+			const diaActual = new Date().getDate();
+			if (diaActual > 3) {
+				this.$toast.add({
+					severity: "warn",
+					summary: "Reclamar bono",
+					detail: "Solo puedes reclamar los bonos del 1 al 3 de cada mes",
+					life: 1600,
+				});
+				return;
+			}
 			if (bono != null) {
 				if (!this.reclamandoBonus) {
 					this.reclamandoBonus = true;
@@ -2039,6 +2049,16 @@ export default {
 			}
 		},
 		async reclamarBonoSeleccionado(nivel = null) {
+			const diaActual = new Date().getDate();
+			if (diaActual > 3) {
+				this.$toast.add({
+					severity: "warn",
+					summary: "Reclamar bono",
+					detail: "Solo puedes reclamar los bonos del 1 al 3 de cada mes",
+					life: 1600,
+				});
+				return;
+			}
 			if (nivel != null) {
 				if (!this.reclamandoBonus) {
 					this.reclamandoBonus = true;
@@ -2086,7 +2106,7 @@ export default {
 				} else {
 					this.$toast.add({
 						severity: "info",
-						summary: "Reclamar préstamo",
+						summary: "Reclamar bono",
 						detail: "Se está reclamando un bono, espera un momento...",
 						life: 1600,
 					});
