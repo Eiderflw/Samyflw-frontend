@@ -31,6 +31,9 @@ import Servicios from "../components/Servicios.vue";
 import TopSeleccionado from "../components/TopSeleccionado.vue";
 import TablaSeleccionado from "../components/TablaSeleccionado.vue";
 import Reuniones from "../components/Reuniones.vue";
+import AlertasSonido from "../components/AlertasSonido.vue";
+import ChatTTS from "../components/ChatTTS.vue";
+import EnLive from "../components/EnLive.vue";
 
 const routes = [
 	{ path: "/", name: "Home", component: Home },
@@ -38,8 +41,16 @@ const routes = [
 	{ path: "/login", name: "LoginEvento", component: LoginEvento },
 	{ path: "/registro", name: "RegistroEvento", component: Registro },
 	{ path: "/terminos", name: "Terminos", component: Terminos },
-	{ path: "/EventoEspecialView", name: "EventoEspecialView", component: EventoEspecialView },
-	{ path: "/actualizaciones-reglas", name: "ActualizacionesReglas", component: ActualizacionesReglas },
+	{
+		path: "/EventoEspecialView",
+		name: "EventoEspecialView",
+		component: EventoEspecialView,
+	},
+	{
+		path: "/actualizaciones-reglas",
+		name: "ActualizacionesReglas",
+		component: ActualizacionesReglas,
+	},
 	{
 		path: "/panel",
 		name: "Panel",
@@ -235,6 +246,42 @@ const routes = [
 				beforeEnter: (to, from, next) => {
 					const store = useStoreEvento();
 					return store.isAdmin() ? next() : next("/login");
+				},
+			},
+			{
+				path: "/panel/alertas",
+				name: "AlertasSonido",
+				component: AlertasSonido,
+				beforeEnter: (to, from, next) => {
+					const store = useStoreEvento();
+					if (store.isActive()) {
+						return !store.isAdmin() ? next() : next(from);
+					}
+					return next("/login");
+				},
+			},
+			{
+				path: "/panel/tts",
+				name: "ChatTTS",
+				component: ChatTTS,
+				beforeEnter: (to, from, next) => {
+					const store = useStoreEvento();
+					if (store.isActive()) {
+						return !store.isAdmin() ? next() : next(from);
+					}
+					return next("/login");
+				},
+			},
+			{
+				path: "/panel/live",
+				name: "EnLive",
+				component: EnLive,
+				beforeEnter: (to, from, next) => {
+					const store = useStoreEvento();
+					if (store.isActive()) {
+						return !store.isAdmin() ? next() : next(from);
+					}
+					return next("/login");
 				},
 			},
 		],
