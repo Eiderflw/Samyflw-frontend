@@ -546,7 +546,7 @@ export default {
 				const resp = await axios.get(`${this.API}/alerta-sonido/usuario/${this.store.getId()}`, this.headers);
 				const alt = typeof resp.data != "object" ? { usuario: null, alertas: [], isActiva: false } : resp.data;
 				this.storeSocket.actualizarConfig(null, { ...alt, alertas: alt.alertas.filter((a) => a.isHabilitada == true) });
-			
+
 				this.misAlertas = { ...alt, alertas: alt.alertas.map((a) => ({ ...a, volumen: a.volumen * 100 })) };
 			} catch (error) {
 				switch (error.response.data.statusCode) {
@@ -982,9 +982,11 @@ export default {
 		await this.getGifts();
 		await this.getSonidos();
 		await this.getMisAlertas();
+		if (!this.misAlertas.isActiva) {
+			this.misAlertas.isActiva = true;
+			await this.actualizarEstado();
+		}
 		this.loadingAlertas = false;
-
-		
 	},
 };
 </script>
