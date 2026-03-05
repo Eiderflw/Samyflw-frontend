@@ -208,12 +208,82 @@
 				<Button label="Si,Restablecer" @click="RestablecerContrasena()" severity="success" />
 			</template>
 		</Dialog>
+		<!-- Widget de presencia en tiempo real -->
+		<div class="presencia-badge" @click="modalPresencia = true" title="Usuarios en línea ahora">
+			<span class="presencia-dot"></span>
+			<span class="presencia-count">{{ usuariosActivos.length }}</span>
+			<span class="presencia-label">en línea</span>
+		</div>
+
+		<!-- Modal historial de presencia -->
+		<Dialog
+			v-model:visible="modalPresencia"
+			header="👥 Usuarios en la plataforma"
+			:style="{ width: '52rem' }"
+			:breakpoints="{ '1199px': '75vw', '575px': '95vw' }"
+			:modal="true"
+			:draggable="false"
+		>
+			<!-- Tabs de fecha -->
+			<div class="flex gap-2 mb-3 flex-wrap">
+				<Button
+					v-for="tab in ['Ahora', 'Hoy', 'Ayer', 'Fecha']"
+					:key="tab"
+					:label="tab"
+					:severity="presenciaTab === tab ? 'primary' : 'secondary'"
+					size="small"
+					@click="cambiarTabPresencia(tab)"
+				/>
+				<Calendar
+					v-if="presenciaTab === 'Fecha'"
+					v-model="presenciaFechaCustom"
+					dateFormat="yy-mm-dd"
+					placeholder="Selecciona fecha"
+					showButtonBar
+					@date-select="cargarHistorialFecha"
+					style="width: 160px"
+				/>
+			</div>
+
+			<!-- Tabla usuarios -->
+			<DataTable
+				:value="presenciaTab === 'Ahora' ? usuariosActivos : historialAccesos"
+				:rows="10"
+				paginator
+				size="small"
+				showGridlines
+				:rowsPerPageOptions="[10, 25, 50]"
+			>
+				<Column header="Foto" style="width: 60px">
+					<template #body="s">
+						<img
+							:src="s.data.foto || 'https://via.placeholder.com/36'"
+							style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0"
+						/>
+					</template>
+				</Column>
+				<Column field="usuario" header="Usuario" sortable />
+				<Column field="rol" header="Rol" sortable />
+				<Column header="Entró" sortable>
+					<template #body="s">{{ formatFechaPresencia(s.data.fechaLogin) }}</template>
+				</Column>
+				<Column header="Último ping" v-if="presenciaTab !== 'Ahora'">
+					<template #body="s">{{ formatFechaPresencia(s.data.ultimoHeartbeat) }}</template>
+				</Column>
+				<Column header="Estado" style="width: 90px">
+					<template #body="s">
+						<span v-if="presenciaTab === 'Ahora' || s.data.activo" style="color:#22c55e;font-weight:600">● En línea</span>
+						<span v-else style="color:#94a3b8">○ Ausente</span>
+					</template>
+				</Column>
+			</DataTable>
+		</Dialog>
 	</Panel>
 </template>
 <script>
 import axios from "axios";
 import { FilterMatchMode } from "primevue/api";
-import { useStoreEvento, useStoreMezcla } from "../store";
+import { useStoreEvento, useStoreMezcla, usePresenceStore } from "../store";
 export default {
 	data: () => ({
 		API: import.meta.env.VITE_APP_API,
@@ -251,7 +321,18 @@ export default {
 			grupo1: null,
 			grupo2: null,
 		},
+		modalPresencia: false,
+		historialAccesos: [],
+		presenciaTab: "Ahora",
+		presenciaFechaCustom: null,
+		presenciaInterval: null,
 	}),
+	computed: {
+		usuariosActivos() {
+			const presenceStore = usePresenceStore();
+			return presenceStore.activos || [];
+		},
+	},
 	methods: {
 		asignarExcel(event) {
 			this.paquete.excel = event.target.files[0];
@@ -314,6 +395,35 @@ export default {
 					life: 1500,
 				});
 			}
+		},
+		async cambiarTabPresencia(tab) {
+			this.presenciaTab = tab;
+			if (tab === 'Ahora') {
+				// El widget usa computed -> presenceStore.activos
+			} else if (tab === 'Hoy') {
+				const hoy = new Date().toISOString().slice(0, 10);
+				await this.cargarHistorialPorFecha(hoy);
+			} else if (tab === 'Ayer') {
+				const ayer = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+				await this.cargarHistorialPorFecha(ayer);
+			}
+		},
+		async cargarHistorialFecha() {
+			if (!this.presenciaFechaCustom) return;
+			const fecha = new Date(this.presenciaFechaCustom).toISOString().slice(0, 10);
+			await this.cargarHistorialPorFecha(fecha);
+		},
+		async cargarHistorialPorFecha(fecha) {
+			try {
+				const res = await axios.get(`${this.API}/usuario/historial-accesos/${fecha}`, {
+					headers: { Authorization: `Bearer ${this.store.getToken()}` }
+				});
+				this.historialAccesos = res.data;
+			} catch (_) {}
+		},
+		formatFechaPresencia(fecha) {
+			if (!fecha) return '-';
+			return new Date(fecha).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 		},
 		abrirModalInsigniasActualizar(insignias, id) {
 			this.paqueteActualizarInsigniasUsuario.selectedInsignias = insignias;
@@ -586,6 +696,62 @@ export default {
 		}
 		await this.getCreadores();
 		await this.getInsignias();
+		
+		this.presenciaInterval = setInterval(() => {
+			if (this.modalPresencia && this.presenciaTab !== 'Ahora') {
+				if (this.presenciaTab === 'Hoy') {
+					this.cargarHistorialPorFecha(new Date().toISOString().slice(0, 10));
+				} else if (this.presenciaTab === 'Ayer') {
+					this.cargarHistorialPorFecha(new Date(Date.now() - 86400000).toISOString().slice(0, 10));
+				} else if (this.presenciaTab === 'Fecha' && this.presenciaFechaCustom) {
+					this.cargarHistorialPorFecha(new Date(this.presenciaFechaCustom).toISOString().slice(0, 10));
+				}
+			}
+		}, 10000);
+	},
+	beforeUnmount() {
+		if (this.presenciaInterval) { clearInterval(this.presenciaInterval); this.presenciaInterval = null; }
 	},
 };
 </script>
+<style scoped>
+.presencia-badge {
+	position: fixed;
+	bottom: 18px;
+	left: 18px;
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	background: #0f172a;
+	color: #f1f5f9;
+	padding: 8px 16px;
+	border-radius: 999px;
+	cursor: pointer;
+	z-index: 1000;
+	box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+	font-size: 13px;
+	font-weight: 600;
+	transition: transform 0.15s, box-shadow 0.15s;
+}
+.presencia-badge:hover {
+	transform: scale(1.05);
+	box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+.presencia-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #22c55e;
+	animation: pulse-verde 1.5s infinite;
+	flex-shrink: 0;
+}
+.presencia-count {
+	font-size: 16px;
+	font-weight: 700;
+	color: #22c55e;
+}
+@keyframes pulse-verde {
+	0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+	50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+}
+</style>
